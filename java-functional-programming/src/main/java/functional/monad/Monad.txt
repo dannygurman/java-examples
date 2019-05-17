@@ -1,0 +1,27 @@
+Monads are simple yet powerful types that could give better structure to the code and in
+ some cases can also help dealing with unwanted side effects
+
+ Technically, a monad is a parameterised type such as Optional and Stream in Java which:
+
+ Implements flatMap (a.k.a. bind)
+ and unit (a.k.a. identity, return, Optional.of(), etc…).
+
+ Follows three laws: Left identity, Right identity and associativity, which are out of the scope of this post[1].
+
+ From Wiki:
+ In functional programming, a monad is a design pattern that defines how functions, operations, inputs, and outputs can be used
+ together to build generic types,[1] with the following organization:
+
+ Define a data type, and how values of that data type are combined.
+ Create functions that use the data type, and compose them together into operations, following the rules defined in the first step
+
+ A monad is created by defining a type constructor M and two operations:
+  bind and return (where return is often also called unit):
+
+  The unary return (unit) operation takes a value from a plain type (a) and puts it into a container - Optional.of()
+using the constructor, creating a monadic value (with type M a).
+
+The binary bind operation ">>=" takes as its arguments a monadic value with type M a (val1)
+and a function (a → M b) (mapper) that can transform the value.
+
+//Unit simply performs the wrapping part

@@ -1,0 +1,20 @@
+Processor
+It represents a processing stage—which is both a Subscriber and a Publisher
+and obeys the contracts of both.
+
+public interface Processor<T, R> extends Subscriber<T>, Publisher<R> {}
+
+In the Reactive-Streams specification, the Subject-like behavior,
+namely being a consumer and supplier of events at the same time,   is done by the Processor interface.
+
+The Processors  available in RxJava:
+
+Publish Processor(Subject in RxJava1)
+Replay Processor
+Behavior Processor
+Async Processor
+
+Processor acts both as an observer and as an Observable.
+
+Because it is an observer, it can subscribe to one or more Observables, and because it is an Observable,
+ it can pass through the items it observes by re-emitting them, and it can also emit new items.

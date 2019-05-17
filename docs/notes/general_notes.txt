@@ -1,0 +1,12 @@
+
+RBAC Authentication/Authorization
+Swagger
+Controller
+QUARTZ
+Second Cache Layer  EHcache
+Retention
+Aggregation
+DML -data manipulation language
+
+Deadlock
+Enrichment

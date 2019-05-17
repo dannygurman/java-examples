@@ -1,0 +1,31 @@
+<!-- Declared the Spring Controller and viewResolver. -->
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<!--Define how Spring will look for the view template.
+	 In this case, the controller HelloWorldController will return a view named HelloWorldPage,
+	 the viewResolver will find the file with following mechanism : prefix + view name + suffix,
+	  which is /WEB-INF/pages/HelloWorldPage.jsp. -->
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/pages/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+	<!-- Controller – Declared a bean name /welcome.htm and map it to HelloWorldController.
+	It means, if an URL with /welcome.htm pattern is requested,
+	the HelloWorldController controller will handle the request. -->
+	<bean name="/welcome.htm" 
+		class="spring.examples.mvc.xml.common.controller.HelloWorldController" />
+	
+</beans>

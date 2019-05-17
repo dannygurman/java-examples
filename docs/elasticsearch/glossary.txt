@@ -1,0 +1,101 @@
+--------------index (noun)
+
+An index is like a table in a relational database.
+It has a mapping which contains a type, which contains the fields in the index.
+
+An index is a logical namespace which maps to one or more primary shards and can 
+have zero or more replica shards.
+
+-----------Index (verb)
+To index a document is to store a document in an index (noun) so that it can be retrieved and queried. 
+It is much like the INSERT keyword in SQL except that, 
+if the document already exists, the new document would replace the old.
+
+
+---Inverted index------
+Relational databases add an index, such as a B-tree index, to specific columns in order to improve the speed of data retrieval.
+ Elasticsearch and Lucene use a structure called an inverted index for exactly the same purpose.
+By default, every field in a document is indexed (has an inverted index) and thus is searchable.
+ A field without an inverted index is not searchable.
+ 
+ 
+------------field
+A document contains a list of fields, or key-value pairs. 
+The value can be a simple (scalar) value (for example, a string, integer, date),
+ or a nested structure like an array or an object. 
+ 
+A field is similar to a column in a table in a relational database.
+
+The mapping for each field has a field type (not to be confused with document type) which indicates the 
+type of data that can be stored in that field, eg integer, string, object.
+ The mapping also allows you to define (amongst other things) how the value for a field should be analyzed.
+
+In Logstash, this term refers to an event property.
+ For example, each event in an apache access log has properties, 
+ such as a status code (200, 404), request path ("/", "index.html"), 
+ HTTP verb (GET, POST), client IP address, and so on. 
+ Logstash uses the term "fields" to refer to these properties.
+ 
+ 
+ ----------document
+A document is a JSON document which is stored in Elasticsearch.
+ It is like a row in a table in a relational database.
+ Each document is stored in an index and has a type and an id.
+
+A document is a JSON object (also known in other languages as a hash / hashmap / associative array)
+ which contains zero or more fields, or key-value pairs.
+
+The original JSON document that is indexed will be stored in the _source field, 
+which is returned by default when getting or searching for a document.
+
+----------------mapping
+A mapping is like a schema definition in a relational database.
+ Each index has a mapping, which defines a type, plus a number of index-wide settings.
+
+A mapping can either be defined explicitly, or it will be generated automatically when a document is indexed.
+
+
+
+----node---------
+A node is a running instance of Elasticsearch or Kibana which belongs to a cluster.
+ Multiple nodes can be started on a single server for testing purposes, but usually you should have one node per server.
+
+At startup, a node will use unicast to discover an existing cluster with the same cluster name and will try to join that cluster.
+
+-------master node------
+Handles write requests for the cluster and publishes changes to other nodes in an ordered fashion.
+ Each cluster has a single master node which is chosen automatically by the cluster and is replaced if the current master node fails.
+ Also see node.
+ 
+ -------------shard
+A shard is a single Lucene instance. 
+It is a low-level “worker” unit which is managed automatically by Elasticsearch.
+ An index is a logical namespace which points to primary and replica shards.
+
+Other than defining the number of primary and replica shards that an index should have, 
+you never need to refer to shards directly. 
+Instead, your code should deal only with an index.
+
+Elasticsearch distributes shards amongst all nodes in the cluster, 
+and can move shards automatically from one node to another in the case of node failure, 
+or the addition of new nodes.
+
+--------------primary shard
+Each document is stored in a single primary shard. 
+When you index a document, it is indexed first on the primary shard, then on all replicas of the primary shard.
+
+By default, an index has 5 primary shards.
+ You can specify fewer or more primary shards to scale the number 
+ of documents that your index can handle.
+
+You cannot change the number of primary shards in an index, once the index is created.
+
+
+-----------------routing
+When you index a document, it is stored on a single primary shard.
+ That shard is chosen by hashing the routing value. 
+ By default, the routing value is derived from the ID of the document or, if the document has a specified 
+ parent document, from the ID of the parent document (to ensure that child and parent documents are stored on the same shard).
+
+This value can be overridden by specifying a routing value at index time,
+ or a /mapping-routing-field.html[routing field] in the mapping.

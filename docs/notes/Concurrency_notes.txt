@@ -1,0 +1,28 @@
+implements  Runnable/extends Thread
+Interrupts -
+Thread.interrupted() - true if interruped being recieved
+if (Thread.interrupted()) {
+    throw new InterruptedException();
+    interrupt status flag -
+    Thread.interrupt sets this flag
+    Check Thread.interrupted, interrupt status is cleared.
+
+    isInterrupted  - does not clear
+
+
+The join method allows one thread to wait for the completion of another. If t is a Thread object whose thread is currently executing,
+t.join(); =
+causes the current thread to pause execution until t's thread terminates
+Like sleep, join responds to an interrupt by exiting with an InterruptedException
+
+Synchronization -
+Memory Consistency Errors
+Intrinsic Locks/monitor lock.
+Every object has an intrinsic lock associated with it
+a thread that needs exclusive and consistent access to an object's fields has to acquire the object's intrinsic lock
+When a thread releases an intrinsic lock, a happens-before relationship is established
+
+When a thread invokes a synchronized method, it automatically acquires the intrinsic lock
+Another way to create synchronized code is with synchronized statements
+    synchronized(this)
+

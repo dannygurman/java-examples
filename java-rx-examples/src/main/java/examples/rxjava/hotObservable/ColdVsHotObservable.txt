@@ -1,0 +1,27 @@
+COLD:
+A cold Observable emits a particular sequence of items but can begin emitting this sequence when its Observer finds it to be convenient,
+and at whatever rate the Observer desires, without disrupting the integrity of the sequence.
+Cold Observable is providing items in a lazy way.
+
+The Observer is taking elements only when it is ready to process that item,
+ and items do not need to be buffered in an Observable because they are requested in a PULL fashion.
+
+ Cold Observables do not need to have any form of a backpressure because they work in a pull fashion.
+ Examples of items emitted by a cold Observable might include the results of a database query, file retrieval, or web requests.
+
+HOT:
+A hot Observable begins generating items and emits them immediately when they are created.
+ It is contrary to a Cold Observables pull model of processing.
+ Hot Observable emits items at its own pace, and it is up to its observers to keep up.
+
+When the Observer is not able to consume items as quickly as they are produced by an Observable they
+need to be buffered or handled in some other way, as they will fill up the memory,
+ finally causing OutOfMemoryException.
+
+Examples of items emitted by a hot Observable might include mouse & keyboard events, system events, or stock prices.
+
+
+See https://github.com/ReactiveX/RxJava/wiki/Backpressure-(2.0)
+
+
+

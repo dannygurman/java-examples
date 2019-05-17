@@ -1,0 +1,26 @@
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>Spring Web MVC guavacache.Application</display-name>
+
+	<!-- Declared a DispatcherServlet servlet to act as the front-controller to
+	handle all the entire web request which end with htm extension -->
+
+	<!-- The mvc-dispatcher is used to define which file to load the Spring XML configurations.
+	By default, it will look for Spring XML configuration file by joining the servlet name mvc-dispatcher with -servlet.xml.
+	In this example, Spring will look for this file – mvc-dispatcher-servlet.xml. -->
+
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<url-pattern>*.htm</url-pattern>
+	</servlet-mapping>
+
+</web-app>

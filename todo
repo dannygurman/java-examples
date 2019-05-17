@@ -1,0 +1,44 @@
+https://www.baeldung.com/java-9-stream-api
+ .takeWhile(s -> s.length() < 10);
+
+
+java-spliterator
+ https://www.baeldung.com/java-spliterator
+
+stream iterate
+
+
+https://www.baeldung.com/java-inifinite-streams
+
+spring-reactor
+https://www.baeldung.com/spring-reactor
+https://www.baeldung.com/reactor-core
+reactor-core
+https://dzone.com/articles/reactor-core-tutorial
+https://www.baeldung.com/reactor-combine-streams
+https://www.baeldung.com/spring-5-functional-web
+
+rabbit terms
+
+AKKA
+kafka
+
+lambda architecture
+ETL
+
+https://www.logicbig.com/tutorials/spring-framework/spring-core/tests-context-initializer.html
+https://www.mkyong.com/spring/spring-propertysources-example/
+
+Hazelcast
+https://memorynotfound.com/spring-boot-hazelcast-caching-example-configuration/
+
+
+https://www.baeldung.com/spring-autowire
+
+Prometheus - time serious
+Grafana
+
+Prometheus
+
+
+

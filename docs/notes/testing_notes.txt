@@ -1,0 +1,19 @@
+Testing:
+hamcrest - - Matcher
+  Assert.assertThat(singleRow.getDouble("suspectedEdge"), is(370.0));
+  Assert.assertThat(results, Matchers.hasItems(303.0, 3.0));
+
+Mockito - when thenreturn
+@InjectMocks
+private SomeManager someManager;
+the tested class should be annotated with @InjectMocks
+From then on, we can specify which specific methods or objects inside the class, in this case SomeManager, will be substituted with mocks
+@Mock
+private SomeDependency someDependency;
+
+MockMvc
+mockMvc.perform(get("/form"))
+     .andExpect(status().isOk())
+     .andExpect(content().mimeType("text/html"))
+     .andExpect(forwardedUrl("/WEB-INF/layouts/main.jsp"))
+

@@ -1,0 +1,8 @@
+Record: Producer sends messages to Kafka in the form of records.
+A record is a key-value pair.
+
+ It contains the topic name and partition number to be sent.
+
+  Kafka broker keeps records inside topic partitions.
+  Records sequence is maintained at the partition level.
+   You can define the logic on which basis partition will be determined.

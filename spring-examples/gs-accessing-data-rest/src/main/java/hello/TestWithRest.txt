@@ -1,0 +1,146 @@
+//READ about - HATEOAS
+
+1. GET  http://localhost:8080
+
+{
+  "_links": {
+    "people": {
+      "href": "http://localhost:8080/people{?page,size,sort}",
+      "templated": true
+    },
+    "profile": {
+      "href": "http://localhost:8080/profile"
+    }
+  }
+}
+
+
+2. http://localhost:8080/people
+{
+  "_embedded": {
+    "people": []
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/people"
+    },
+    "profile": {
+      "href": "http://localhost:8080/profile/people"
+    },
+    "search": {
+      "href": "http://localhost:8080/people/search"
+    }
+  },
+  "page": {
+    "size": 20,
+    "totalElements": 0,
+    "totalPages": 0,
+    "number": 0
+  }
+}
+
+
+3.
+POST http://localhost:8080/people
+BODY:
+{  "firstName" : "Frodo",  "lastName" : "Baggins" }
+
+Result 201:created
+
+
+
+
+4. GET http://localhost:8080/profile/people
+{
+  "alps": {
+    "version": "1.0",
+    "descriptors": [
+      {
+        "id": "person-representation",
+        "href": "http://localhost:8080/profile/people",
+        "descriptors": [
+          {
+            "name": "firstName",
+            "type": "SEMANTIC"
+          },
+          {
+            "name": "lastName",
+            "type": "SEMANTIC"
+          }
+        ]
+      },
+      {
+        "id": "get-people",
+        "name": "people",
+        "type": "SAFE",
+        "rt": "#person-representation",
+        "descriptors": [
+          {
+            "name": "page",
+            "doc": {
+              "value": "The page to return.",
+              "format": "TEXT"
+            },
+            "type": "SEMANTIC"
+          },
+          {
+            "name": "size",
+            "doc": {
+              "value": "The size of the page to return.",
+              "format": "TEXT"
+            },
+            "type": "SEMANTIC"
+          },
+          {
+            "name": "sort",
+            "doc": {
+              "value": "The sorting criteria to use to calculate the content of the page.",
+              "format": "TEXT"
+            },
+            "type": "SEMANTIC"
+          }
+        ]
+      },
+      {
+        "id": "create-people",
+        "name": "people",
+        "type": "UNSAFE",
+        "rt": "#person-representation"
+      },
+      {
+        "id": "get-person",
+        "name": "person",
+        "type": "SAFE",
+        "rt": "#person-representation"
+      },
+      {
+        "id": "delete-person",
+        "name": "person",
+        "type": "IDEMPOTENT",
+        "rt": "#person-representation"
+      },
+      {
+        "id": "update-person",
+        "name": "person",
+        "type": "IDEMPOTENT",
+        "rt": "#person-representation"
+      },
+      {
+        "id": "patch-person",
+        "name": "person",
+        "type": "UNSAFE",
+        "rt": "#person-representation"
+      },
+      {
+        "name": "findByLastName",
+        "type": "SAFE",
+        "descriptors": [
+          {
+            "name": "name",
+            "type": "SEMANTIC"
+          }
+        ]
+      }
+    ]
+  }
+}
