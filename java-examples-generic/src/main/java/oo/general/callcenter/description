@@ -1,0 +1,17 @@
+Imagine you have a call center with three levels of employees: fresher, technical lead
+(TL), product manager (PM). There can be multiple employees, but only one TL or PM.
+An incoming telephone call must be allocated to a fresher who is free. If a fresher
+can’t handle the call, he or she must escalate the call to technical lead. If the TL is
+not free or not able to handle it, then the call should be escalated to PM. Design the
+classes and data structures for this problem. Implement a method getCallHandler().
+
+
+All three ranks of employees have different work to be done, so those specific functions are
+profile specific.
+We should keep these specific things within their respective class.
+
+There are a few things which are common to them, like address, name, job title, age, etc.
+These things can be kept in one class and can be extended / inherited by others.
+
+Finally, there should be one CallHandler class which would route the calls to the concerned
+person.

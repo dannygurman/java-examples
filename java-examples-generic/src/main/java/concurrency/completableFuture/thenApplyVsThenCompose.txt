@@ -1,0 +1,15 @@
+
+
+thenApply is used if you have a synchronous mapping function.
+
+CompletableFuture<Integer> future =  CompletableFuture.supplyAsync(() -> 1).thenApply(x -> x+1);
+
+This method is analogous to Optional.map and Stream.map
+
+
+thenCompose is used if you have an asynchronous mapping function (i.e. one that returns a CompletableFuture).
+It will then return a future with the result directly, rather than a nested future.
+
+CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> 1).thenCompose(x -> CompletableFuture.supplyAsync(() -> x+1));
+
+his method is analogous to Optional.flatMap and  Stream.flatMap.

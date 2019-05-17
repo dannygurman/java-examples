@@ -1,0 +1,18 @@
+CompletableFuture is an extension to Java’s Future API which was introduced in Java 5
+
+A Future is used as a reference to the result of an asynchronous computation. It provides an isDone() method to check whether the computation is done or not,
+ and a get() method to retrieve the result of the computation when it is done.
+
+ Future API was a good step towards asynchronous programming in Java but it lacked some important and useful features -
+
+ 1.It cannot be manually completed (finished).
+
+ 2.You cannot perform further action on a Future’s result without blocking
+
+ 3. Multiple Futures cannot be chained together :
+ Sometimes you need to execute a long-running computation and when the computation is done, you need to send its result to another long-running computation, and so on.
+
+ 4.You can not combine multiple Futures together :
+ Let’s say that you have 10 different Futures that you want to run in parallel and then run some function after all of them completes
+
+ 5.No Exception Handling :

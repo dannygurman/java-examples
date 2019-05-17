@@ -1,0 +1,14 @@
+hen guarding a critical section with a Lock, and the critical section may throw exceptions, it is important to call the unlock() method from inside a finally-clause.
+ Doing so makes sure that the Lock is unlocked so other threads can lock it.
+  Here is an example:
+
+lock.lock();
+try{
+  //do critical section code, which may throw exception
+} finally {
+  lock.unlock();
+}
+This little construct makes sure that the Lock is unlocked in case an exception is thrown from the code in the critical section. 
+
+If unlock() was not called from inside a finally-clause, and an exception was thrown from the critical section, 
+the Lock would remain locked forever, causing all threads calling lock() on that Lock instance to halt indefinately (for an unlimited or unspecified period of time).

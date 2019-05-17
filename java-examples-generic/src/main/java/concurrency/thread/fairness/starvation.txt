@@ -1,0 +1,10 @@
+Causes of Starvation in Java
+The following three common causes can lead to starvation of threads in Java:
+
+Threads with high priority swallow all CPU time from threads with lower priority.
+
+Threads are blocked indefinately waiting to enter a synchronized block,
+because other threads are constantly allowed access before it.
+
+Threads waiting on an object (called wait() on it) remain waiting indefinitely
+because other threads are constantly awakened instead of it

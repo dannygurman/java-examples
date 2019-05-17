@@ -1,0 +1,38 @@
+Service Locator vs Dependency Injection
+
+The fundamental choice is between Service Locator and Dependency Injection. 
+The first point is that both implementations provide the fundamental decoupling that's missing 
+in the naive example - in both cases application code is independent of the concrete implementation
+of the service interface. The important difference between the two patterns is about how that
+implementation is provided to the application class. With service locator the application
+class asks for it explicitly by a message to the locator. With injection there is
+no explicit request, the service appears in the application class - hence the inversion of control.
+
+Inversion of control is a common feature of frameworks,
+ but it's something that comes at a price. It tends to be hard 
+ to understand and leads to problems when you are trying to debug. 
+ So on the whole I prefer to avoid it unless I need it. This isn't 
+ to say it's a bad thing, just that I think it needs to justify itself 
+ over the more straightforward alternative.
+
+The key difference is that with a Service Locator every user
+ of a service has a dependency to the locator. The locator 
+ can hide dependencies to other implementations, but you do need to see the locator.
+  So the decision between locator and injector depends on whether that dependency is a problem.
+
+Using dependency injection can help make it easier to see what the component
+dependencies are. With dependency injector you can just look at the injection mechanism,
+such as the constructor, and see the dependencies. With the service locator you have to
+search the source code for calls to the locator. Modern IDEs with a find references
+feature make this easier, but it's still not as easy as looking at the constructor
+or setting methods.
+
+A lot of this depends on the nature of the user of the service.
+If you are building an application with various classes that use a
+service, then a dependency from the application classes to the
+locator isn't a big deal. In my example of giving a Movie Lister
+to my friends, then using a service locator works quite well.
+All they need to do is to configure the locator to hook in the
+right service implementations, either through some configuration
+code or through a configuration file. In this kind of scenario
+I don't see the injector's inversion as providing anything compelling.

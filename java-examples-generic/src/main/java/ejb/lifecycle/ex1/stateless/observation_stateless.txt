@@ -1,0 +1,8 @@
+Observations
+
+Since a Servlet itself is not thread safe, multiple threads will in fact enter the doGet() method
+
+Different instances of the SLSB (evident via the hashCode result) are being picked by the container
+to manage concurrent requests (see the thread names in the logged statements).
+
+In spite of concurrent requests, each request thread is getting serviced by a new instance

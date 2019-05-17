@@ -1,0 +1,10 @@
+he CompletableFuture.get() method is blocking.
+It waits until the Future is completed and returns the result after its completion.
+
+But, that’s not what we want right? For building asynchronous systems we should be able to attach a callback to the CompletableFuture
+which should automatically get called when the Future completes.
+
+That way, we won’t need to wait for the result, and we can write the logic that needs to be executed after
+ the completion of the Future inside our callback function.
+
+You can attach a callback to the CompletableFuture using thenApply(), thenAccept() and thenRun() methods -

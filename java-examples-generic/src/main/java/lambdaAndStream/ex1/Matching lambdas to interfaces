@@ -1,0 +1,9 @@
+A single method interface is also sometimes referred to as a functional interface.
+
+Matching a Java lambda expression against a functional interface is divided into these steps:
+
+Does the interface have only one method?
+Does the parameters of the lambda expression match the parameters of the single method?
+Does the return type of the lambda expression match the return type of the single method?
+If the answer is yes to these three questions, then the given lambda expression
+ is matched successfully against the interface.

@@ -1,0 +1,17 @@
+//The Java try with resources construct, AKA Java try-with-resources, is an exception handling mechanism that
+makes it possible to automatically close resources like an InputStream or a JDBC Connection when you are done with them.
+
+ To do so, you must open and use the resource within a Java try-with-resources block.
+When the execution leaves the try-with-resources block, any resource opened within
+the try-with-resources block is automatically closed,
+regardless of whether any exceptions are thrown either from inside the try-with-resources block,
+or when attempting to close the resources.
+
+   //InputStream implements Closeable
+       // FileInputStream extends InputStream
+       // public interface Closeable extends AutoCloseable {
+
+       //Closeable extends AutoCloseable, and is specifically dedicated to IO streams:
+        //it throws IOException instead of Exception, and is idempotent,
+        whereas AutoCloseable doesn't provide this guarantee.
+       }

@@ -1,0 +1,39 @@
+In computer science, string interning is a method of storing only one copy of each distinct string value, which must be immutable.
+
+Interning strings makes some string processing tasks more time- or space-efficient at the cost of
+requiring more time when the string is created or interned.
+
+The distinct values are stored in a string intern pool.
+
+The single copy of each string is called its 'intern' and is typically looked up by  String.intern() in Java.
+
+All compile-time constant strings in Java are automatically interned using this method.
+
+Motivation:
+String interning speeds up string comparisons, which are sometimes a performance bottleneck in applications (such as compilers and dynamic programming language runtimes)
+ that rely heavily on hash tables with string keys.
+
+ Without interning, checking that two different strings are equal involves examining every character of both strings
+ (in the case where the strings are equal - when they differ the character comparison only has to proceed to the point at
+ which either different characters are found, or to the end of the shortest string).
+
+ This is slow for several reasons:
+it is inherently O(n) in the length of the strings;
+it typically requires reads from several regions of memory, which take time;
+ and the reads fill up the processor cache, meaning there is less cache available for other needs.
+
+ With interned strings, a simple object identity test  suffices after the original intern operation;
+
+ this is typically implemented as a pointer equality test (s1 == s2), normally just a single machine instruction with no memory reference at all.
+
+String interning also reduces memory usage if there are many instances of the same string value;
+  for instance, it is read from a network or from storage.
+
+Such strings may include magic numbers or network protocol information.
+For example, XML parsers may intern names of tags and attributes to save memory.
+
+ Network transfer of objects over Java RMI serialization object streams can transfer strings that are interned more efficiently
+ , as the String object's handle is used in place of duplicate objects upon serialization.
+
+
+Related:Flyweight pattern

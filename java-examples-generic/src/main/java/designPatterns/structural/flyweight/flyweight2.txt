@@ -1,0 +1,17 @@
+The flyweight pattern is a structural design pattern.
+
+In the flyweight pattern, instead of creating large numbers of similar objects, objects are reused.
+
+ This can be used to reduce memory requirements and instantiation time and related costs.
+
+Similarities between objects are stored inside of the objects, and differences are moved outside of
+the objects and placed in client code.
+
+These differences are passed in to the objects when needed via method calls on the objects.
+
+ A Flyweight interface declares these methods.
+
+A Concrete Flyweight class implements the Flyweight interface which is used to perform operations
+ based on external state and it also stores common state.
+
+     A Flyweight Factory is used create and return Flyweight objects.

@@ -1,0 +1,6 @@
+Now we will use bridge design pattern to decouple the interfaces from implementation.
+
+ UML diagram for the classes and interfaces after applying bridge pattern
+ will look like below image.
+
+ Notice the bridge between Shape and Color interfaces and use of composition in implementing the bridge pattern.

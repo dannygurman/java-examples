@@ -1,0 +1,35 @@
+From: Dror Lupu
+Sent: Wednesday, March 30, 2016 7:59 PM
+
+
+B) SQL
+Define a schema to describe a university where there asre courses, students and students get grades in courses - describe PK, FK.
+
+Then write a query to print course name and average grade.
+
+Answer: Assuming the table structure is (Courses - Id, Name : Students - Id, Name : Grades: Student_ID, Course_ID, grade)
+
+the query is:
+select c.name, avg(grades.grade) from
+courses c join on c.id =  grades.course_id
+group by course.name
+
+I ask also give all the courses for averages greater than 90. The addition to the query should be "having avg(grades.grade) > 90"
+
+C. Design
+Give an Engine which runsTasks which are classes that implement Task interface (void doWork(Object[] parameters)).
+ You get a class you need to add to the engine "C" but it has only "void doSomething()".
+How will you add it to the engine?
+
+Answer:
+The design pattern is a decorator/wrapper.
+Write class CWrapper implements Task.
+Instanciate  C in the ctor.
+in doWork(Object[] params) call .doSomething().
+
+Usually these 3 questions take ~1 - 1.5 hrs.
+
+Thanks,
+Dror
+
+Sent from my LG Mobile

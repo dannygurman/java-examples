@@ -1,0 +1,98 @@
+In Java 8  java.util.function package there are 43
+useful functional interface.
+
+It divided to 4 main categories:
+
+
+1.Consumers
+------------------------------------
+A consumer consume an object and does not return anything
+
+* Performs this operation on the given argument.
+     *
+     * @param t the input argument
+     */
+    void accept(T t);
+
+----- Bi consumer has method:
+        * Performs this operation on the given arguments.
+             *
+             * @param t the first input argument
+             * @param u the second input argument
+             */
+            void accept(T t, U u);
+
+
+
+2. Supplier
+----------------------------------
+A supplier provide an object and take no parameter
+
+public interface Supplier<T> {
+
+T get();
+
+}
+
+3. Function
+---------------------------------
+A function take an object an return another object (of another type)
+
+
+ /**
+     * Applies this function to the given argument.
+     *
+     * @param t the function argument
+     * @return the function result
+     */
+    R apply(T t);
+
+
+--BiFunction:
+Represents a function that accepts two arguments and produces a result.
+ @param <T> the type of the first argument to the function
+ * @param <U> the type of the second argument to the function
+ * @param <R> the type of the result of the function
+@FunctionalInterface
+public interface BiFunction<T, U, R> {
+
+  R apply(T t, U u);
+
+}
+
+--UnaryOperator:
+//Represents an operation on a single operand that produces a result of the
+ * same type as its operand.
+
+ public interface UnaryOperator<T> extends Function<T, T> {
+
+ Specual method - identity
+ static <T> UnaryOperator<T> identity() {
+         return t -> t;
+     }
+ }
+
+
+ --BinaryOperator
+ Represents an operation upon two operands of the same type, producing a result
+    * of the same type as the operands
+    public interface BinaryOperator<T> extends BiFunction<T,T,T> {
+
+
+
+4. Predicates
+-----------------------
+A predicate takes an object an return a boolean
+Represents a predicate (boolean-valued function) of one argument.
+
+
+public interface Predicate<T> {
+    boolean test(T t);
+}
+
+--BiPredicate
+Represents a predicate (boolean-valued function) of two arguments.
+public interface BiPredicate<T, U> {public interface BiPredicate<T, U> {
+    boolean test(T t, U u);
+    }
+}

@@ -1,0 +1,10 @@
+Conclusion:
+
+DAO pattern offers only a loosely defined contract. It suffers from getting potential misused
+ and bloated implementations.
+ The repository pattern uses a metaphor of a Collection.
+  This metaphor gives the pattern a tight contract and make it easier to understand by your fellow colleagues.
+
+References:
+
+[DDD] – Domain-Driven Design Tackling Complexity in the Heart of Software. By Eric Evans.

@@ -1,0 +1,6 @@
+Getting list of numbers as parameters
+
+If num is odd - its radius of circle
+if num is  even - the number is side of a square
+
+need to sort and return strings that describe the shapes , ordered by shape area

@@ -1,0 +1,5 @@
+Terminal vs Intermediate Call
+
+A terminal operation must be called to trigger the processing of a Stream
+
+No terminal operation = no data is ever processed

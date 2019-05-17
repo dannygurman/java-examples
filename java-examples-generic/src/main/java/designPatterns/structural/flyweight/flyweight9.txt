@@ -1,0 +1,20 @@
+Clients don't directly instantiate flyweights; instead they get them from a factory. 
+The factory first checks to see if it has a flyweight that fits specific criteria (e.g., a blue or white line);
+ if so, the factory returns a reference to the flyweight. 
+ 
+ If the factory can't locate a flyweight for the specified criteria, it instantiates one,
+ adds it to the pool, and returns it to the client.
+
+
+ 
+You might be wondering how you can reuse flyweights. 
+For example, how can one line flyweight draw all lines of a particular color when those lines
+ presumably have different locations and lengths? 
+
+You accomplish that reuse by splitting a flyweight's state in two:
+ intrinsic state (e.g., line color) 
+ and extrinsic state (e.g., line location and length). 
+ 
+ The flyweight maintains intrinsic state, while extrinsic state must be passed to the flyweight at runtime.
+
+ By externalizing extrinsic state, you can easily reuse flyweights for different variations of that extrinsic state.

@@ -1,0 +1,6 @@
+Zero Parameters
+
+If the method you are matching your lambda expression against takes no parameters,
+then you can write your lambda expression like this:
+
+() -> System.out.println("Zero parameter lambda");

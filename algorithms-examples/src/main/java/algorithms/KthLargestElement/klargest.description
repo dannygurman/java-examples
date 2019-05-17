@@ -1,0 +1,7 @@
+Find the kth largest element in an unsouted array.
+
+For example:
+Given [3 , 2, ,1 ,5 ,6 ,4] and k=2 return 5;
+
+6 is 1th largest
+4 is 3th largest

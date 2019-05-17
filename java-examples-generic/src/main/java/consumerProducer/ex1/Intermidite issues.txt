@@ -1,0 +1,13 @@
+We do have an intermediate solution.
+Refer to the image and you will immediately notice that the producers are piling up their work in a filing cabinet and the
+ worker continues to pick it up as they get done with the previous task. However,
+ this approach does have some glaring shortcomings:
+
+There is still one worker who has to do all the work.
+
+The external systems may be happy, but the task will still continue to exist until
+the worker has completed all of the tasks
+
+The producers will pile up their data in a queue and it needs resources to hold the same.
+Just as in this example the cabinet can fill up, the same can happen with the JVM resources too.
+We need to be careful how much data we are going to place in memory and in some cases it may not be much.

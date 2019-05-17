@@ -1,0 +1,46 @@
+Taken from Javarevisited site.
+Builder pattern is a creational design pattern it means its solves problem related to object creation.
+
+Constructors in Java are used to create object and can take parameters required to create object.
+ Problem starts when an Object can be created with lot of parameters, some of them may be mandatory and others may be optional.
+
+ Consider a class which is used to create Cake, now you need number of item like egg, milk, flour to create cake.
+ many of them are mandatory and some  of them are optional like cherry, fruits etc.
+
+ If we are going to have overloaded constructor for different kind of cake then there will be many constructor(!)
+ and even worst - they will accept many parameter.
+
+Problems:
+1) too many constructors to maintain.
+
+2) error prone because many fields has same type e.g.
+sugar and and butter  are in cups so instead of 2 cup sugar if you pass 2 cup butter,
+  your compiler will not complain but will get a buttery cake with almost no sugar with high cost of wasting butter.
+
+You can partially solve this problem by creating Cake and then adding ingredients but that will impose another problem
+ of leaving Object on inconsistent state during building,  ideally cake should not be available until its created.
+
+ Both of these problem can be solved by using Builder design pattern in Java.
+
+ Builder design pattern not only improves readability but also reduces chance of error
+  by adding ingredients explicitly and making object available once fully constructed.
+
+
+Advantages:
+1) more maintainable if number of fields required to create object is more than 4 or 5.
+
+2) less error-prone as user will know what they are passing because of explicit method call.
+
+3) more robust as only fully constructed object will be available to client.
+
+Disadvantages:
+1) verbose and code duplication as Builder needs to copy all fields from Original or Item class.
+
+When to use Builder Design pattern in Java:
+Builder Design pattern is a creational pattern and should be used when number of parameter
+ required in constructor is more than manageable usually 4 or at most 5.
+
+Don't confuse with Builder and Factory pattern there is an obvious difference between Builder and Factory pattern,
+as Factory can be used to create different implementation of same interface but Builder is tied up with its Container class
+ and only returns object of Outer class.
+

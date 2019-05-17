@@ -1,0 +1,5 @@
+Even if the concrete implementation is determined at runtime and this is
+ determined with a switch statement, you are still reducing the number 
+ of switch statements.
+ You are deciding which family of Product to create in a single place rather
+ that which Product to create in multiple place

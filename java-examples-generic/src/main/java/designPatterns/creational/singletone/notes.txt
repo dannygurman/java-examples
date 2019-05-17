@@ -1,0 +1,35 @@
+What about class loaders? 
+I heard there is a chance that two 
+class loaders could each end up with 
+their own instance of Singleton.
+
+
+A: Yes, that is true as each class 
+loader defines a namespace. 
+If you have two or more classloaders,
+ you can load the same class multiple times 
+(once in each classloader). Now, if that 
+class happens to be a Singleton, then 
+since we have more than one version 
+of the class, we also have more than 
+one instance of the Singleton.
+ So, if you are using multiple classloaders 
+and Singletons, be careful.
+ One way around this problem is to specify the classloader yourself.
+
+
+Can’t I just create a class in which all methods and variables are 
+defined as static? Wouldn’t that be the same as a Singleton?
+
+
+A: 
+Yes, if your class is selfcontained and doesn’t depend on 
+complex initialization. However, because of the way static 
+initializations are handled in Java, this can get very messy, especially if 
+multiple classes are involved. Often this scenario can result in subtle, 
+hard to find bugs involving order of initialization. Unless there is a 
+compelling need to implement your “singleton” this way, it is far better to 
+stay in the object world.
+
+
+
