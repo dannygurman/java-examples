@@ -22,7 +22,7 @@ public class BeforeJava8 {
     private static List<String> getFilterOutput(List<String> lines, String filter) {
         List<String> result = new ArrayList<>();
         for (String line : lines) {
-            if (!"mkyong".equals(line)) { // we dont like mkyong
+            if ( ! filter.equals(line)) { // we dont like mkyong
                 result.add(line);
             }
         }
