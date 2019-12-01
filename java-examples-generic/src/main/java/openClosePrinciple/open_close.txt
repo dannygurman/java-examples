@@ -1,0 +1,12 @@
+Let’s begin with a short summary of what the Open/Closed Principle is.
+ It’s a principle for object oriented design first described by Bertrand Meyer that says that
+ “software entities (classes, modules, functions, etc.) should be open for extension,
+  but closed for modification”.
+
+At first thought that might sound quite academic and abstract.
+What it means though is that we should strive to write code that doesn’t have to be changed every
+time the requirements change.
+
+ How we do that can differ a bit depending on the context, such as our programming language.
+  When using Java, C# or some other statically typed language the solution often involves inheritance
+   and polymorphism, which is what this example will illustrate.
