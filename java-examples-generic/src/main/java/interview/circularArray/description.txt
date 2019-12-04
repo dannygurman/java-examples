@@ -1,0 +1,3 @@
+Implement a Circular Array class that supports an array-like data structure which
+can be efficiently rotated. The class should use a generic type, and should support
+iteration via the standard for (Obj o : circuLarArray) notation.

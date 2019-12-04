@@ -1,6 +1,6 @@
 package consumerProducer.ex3;
 
-public class ProducerConsumerTest {
+public class  ProducerConsumerTest {
     //Controller
     public static void main(String[] args) {
         CubbyHole c = new CubbyHole();

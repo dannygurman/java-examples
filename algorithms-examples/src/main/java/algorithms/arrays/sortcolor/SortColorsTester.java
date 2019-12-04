@@ -16,9 +16,9 @@ public class SortColorsTester {
 
        // SortColorPointersVer2.sortColors(nums);
 
-       // SortColorTrivialTwoPass.sortColors(nums);
+         SortColorTrivialTwoPass.sortColors(nums);
 
-        SortColorTwoPassVer2.sortColors(nums);
+       // SortColorTwoPassVer2.sortColors(nums);
 
         //SortColorTwoPassVer3Improved.sortColors(nums);
 
