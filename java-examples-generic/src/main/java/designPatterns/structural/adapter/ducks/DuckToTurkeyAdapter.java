@@ -1,11 +1,11 @@
 package designPatterns.structural.adapter.ducks;
 import java.util.Random;
 
-public class DuckAdapter implements Turkey {
+public class DuckToTurkeyAdapter implements Turkey {
 	Duck duck;
 	Random rand;
  
-	public DuckAdapter(Duck duck) {
+	public DuckToTurkeyAdapter(Duck duck) {
 		this.duck = duck;
 		rand = new Random();
 	}
