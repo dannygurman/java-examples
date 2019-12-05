@@ -1,0 +1,58 @@
+You are given an array of integers (both positive and negative).
+Find the contiguous sequence with the largest sum.
+Return the sum.
+
+
+SOLUTION
+ Let's approach this by looking at an example:
+2  3 - 8 - 1 2 4 - 2 3
+
+If we think about our array as having alternating sequences of positive and negative
+numbers, we can observe that we would never include only part of a negative subsequence
+or part of a positive sequence.
+ Why would we?
+ Including part of a negative subsequence would make things unnecessarily negative,
+  and we should just instead
+not include that negative sequence at all.
+
+Likewise, including only part of a positive
+subsequence would be strange, since the sum would be even bigger if we included the whole thing.
+
+For the purposes of coming up with our algorithm, we can think about our array as
+being a sequence of alternating negative and positive numbers.
+
+Each number correspondsto the sum of a subsequence of positive numbers of a subsequence of negative
+numbers.
+
+For the array above, our new reduced array would be:
+5 - 9 6 - 2 3
+
+This doesn't give away a great algorithm immediately, but it does help us to better
+understand what we're working with.
+
+Consider the array above. Would it ever make sense to have {5, -9} in a subsequence?
+No. These numbers sum to -4, so we're better off not including either number, or
+possiblyjust having the sequence bejust {5}).
+
+When would we want negative numbers included in a subsequence? Only if it allows us
+to join two positive subsequences, each of which have a sum greater than the negative
+value.
+
+We can approach this in a step-wise manner, starting with the first element in the array.
+When we look at 5, this is the biggest sum we've seen so far. We set maxSum to 5, and
+sum to 5.
+Then, we consider -9. If we added it to sum, we'd get a negative value.
+There's no sense in extending the subsequence from 5 to -9 (which "reduces"to a sequence of
+just -4), so we just reset the value of sum.
+
+Now, we consider 6.This subsequence is greater than 5, so we update both maxSum and sum.
+
+Next, we look at -2. Adding this to 6 will set sum to 4.
+
+ Since this is still a "value add" (when adjoined to another, bigger sequence), we might want {6, -2} in our max
+subsequence. We'll update sum, but not maxSum.
+
+Finally, we look at 3. Adding 3 to sum (4) gives us 7, so we update maxSum.
+ The max
+subsequence is therefore the sequence {6, -2, 3}.
+When we look at this in the full expanded array, our logic is identical
