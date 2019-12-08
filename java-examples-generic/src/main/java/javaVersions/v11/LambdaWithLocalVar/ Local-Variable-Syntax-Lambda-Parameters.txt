@@ -1,0 +1,23 @@
+Local-Variable Syntax for Lambda Parameters
+JEP 323, Local-Variable Syntax for Lambda Parameters is the only language feature release in Java 11.
+In Java 10, Local Variable Type Inference was introduced. Thus we could infer the type of
+ the variable from the RHS (right hand side)– var list = new ArrayList<String>();
+
+JEP 323 allows var to be used to declare the formal parameters of an implicitly typed lambda expression.
+
+We can now define :
+
+(var s1, var s2) -> s1 + s2
+This was possible in Java 8 too but got removed in Java 10. Now it’s back in Java 11 to keep things uniform.
+
+But why is this needed when we can just skip the type in the lambda?
+If you need to apply an annotation just as @Nullable, you cannot do that without defining the type.
+
+Limitation of this feature – You must specify the type var on all parameters or none.
+Things like the following are not possible:
+
+
+(var s1, s2) -> s1 + s2 //no skipping allowed
+(var s1, String y) -> s1 + y //no mixing allowed
+
+var s1 -> s1 //not allowed. Need parentheses if you use var in lambda.
