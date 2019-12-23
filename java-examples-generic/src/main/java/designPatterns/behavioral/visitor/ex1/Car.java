@@ -4,7 +4,7 @@ package designPatterns.behavioral.visitor.ex1;
  * Created by DannyG on 28/01/2015.
  */
 class Car implements ICarElement {
-    ICarElement[] elements;
+    ICarElement[] elements = new ICarElement[1];
 
     public Car() {
         //create new Array of elements

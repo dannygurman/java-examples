@@ -3,7 +3,7 @@ package algorithms.strings;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LeterCombinationOfPhoneNumber {
+public class  LeterCombinationOfPhoneNumber {
     //Given a digit String , return all possible letter combination that nuber could represent
     // A mapping of digit to number like Telephone is given
 
