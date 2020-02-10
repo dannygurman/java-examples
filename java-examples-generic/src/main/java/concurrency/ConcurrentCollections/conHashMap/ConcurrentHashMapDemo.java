@@ -1,4 +1,4 @@
-package concurrency.ConcurrentCollections;
+package concurrency.ConcurrentCollections.conHashMap;
 
 import java.util.concurrent.ConcurrentHashMap;
 
