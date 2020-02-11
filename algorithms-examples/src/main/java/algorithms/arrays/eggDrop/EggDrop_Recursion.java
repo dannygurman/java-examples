@@ -1,7 +1,6 @@
 package algorithms.arrays.eggDrop;
 
-// A Dynamic Programming based Java Program for the Egg Dropping Puzzle
-// So overall time complexity of the algorithm is O(nLogn) + O(n) which is O(nLogn).
+
 class EggDrop_Recursion {
 
     /* Function to get minimum number of
@@ -31,7 +30,11 @@ class EggDrop_Recursion {
             int min_trails_lower_flower_minus_egg = eggDropMinimalTrails(n_eggs - 1, floor_id - 1);
 
             //in case egg was NOT  broken - we have left with all eggs - checking upper floor
-            int min_trails_upper_flower = eggDropMinimalTrails(k_floors, k_floors - floor_id);
+            //The floors we want to test aren't important; in fact, the number of remaining floors is what matters.
+            //For example, testing the floors between 1 and 20 (both 1 and 20 included) would require the same number
+            // of drops to test the floors between 21 and 40, or between 81 and 100. In all
+            // three situations, we tested 20 floors
+            int min_trails_upper_flower = eggDropMinimalTrails(n_eggs, k_floors - floor_id);
             res = Math.max(min_trails_lower_flower_minus_egg,
                     min_trails_upper_flower);
             if (res < min)
