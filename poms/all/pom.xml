@@ -29,6 +29,7 @@
         <module>${spring.examples.dir}/spring.cache.guava</module>
         <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
         <module>${spring.examples.dir}/spring-boot-test</module>
+        <module>${spring.examples.dir}/spring-load-implementors</module>
     </modules>
 
 </project>
