@@ -2,28 +2,23 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>spring.examples</groupId>
+
   <artifactId>basic.annotations</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>basic.annotations</name>
-  <url>http://maven.apache.org</url>
 
 
-    <properties>
-        <spring.version>4.1.6.RELEASE</spring.version>
-    </properties>
+
+    <parent>
+        <groupId>examples.spring</groupId>
+        <artifactId>parent-spring-examples</artifactId>
+        <version>1.0</version>
+    </parent>
 
     <dependencies>
 
-        <!-- Spring framework -->
-        <!-- Spring 3 dependencies -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
