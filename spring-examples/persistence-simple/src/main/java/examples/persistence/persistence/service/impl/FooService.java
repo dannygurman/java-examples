@@ -1,7 +1,7 @@
 package examples.persistence.persistence.service.impl;
 
 
-import com.baeldung.spring.data.persistence.service.common.AbstractService;
+import examples.persistence.persistence.service.common.AbstractService;
 import examples.persistence.dao.IFooDao;
 import examples.persistence.model.Foo;
 import examples.persistence.persistence.service.IFooService;

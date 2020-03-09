@@ -1,4 +1,4 @@
-package com.baeldung.spring.data.persistence.dao;
+package examples.persistence.persistence.dao;
 
 import com.baeldung.spring.data.persistence.model.Foo;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.baeldung.spring.data.persistence.service.common;
+package examples.persistence.persistence.service.common;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.baeldung.spring.data.persistence.model;
+package examples.persistence.persistence.model;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.baeldung.spring.data.persistence.config;
+package examples.persistence.persistence.config;
 
 import java.util.Properties;
 
@@ -24,7 +24,7 @@ import com.google.common.base.Preconditions;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({ "classpath:persistence-${envTarget:h2}.properties" })
-@ComponentScan({ "com.baeldung.examples.persistence.persistence" })
+@ComponentScan({ "examples.persistence.persistence" })
 // @ImportResource("classpath*:springDataPersistenceConfig.xml")
 @EnableJpaRepositories(basePackages = { "com.baeldung.examples.persistence.persistence.dao", "com.baeldung.examples.persistence.persistence.jpaquery" })
 public class PersistenceConfig {
@@ -40,7 +40,7 @@ public class PersistenceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[] { "com.baeldung.examples.persistence.persistence.model" });
+        em.setPackagesToScan(new String[] { "examples.persistence.persistence.persistence.model" });
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         // vendorAdapter.set

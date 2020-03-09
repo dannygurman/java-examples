@@ -1,4 +1,4 @@
-package com.baeldung.spring.data.persistence.jpaquery;
+package examples.persistence.persistence.jpaquery;
 
 import java.time.LocalDate;
 import java.util.Collection;
