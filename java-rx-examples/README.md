@@ -7,7 +7,7 @@
 - [Implementing Custom Operators in RxJava](http://www.baeldung.com/rxjava-custom-operators)
 - [Introduction to RxJava](http://www.baeldung.com/rx-java)
 - [Observable Utility Operators in RxJava](http://www.baeldung.com/rxjava-observable-operators)
-- [Introduction to rxjava-jdbc](http://www.baeldung.com/rxjava-jdbc)
+- [Introduction to rxjava-examples.persistence.jdbc](http://www.baeldung.com/rxjava-examples.persistence.jdbc)
 - [Schedulers in RxJava](http://www.baeldung.com/rxjava-schedulers)
 - [Mathematical and Aggregate Operators in RxJava](http://www.baeldung.com/rxjava-math)
 - [Combining Observables in RxJava](http://www.baeldung.com/rxjava-combine-observables)

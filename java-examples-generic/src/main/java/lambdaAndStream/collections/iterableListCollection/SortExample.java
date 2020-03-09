@@ -28,7 +28,7 @@ public class SortExample {
         people.sort(personComparator);
 
 
-        //ALTERNATIVES using java.util.collections:
+        //ALTERNATIVES using java.examples.persistence.util.collections:
 
         // 1.  Collections.sort( people);
 

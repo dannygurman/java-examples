@@ -74,20 +74,20 @@ public class BackPressureSimpleTest {
 
     /*Output:
     INFO: | onSubscribe([Synchronous Fuseable] FluxArray.ArraySubscription)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | request(2)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | onNext(1)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | onNext(2)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | request(2)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | onNext(3)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | onNext(4)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | request(2)
-    Sep 24, 2018 5:06:15 PM reactor.util.Loggers$JdkLogger info
+    Sep 24, 2018 5:06:15 PM reactor.examples.persistence.util.Loggers$JdkLogger info
     INFO: | onComplete()*/
 }

@@ -47,8 +47,8 @@ public class OptionalBasicExample {
     ofNullable on Empty Optional: Optional.empty
 
     Exception in thread "main" java.lang.NullPointerException
-    at java.util.Objects.requireNonNull(Objects.java:203)
-    at java.util.Optional.<init>(Optional.java:96)
-    at java.util.Optional.of(Optional.java:108)*/
+    at java.examples.persistence.util.Objects.requireNonNull(Objects.java:203)
+    at java.examples.persistence.util.Optional.<init>(Optional.java:96)
+    at java.examples.persistence.util.Optional.of(Optional.java:108)*/
     //...
 }

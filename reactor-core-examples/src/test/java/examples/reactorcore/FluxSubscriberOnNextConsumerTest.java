@@ -43,19 +43,19 @@ public class FluxSubscriberOnNextConsumerTest {
         2:Thread[main,5,main]
         3:Thread[main,5,main]
         4:Thread[main,5,main]
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onSubscribe([Synchronous Fuseable] FluxArray.ArraySubscription)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | request(unbounded)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onNext(1)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onNext(2)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onNext(3)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onNext(4)
-        Sep 24, 2018 4:24:40 PM reactor.util.Loggers$JdkLogger info
+        Sep 24, 2018 4:24:40 PM reactor.examples.persistence.util.Loggers$JdkLogger info
         INFO: | onComplete()*/
 
         // onSubscribe() – This is called when we subscribe to our stream

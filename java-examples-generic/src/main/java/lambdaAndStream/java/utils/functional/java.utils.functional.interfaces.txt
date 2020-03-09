@@ -1,4 +1,4 @@
-In Java 8  java.util.function package there are 43
+In Java 8  java.examples.persistence.util.function package there are 43
 useful functional interface.
 
 It divided to 4 main categories:

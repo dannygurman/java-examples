@@ -1,4 +1,4 @@
- java.util.concurrent.BlockingQueue is a java Queue that support operations that wait for the queue to
+ java.examples.persistence.util.concurrent.BlockingQueue is a java Queue that support operations that wait for the queue to
  become non-empty when retrieving and removing an element,
  and wait for space to become available in the queue when adding an element.
 

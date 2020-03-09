@@ -46,7 +46,7 @@ public class FutureExample4 extends FutureExampleAbs {
     //Output:
   /*  Dp Other things
     And other things..
-    TimeoutException occurredjava.util.concurrent.TimeoutException
+    TimeoutException occurredjava.examples.persistence.util.concurrent.TimeoutException
     is done:false
     is canceled:false
     NA*/
