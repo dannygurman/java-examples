@@ -8,6 +8,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Optional;
+
 
 //SpringBootApplication - Indicates a configuration class that declares one or more @Bean methods and also
 // triggers auto-configuration and component scanning.
@@ -51,8 +53,9 @@ public class Application {
             log.info("");
 
 			// fetch an individual customer by ID
-			Customer customer = repository.findOne(1L);
-			log.info("Customer found with findOne(1L):");
+			Optional<Customer> customerOptional = repository.findById(1L);
+			Customer customer = customerOptional.orElse(null);;
+			log.info("Customer found with findById(1L):");
 			log.info("--------------------------------");
 			log.info(customer.toString());
             log.info("");
