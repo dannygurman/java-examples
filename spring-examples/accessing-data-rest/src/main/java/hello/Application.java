@@ -1,7 +1,9 @@
 package hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 //SpringBootApplication - Indicates a configuration class that declares one or more @Bean methods and also
 // triggers auto-configuration and component scanning.
@@ -20,6 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Application {
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

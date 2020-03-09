@@ -18,6 +18,7 @@
 <modules>
 <module>${spring.examples.dir}/spring-examples-parent</module>
 <module>${spring.examples.dir}/accessing-data-jpa</module>
+<module>${spring.examples.dir}/accessing-data-rest</module>
 <module>${spring.examples.dir}/spring.boot.web</module>
 <module>${spring.examples.dir}/spring-examples-boot-elastic</module>
 <module>${spring.examples.dir}/spring.cache.basic</module>
