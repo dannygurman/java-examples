@@ -18,6 +18,7 @@
         <junit.jupiter.version>5.0.0-M1</junit.jupiter.version>
         <h2.version>1.4.197</h2.version>
         <mysql.connector.version>5.1.9</mysql.connector.version>
+        <h2.connector.version>1.4.195</h2.connector.version>
     </properties>
 
     <dependencyManagement>
@@ -26,6 +27,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.connector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.connector.version}</version>
             </dependency>
 
             <dependency>
@@ -44,6 +51,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-rest</artifactId>
                 <version>${spring.boot.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
             </dependency>
 
         </dependencies>
