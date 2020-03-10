@@ -26,7 +26,7 @@ import com.google.common.base.Preconditions;
 @PropertySource({ "classpath:persistence-${envTarget:h2}.properties" })
 @ComponentScan({ "examples.persistence.persistence" })
 // @ImportResource("classpath*:springDataPersistenceConfig.xml")
-@EnableJpaRepositories(basePackages = { "com.baeldung.examples.persistence.persistence.dao", "com.baeldung.examples.persistence.persistence.jpaquery" })
+@EnableJpaRepositories(basePackages = { "com.baeldung.examples.persistence.persistence.hibernateexample.dao", "com.baeldung.examples.persistence.persistence.jpaquery" })
 public class PersistenceConfig {
 
     @Autowired

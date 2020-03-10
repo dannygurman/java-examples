@@ -39,7 +39,7 @@ Its job is to catch all persistence related exceptions and rethrow them as a Spr
 For this, we should configure PersistenceExceptionTranslationPostProcessor in our application context:
 
 <bean class=
-  "org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+  "org.springframework.hibernateexample.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 This bean post processor adds an advisor to all beans marked with @Repository.
 The advisor’s responsibility is to translate the platform-specific exceptions to the Spring’s unified unchecked exceptions.
 

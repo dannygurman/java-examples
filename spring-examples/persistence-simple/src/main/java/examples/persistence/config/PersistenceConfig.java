@@ -29,10 +29,10 @@ import com.google.common.base.Preconditions;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = { "examples.persistence.dao" }, transactionManagerRef = "jpaTransactionManager")
+@EnableJpaRepositories(basePackages = { "examples.persistence.hibernateexample.dao" }, transactionManagerRef = "jpaTransactionManager")
 @EnableJpaAuditing
 @PropertySource({ "classpath:persistence-h2.properties" })
-@ComponentScan({ "persistence", "examples.persistence.dao" })
+@ComponentScan({ "persistence", "examples.persistence.hibernateexample.dao" })
 public class PersistenceConfig {
 
     @Autowired

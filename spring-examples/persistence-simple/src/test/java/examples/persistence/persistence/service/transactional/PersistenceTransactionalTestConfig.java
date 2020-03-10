@@ -28,8 +28,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({ "classpath:persistence-h2.properties" })
-@ComponentScan({ "com.baeldung.persistence","com.baeldung.examples.persistence.dao" })
-@EnableJpaRepositories(basePackages = "com.baeldung.examples.persistence.dao")
+@ComponentScan({ "com.baeldung.persistence","com.baeldung.examples.persistence.hibernateexample.dao" })
+@EnableJpaRepositories(basePackages = "com.baeldung.examples.persistence.hibernateexample.dao")
 public class PersistenceTransactionalTestConfig {
 
     public static class TransactionSynchronizationAdapterSpy extends TransactionSynchronizationAdapter {

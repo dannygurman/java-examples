@@ -26,8 +26,8 @@ import com.google.common.base.Preconditions;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({ "classpath:persistence-h2.properties" })
-@ComponentScan({ "examples.persistence","examples.persistence.dao" })
-@EnableJpaRepositories(basePackages = "examples.persistence.dao")
+@ComponentScan({ "examples.persistence","examples.persistence.hibernateexample.dao" })
+@EnableJpaRepositories(basePackages = "examples.persistence.hibernateexample.dao")
 public class PersistenceJPAConfig {
 
     @Autowired
