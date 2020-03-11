@@ -1,4 +1,2 @@
-https://examples.javacodegeeks.com/enterprise-java/spring/data/spring-data-jparepository-example/
-https://dzone.com/articles/hibernate-5-java-configuration-example
 https://www.logicbig.com/tutorials/spring-framework/spring-orm/local-container-entity-manager-factory-bean.html
 https://www.logicbig.com/tutorials/spring-framework/spring-orm/spring-jpa-orm.html
