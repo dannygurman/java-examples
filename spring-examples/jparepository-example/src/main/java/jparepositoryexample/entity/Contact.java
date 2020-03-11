@@ -41,8 +41,8 @@ public class Contact {
 	@Enumerated(EnumType.STRING)
 	private PhoneType phoneType;
 
-	@OneToMany(mappedBy="contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Contact_Note.class)
-	private List<Contact_Note> notes;
+	@OneToMany(mappedBy="contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = ContactNote.class)
+	private List<ContactNote> notes;
 
 	public Contact() {
 	}
@@ -104,19 +104,19 @@ public class Contact {
 		this.phoneType = phoneType;
 	}
 
-	public List<Contact_Note> getNotes() {
+	public List<ContactNote> getNotes() {
 		if (this.notes == null) {
 			this.notes = new ArrayList<>();
 		}
 		return this.notes;
 	}
 	
-	public void addNote(Contact_Note note){
+	public void addNote(ContactNote note){
 		getNotes().add(note);
 		note.setContact(this);
 	}
 
-	public void setNotes(List<Contact_Note> addresses) {
+	public void setNotes(List<ContactNote> addresses) {
 		this.notes = addresses;
 	}
 

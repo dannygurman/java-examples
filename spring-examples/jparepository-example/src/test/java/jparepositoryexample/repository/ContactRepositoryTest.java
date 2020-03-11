@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import jparepositoryexample.entity.Contact;
-import jparepositoryexample.entity.Contact_Note;
+import jparepositoryexample.entity.ContactNote;
 import jparepositoryexample.type.PhoneType;
 
 @RunWith(SpringRunner.class)
@@ -25,7 +25,7 @@ public class ContactRepositoryTest {
 	@Test
 	public void it_can_find_the_contact_after_save_it() {
 		Contact contact = new Contact("Mary", "Zheng", "test@test.com", PhoneType.HOME, "6365272943");
-		Contact_Note note = new Contact_Note();
+		ContactNote note = new ContactNote();
 		note.setMessage("She is a java geek");
 		contact.addNote(note);	
 		
@@ -46,7 +46,7 @@ public class ContactRepositoryTest {
 	@Test
 	public void it_can_delete_the_contact_after_save_it() {
 		Contact contact = new Contact("Mary", "Zheng", "test@test.com", PhoneType.HOME, "6365272943");
-		Contact_Note note = new Contact_Note();
+		ContactNote note = new ContactNote();
 		note.setMessage("She is a java geek");
 		contact.addNote(note);
 		

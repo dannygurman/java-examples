@@ -7,7 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Contact_Note {
+public class ContactNote {
 
 	@Id
 	@GeneratedValue
@@ -19,7 +19,7 @@ public class Contact_Note {
 	@JoinColumn(name = "CONTACT_ID")
 	private Contact contact;
 
-	public Contact_Note() {
+	public ContactNote() {
 		super();
 	}
 
