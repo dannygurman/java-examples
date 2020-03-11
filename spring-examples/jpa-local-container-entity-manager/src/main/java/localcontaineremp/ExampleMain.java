@@ -1,5 +1,6 @@
 package localcontaineremp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ExampleMain {
+
+    @Autowired
+    private EntityManagerFactory emf;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context =  new AnnotationConfigApplicationContext(AppConfig.class);

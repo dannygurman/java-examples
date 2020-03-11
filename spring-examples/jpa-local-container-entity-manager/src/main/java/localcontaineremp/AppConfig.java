@@ -1,16 +1,40 @@
 package localcontaineremp;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.PropertySource;
+
+import com.google.common.base.Preconditions;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
+@PropertySource({ "classpath:persistence-h2.properties" })
 public class AppConfig {
+
+    @Autowired
+    private Environment env;
+
+    public AppConfig() {
+        super();
+    }
 
     @Bean
     public DataSource h2DataSource() {
@@ -20,16 +44,57 @@ public class AppConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean factoryBean() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+         emf.setDataSource(dataSource());
 
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setDataSource(h2DataSource());
-        factory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        //comment the following line if you want to use default META-INF/persistence.xml
-        factory.setPersistenceXmlLocation("jpa/my-persistence.xml");
-        Properties properties = new Properties();
-        properties.setProperty("javax.persistence.schema-generation.database.action", "create");
-        factory.setJpaProperties(properties);
-        return factory;
+        emf.setPersistenceUnitName("primary");
+        emf.setPackagesToScan(new String[]{"localcontaineremp"});
+
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        emf.setJpaVendorAdapter(vendorAdapter);
+        emf.setJpaProperties(additionalProperties());
+
+        return emf;
     }
+
+    @Bean
+    public DataSource dataSource() {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        String driverClass = env.getProperty("jdbc.driverClassName");
+        dataSource.setDriverClassName(driverClass);
+        String url = env.getProperty("jdbc.url");
+        dataSource.setUrl(Preconditions.checkNotNull(url));
+      //  dataSource.setUsername(Preconditions.checkNotNull(env.getProperty("jdbc.user")));
+        dataSource.setUsername("");
+       String password = Preconditions.checkNotNull(env.getProperty("jdbc.pass"));
+        dataSource.setPassword(password);
+        try {
+            DriverManager.getConnection(url ,"",password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dataSource;
+    }
+
+    final Properties additionalProperties() {
+        final Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "false");
+        return hibernateProperties;
+    }
+
+  /*  @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+        final JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(emf);
+        return transactionManager;
+    }
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        return new PersistenceExceptionTranslationPostProcessor();
+    }*/
 }
