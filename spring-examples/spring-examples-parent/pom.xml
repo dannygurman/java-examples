@@ -15,7 +15,7 @@
         <spring.version>5.2.4.RELEASE</spring.version>
         <spring.boot.version>2.2.5.RELEASE </spring.boot.version>
         <junit.version>4.13</junit.version>
-        <junit.jupiter.version>5.0.0-M1</junit.jupiter.version>
+        <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <h2.version>1.4.197</h2.version>
         <mysql.connector.version>5.1.9</mysql.connector.version>
         <hibernate.version>5.4.4.Final</hibernate.version>
@@ -75,6 +75,12 @@
                 <artifactId>spring-boot-starter-parent</artifactId>
                 <version>${spring.boot.version}</version>
               <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.version}</version>
             </dependency>
 
             <dependency>
@@ -191,6 +197,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>28.2-jre</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.threeten</groupId>
+                <artifactId>threetenbp</artifactId>
+                <version>1.4.1</version>
             </dependency>
 
             <dependency>
