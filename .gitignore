@@ -27,3 +27,5 @@ generated
 licenses
 
 /sample.mv.db
+/spring-examples/spring-boot-hibernate/sample.mv.db
+/spring-examples/spring-boot-hibernate/sample.trace.db
