@@ -36,12 +36,12 @@ public class AppConfig {
         super();
     }
 
-    @Bean
+   /* @Bean
     public DataSource h2DataSource() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .build();
-    }
+    }*/
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {

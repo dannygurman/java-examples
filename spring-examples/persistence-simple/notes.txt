@@ -1,2 +1,0 @@
-https://www.logicbig.com/tutorials/spring-framework/spring-orm/local-container-entity-manager-factory-bean.html
-https://www.logicbig.com/tutorials/spring-framework/spring-orm/spring-jpa-orm.html

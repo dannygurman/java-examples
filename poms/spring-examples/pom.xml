@@ -19,13 +19,16 @@
 <module>${spring.examples.dir}/spring-examples-parent</module>
 <module>${spring.examples.dir}/accessing-data-jpa</module>
 <module>${spring.examples.dir}/accessing-data-rest</module>
-<module>${spring.examples.dir}/spring.boot.web</module>
-<module>${spring.examples.dir}/spring-examples-boot-elastic</module>
-<module>${spring.examples.dir}/spring.cache.basic</module>
-<module>${spring.examples.dir}/spring.cache.guava</module>
-<module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
-<module>${spring.examples.dir}/spring-boot-test</module>
-<module>${spring.examples.dir}/spring-load-implementors</module>
+    <module>${spring.examples.dir}/hibernate-5-example</module>
+    <module>${spring.examples.dir}/jpa-local-container-entity-manager</module>
+    <module>${spring.examples.dir}/jparepository-example</module>
+
+    <!--<module>${spring.examples.dir}/spring-examples-boot-elastic</module>
+    <module>${spring.examples.dir}/spring.cache.basic</module>
+    <module>${spring.examples.dir}/spring.cache.guava</module>
+    <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
+    <module>${spring.examples.dir}/spring-boot-test</module>
+    <module>${spring.examples.dir}/spring-load-implementors</module>-->
 </modules>
 
 
