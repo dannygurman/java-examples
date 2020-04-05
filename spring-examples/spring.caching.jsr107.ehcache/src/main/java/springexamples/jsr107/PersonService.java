@@ -1,4 +1,4 @@
-package org.terracotta.jsr107;
+package springexamples.jsr107;
 
 import java.util.Date;
 import static java.util.concurrent.TimeUnit.SECONDS;

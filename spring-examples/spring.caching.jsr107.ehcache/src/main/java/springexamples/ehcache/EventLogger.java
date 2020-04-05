@@ -1,4 +1,4 @@
-package org.terracotta.ehcache;
+package springexamples.ehcache;
 
 import org.ehcache.event.CacheEvent;
 import org.ehcache.event.CacheEventListener;
@@ -14,7 +14,7 @@ public class EventLogger implements CacheEventListener<Object, Object>{
   private static final Logger LOGGER = LoggerFactory.getLogger(EventLogger.class);
 
   @Override
-  public void onEvent(CacheEvent<Object, Object> event) {
+  public void onEvent(CacheEvent<?, ?> event) {
     LOGGER.info("Event: " + event.getType() + " Key: " + event.getKey() + " old value: " + event.getOldValue() + " new value: " + event.getNewValue());
   }
 

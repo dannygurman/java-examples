@@ -13,7 +13,7 @@
 
     <listeners>
         <listener>
-          <class>org.terracotta.ehcache.EventLogger</class>
+          <class>springexamples.ehcache.EventLogger</class>
           <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
           <event-ordering-mode>UNORDERED</event-ordering-mode>
           <events-to-fire-on>CREATED</events-to-fire-on>

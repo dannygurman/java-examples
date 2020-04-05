@@ -1,4 +1,4 @@
-package org.terracotta.jsr107;
+package springexamples.jsr107;
 
 import java.io.Serializable;
 
