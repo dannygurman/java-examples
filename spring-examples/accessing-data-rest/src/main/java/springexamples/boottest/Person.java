@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

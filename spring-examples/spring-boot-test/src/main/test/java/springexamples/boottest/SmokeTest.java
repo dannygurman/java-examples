@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SmokeTest {
 
     @Autowired
-    private HomeController controller;
+    private GreetingController controller;
 
     @Test
     public void contexLoadsTest() throws Exception {

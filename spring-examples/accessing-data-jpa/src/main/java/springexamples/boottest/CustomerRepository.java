@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 import java.util.List;
 

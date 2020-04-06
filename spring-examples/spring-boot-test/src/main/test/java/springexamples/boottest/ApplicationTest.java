@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 
 import org.junit.Test;
@@ -40,10 +40,10 @@ public class ApplicationTest {
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
 
-        RequestBuilder requestBuilder = get("/");
+        RequestBuilder requestBuilder = get("/"+GreetingController.GREETING_URL);
         ResultHandler resultHandler = print();
         ResultMatcher resultMatcher1 =  status().isOk();
-        ResultMatcher resultMatcher2 = content().string(containsString("Hello World"));
+        ResultMatcher resultMatcher2 = content().string(containsString(GreetingService.RESPONSE_TEXT));
 
         this.mockMvc.perform(requestBuilder).andDo(resultHandler).andExpect(resultMatcher1).andExpect(resultMatcher2);
     }

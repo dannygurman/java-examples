@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +22,8 @@ public class HttpRequestTest {
 
     @Test
     public void greetingShouldReturnDefaultMessage() throws Exception {
-        String url = "http://localhost:" + port + "/";
+        String url = "http://localhost:" + port + "/"+GreetingController.GREETING_URL;
         String restResponse = this.restTemplate.getForObject(url, String.class);
-        assertThat(restResponse.contains("Hello World"));
+        assertThat(restResponse.contains(GreetingService.RESPONSE_TEXT));
     }
 }

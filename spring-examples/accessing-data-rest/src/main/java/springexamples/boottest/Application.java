@@ -1,9 +1,7 @@
-package hello;
+package springexamples.boottest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 //SpringBootApplication - Indicates a configuration class that declares one or more @Bean methods and also
 // triggers auto-configuration and component scanning.

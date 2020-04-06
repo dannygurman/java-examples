@@ -1,4 +1,4 @@
-package hello;
+package springexamples.boottest;
 
 //import static org.hamcrest.Matchers.containsString;
 //import static org.mockito.Mockito.when;
@@ -19,8 +19,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.regex.Matcher;
-
 
 //The service dependency will be automatically injected by Spring into the controller (because of the constructor signature).
 // To test this controller with @WebMvcTest you can do this:
@@ -29,6 +27,8 @@ import java.util.regex.Matcher;
 // (if you don not do this the application context cannot start),
 // and we set its expectations using Mockito
 
+// In an application with multiple controllers you can even ask for just one to be instantiated,
+// using, for example @WebMvcTest(GreetingController.class)
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(GreetingController.class)
@@ -46,7 +46,7 @@ public class WebMockTest {
 
         Mockito.when(service.greet()).thenReturn(MOCK_RESULT_STRING);//Could be import statically -
 
-        RequestBuilder requestBuilder = get("/greeting");
+        RequestBuilder requestBuilder = get("/"+GreetingController.GREETING_URL);
         ResultHandler resultHandler = print();
         ResultMatcher resultMatcher1 =  status().isOk();
 

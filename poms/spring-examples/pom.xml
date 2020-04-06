@@ -24,14 +24,16 @@
     <module>${spring.examples.dir}/jparepository-example</module>
     <module>${spring.examples.dir}/spring.basic.annotations</module>
     <module>${spring.examples.dir}/spring.boot.web</module>
-    <module>${spring.examples.dir}/spring.cache.basic</module>
-    <module>${spring.examples.dir}/spring.cache.guava</module>
-    <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
-    <!--<module>${spring.examples.dir}/spring-examples-boot-elastic</module>
+    <module>${spring.examples.dir}/spring-boot-hibernate</module>
     <module>${spring.examples.dir}/spring.cache.basic</module>
     <module>${spring.examples.dir}/spring.cache.guava</module>
     <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
     <module>${spring.examples.dir}/spring-boot-test</module>
+    <!--<module>${spring.examples.dir}/spring-examples-boot-elastic</module>
+    <module>${spring.examples.dir}/spring.cache.basic</module>
+    <module>${spring.examples.dir}/spring.cache.guava</module>
+    <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
+
     <module>${spring.examples.dir}/spring-load-implementors</module>-->
 </modules>
 
