@@ -1,16 +1,15 @@
-package com.springexamples.factorybean;
+package com.springexamples.factorybean.factories;
 
-import org.springframework.beans.factory.FactoryBean;
+import com.springexamples.factorybean.Tool;
+import org.springframework.beans.factory.config.AbstractFactoryBean;
 
-public class ToolFactory implements FactoryBean<Tool> {
-   
+public abstract class AbsToolFactoryBean extends AbstractFactoryBean<Tool> {
+
     private int factoryId;
     private int toolId;
 
     @Override
-    public Tool getObject() throws Exception {
-        return new Tool(toolId);
-    }
+    public abstract boolean isSingleton();
 
     @Override
     public Class<?> getObjectType() {
@@ -18,8 +17,8 @@ public class ToolFactory implements FactoryBean<Tool> {
     }
 
     @Override
-    public boolean isSingleton() {
-        return false;
+    protected Tool createInstance() throws Exception {
+        return new Tool(toolId);
     }
 
     public int getFactoryId() {

@@ -1,22 +1,27 @@
-package com.springexamples.factorybean;
+package com.springexamples.factorybean.factories;
 
-import org.springframework.beans.factory.config.AbstractFactoryBean;
+import com.springexamples.factorybean.Tool;
+import org.springframework.beans.factory.FactoryBean;
 
-//no need to set singleton property because default value is true
-public class SingleToolFactory extends AbstractFactoryBean<Tool> {
-    
+public abstract class AbsToolFactoryBean2 implements FactoryBean<Tool> {
+   
     private int factoryId;
     private int toolId;
+
+    @Override
+    public abstract boolean isSingleton();
+
+    @Override
+    public Tool getObject() throws Exception {
+        return new Tool(toolId);
+    }
 
     @Override
     public Class<?> getObjectType() {
         return Tool.class;
     }
 
-    @Override
-    protected Tool createInstance() throws Exception {
-        return new Tool(toolId);
-    }
+
 
     public int getFactoryId() {
         return factoryId;
