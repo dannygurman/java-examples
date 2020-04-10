@@ -1,8 +1,6 @@
-package loadimplementors;
+package springexampes.injectcollection.beanreference.ex1;
 
 import java.util.List;
-
-import loadimplementors.animals.Animal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +10,8 @@ public class Zoo {
 	List<Animal> animals;
 
 	@Autowired
-	public Zoo(List<Animal> runners) {
-		this.animals = runners;
+	public Zoo(List<Animal> animals) {
+		this.animals = animals;
 	}
 
 	public void showAnimals() {

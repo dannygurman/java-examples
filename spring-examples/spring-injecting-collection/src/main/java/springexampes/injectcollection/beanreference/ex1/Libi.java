@@ -1,4 +1,4 @@
-package loadimplementors.animals;
+package springexampes.injectcollection.beanreference.ex1;
 
 import org.springframework.stereotype.Service;
 
