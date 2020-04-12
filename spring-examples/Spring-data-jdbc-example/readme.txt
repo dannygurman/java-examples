@@ -1,0 +1,1 @@
+When you reload the application, you can launch the H2 Console at http://localhost:8080/h2-console.
