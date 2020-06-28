@@ -32,7 +32,7 @@ public class CollectionAndMapStreamToString {
         return nullSafeObjToDescriptionMapper;
     }
 
-    private static <T> String getJoinedString (Collection<T> collection,
+    private static <T> String getJoinedString (final Collection<T> collection,
                                                Function <T , String> objectToDescriptionMapper) {
         if (collection == null){
             return "NULL collection";
@@ -41,11 +41,11 @@ public class CollectionAndMapStreamToString {
         return collection.stream().map(nullSafeObjToDescriptionMapper).collect( JOIN_STRING_COLLECTOR);
     }
 
-    public static String getJoinedInternalEntityCollection (Collection<InternalEntity> collection) {
+    public static String getJoinedInternalEntityCollection (final Collection<InternalEntity> collection) {
         return getJoinedString (collection, INTERNAL_ENTITY_TO_STRING);
     }
 
-    private static <T> String getJoinedString (Map<String, T> map,
+    private static <T> String getJoinedString (final Map<String, T> map,
                                                Function <T , String> objectToDescriptionMapper) {
         if (map == null){
             return "NULL map";
@@ -56,7 +56,7 @@ public class CollectionAndMapStreamToString {
         return map.entrySet().stream().map(entryDescriptionMapper).collect( JOIN_STRING_COLLECTOR);
     }
 
-    public static String getJoinedInternalEntityMap (Map<String, InternalEntity> map) {
+    public static String getJoinedInternalEntityMap (final Map<String, InternalEntity> map) {
         return getJoinedString (map, INTERNAL_ENTITY_TO_STRING );
     }
 
