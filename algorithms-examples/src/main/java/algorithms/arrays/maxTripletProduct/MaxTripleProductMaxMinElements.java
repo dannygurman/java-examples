@@ -66,11 +66,15 @@ public class MaxTripleProductMaxMinElements {
 
     // Driver program to test above function
     public static void main (String [] args) {
-        int arr[] = { 1, -4, 3, -6, 7, 0 };
+        int arr[] = {1, -4, 3, -6, 7, 0};
         int n = arr.length;
 
         int max = maxProduct(arr, n);
-        System.out.println("Maximum product is " + max);
+        if (max == -1) {
+            System.out.println("No Triplet Exists");
+        } else {
+            System.out.println("Maximum product is " + max);
+        }
     }
 
 }
