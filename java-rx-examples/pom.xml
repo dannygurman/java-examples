@@ -54,11 +54,6 @@
             <version>${awaitility.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.davidmoten</groupId>
-            <artifactId>rxjava-examples.persistence.jdbc</artifactId>
-            <version>${rx.java.examples.persistence.jdbc.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
