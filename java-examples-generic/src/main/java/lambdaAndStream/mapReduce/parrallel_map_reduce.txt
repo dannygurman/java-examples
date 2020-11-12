@@ -1,0 +1,14 @@
+When we use parallelized streams, we should make sure that reduce() or any other aggregate operations executed on the streams are:
+
+associative: the result is not affected by the order of the operands
+
+non-interfering: the operation doesn't affect the data source
+
+stateless and deterministic: the operation doesn't have state and produces the same output for a given input
+
+For obvious reasons, parallelized streams are much more performant than the sequential counterparts.
+ Even so, they can be overkill if the operations applied to the stream aren't expensive, or
+  the number of elements in the stream is small.
+
+Of course, parallelized streams are the right way to go when we need to work with large streams and
+perform expensive aggregate operations.

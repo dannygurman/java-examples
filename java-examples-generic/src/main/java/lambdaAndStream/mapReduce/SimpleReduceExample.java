@@ -12,8 +12,11 @@ public class SimpleReduceExample {
        Integer identity = 0;
         BinaryOperator<Integer> accumulator =(subtotal, element) -> subtotal + element;
         int result = numbers .stream().reduce(identity, accumulator);
-        int expected =21;
+        int expected = 21;
         assertThat(result).isEqualTo(expected);
+        //To make the code even more concise, we can use a method reference, instead of a lambda expression:
 
+        int result2 = numbers.stream().reduce(identity, Integer::sum);
+        assertThat(result2).isEqualTo(expected);
     }
 }
