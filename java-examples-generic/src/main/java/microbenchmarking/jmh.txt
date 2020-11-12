@@ -1,0 +1,17 @@
+JMH -the Java Microbenchmark Harness
+
+Simply put, JMH takes care of the things like JVM warm-up and code-optimization paths, making benchmarking as simple as possible.
+
+JMH supports some possible benchmarks: Throughput, AverageTime, SampleTime, and SingleShotTime.
+ These can be configured via @BenchmarkMode annotation:
+
+	<dependency>
+    <groupId>org.openjdk.jmh</groupId>
+    <artifactId>jmh-core</artifactId>
+    <version>1.19</version>
+</dependency>
+<dependency>
+    <groupId>org.openjdk.jmh</groupId>
+    <artifactId>jmh-generator-annprocess</artifactId>
+    <version>1.19</version>
+</dependency>
