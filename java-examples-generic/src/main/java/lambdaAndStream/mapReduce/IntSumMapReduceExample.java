@@ -37,7 +37,12 @@ public class IntSumMapReduceExample {
 
         Integer sumIdentity = 0 ;
 
-        return people.stream().parallel().filter(withoutDannyFilter).map(getAgeToFunction).filter(ageAbove20Predicate).reduce(sumIdentity ,intSumBinaryOperator );
+        return people.stream()
+                .parallel()
+                .filter(withoutDannyFilter)
+                .map(getAgeToFunction)
+                .filter(ageAbove20Predicate)
+                .reduce(sumIdentity ,intSumBinaryOperator );
     }
 
 
@@ -48,7 +53,13 @@ public class IntSumMapReduceExample {
 
         IntPredicate ageAbove20IntPredicate = age -> (age > 20);
 
-        return  people.stream().parallel().filter(withoutDannyFilter).mapToInt(getAgeToIntFunction).filter(ageAbove20IntPredicate).sum();
+        return  people.
+                stream().
+                parallel().
+                filter(withoutDannyFilter).
+                mapToInt(getAgeToIntFunction).
+                filter(ageAbove20IntPredicate).
+                sum();
     }
 
 
@@ -82,7 +93,10 @@ public class IntSumMapReduceExample {
 
 
         //Performing the twosum - using accumulator and combiner
-        return people.stream().parallel().reduce(sumIdentity ,personAgSumAccumulator , intSumCombiner );
+        return people.
+                stream().
+                parallel().
+                reduce(sumIdentity ,personAgSumAccumulator , intSumCombiner );
     }
 
 
