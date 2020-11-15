@@ -11,7 +11,7 @@ public class EmployeeAspect {
 		System.out.println("Executing Advice on getName()");
 	}
 	
-	@Before("execution(* com.journaldev.spring.service.*.get*())")
+	@Before("execution(* springexamples.aop.service.*.get*())")
 	public void getAllAdvice(){
 		System.out.println("Service method getter called");
 	}

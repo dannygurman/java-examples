@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public class EmployeeAroundAspect {
 
-	@Around("execution(* com.journaldev.spring.model.Employee.getName())")
+	@Around("execution(* springexamples.aop.model.Employee.getName())")
 	public Object employeeAroundAdvice(ProceedingJoinPoint proceedingJoinPoint){
 		System.out.println("Before invoking getName() method");
 		Object value = null;
