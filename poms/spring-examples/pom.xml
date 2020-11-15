@@ -34,6 +34,7 @@
     <module>${spring.examples.dir}/spring-injecting-collection</module>
     <module>${spring.examples.dir}/spring-mvc-basic</module>
     <module>${spring.examples.dir}/spring-data-jdbc-example</module>
+    <module>${spring.examples.dir}/spring-examples-aspect</module>
     <!--<module>${spring.examples.dir}/</module>
     <module>${spring.examples.dir}/spring.cache.guava</module>
     <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>

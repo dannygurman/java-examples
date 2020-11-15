@@ -24,6 +24,7 @@
         <tomcat-dbcp.version>9.0.31</tomcat-dbcp.version>
         <querydsl.version>4.2.2</querydsl.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
+        <aspectj.version>1.9.5</aspectj.version>
     </properties>
 
     <dependencyManagement>
@@ -83,6 +84,12 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
 
@@ -309,6 +316,13 @@
                 <artifactId>hamcrest-core</artifactId>
                 <version>2.2</version>
                 <scope>test</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
             </dependency>
 
         </dependencies>
