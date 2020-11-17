@@ -27,9 +27,11 @@ public class BookController {
         return bookService.getBooks();
     }
 
+    //Example - POST http://127.0.0.1:8090/api/v1/books/
+    //Body {"id":"id1","name":"name1" }
     @PostMapping()
-    public Book createBook(@RequestBody  @NotEmpty final Book book) {
-        return bookService.addBook(book);
+    public void createBook(@RequestBody  @NotEmpty final Book book) {
+        bookService.addBook(book);
     }
 
 }

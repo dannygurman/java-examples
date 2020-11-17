@@ -20,7 +20,7 @@ public class BookService {
         return bookRepository.values();
     }
 
-    public Book  addBook( final Book book) {
-        return bookRepository.put(book.getId(), book);
+    public void addBook( final Book book) {
+         bookRepository.put(book.getId(), book);
     }
 }
