@@ -8,3 +8,8 @@ public interface ObjectFactory<T> {
 
 @Documented
 public @interface ExceptionHandler {
+
+@ProdProfile
+@Profile({"!dev && !test"})
+Environment
+}

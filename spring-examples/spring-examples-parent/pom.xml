@@ -25,6 +25,9 @@
         <querydsl.version>4.2.2</querydsl.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
         <aspectj.version>1.9.5</aspectj.version>
+        <spring-security-test-version>5.3.1.RELEASE</spring-security-test-version>
+        <spring-security-web-version>5.2.3.RELEASE</spring-security-web-version>
+        <spring-security-config-version>5.2.3.RELEASE</spring-security-config-version>
     </properties>
 
     <dependencyManagement>
@@ -151,7 +154,7 @@
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
-                <!--                <scope>import</scope>-->
+                <!-- <scope>import</scope>-->
             </dependency>
 
             <!-- MVC /WEB-->
@@ -308,7 +311,7 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.9</version>
-                <!--                <scope>test</scope>-->
+                <!--   <scope>test</scope>-->
             </dependency>
 
             <dependency>
@@ -330,6 +333,26 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security-web-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>${spring-security-test-version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security-config-version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -12,6 +12,8 @@ import java.util.Collection;
 @RequestMapping(value = "${v1API}/books")
 public class BookController {
 
+    //NOTE!!! - call REST  with cookie  "mycookie=admin" (see spring security)
+
     @Autowired
     private BookService bookService;
 
