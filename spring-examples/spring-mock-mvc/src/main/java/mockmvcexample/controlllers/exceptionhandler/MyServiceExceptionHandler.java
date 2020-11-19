@@ -1,6 +1,9 @@
 package mockmvcexample.controlllers.exceptionhandler;
 
 import lombok.extern.slf4j.Slf4j;
+import mockmvcexample.exceptions.MyServiceClientException;
+import mockmvcexample.exceptions.MyServiceException;
+import mockmvcexample.exceptions.MyServiceServerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,19 +19,19 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class MyServiceExceptionHandler {
 
-    @ExceptionHandler(PolicyOptimizationException.class)
+    @ExceptionHandler(MyServiceException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiFailure handleDeviceManagerException(final HttpServletRequest request, final PolicyOptimizationException exception) {
+    public ApiFailure handleDeviceManagerException(final HttpServletRequest request, final MyServiceException exception) {
         logError(HttpStatus.INTERNAL_SERVER_ERROR, request, exception);
 
         return ApiFailure.internalError(exception.getMessage());
     }
 
-    @ExceptionHandler(PolicyOptimizationServerException.class)
+    @ExceptionHandler(MyServiceServerException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiFailure handleDeviceManagerServerException(final HttpServletRequest request, final PolicyOptimizationServerException exception) {
+    public ApiFailure handleDeviceManagerServerException(final HttpServletRequest request, final MyServiceServerException exception) {
         logError(HttpStatus.INTERNAL_SERVER_ERROR, request, exception);
 
         return ApiFailure.internalError(exception.getMessage());
@@ -43,10 +46,10 @@ public class MyServiceExceptionHandler {
         return ApiFailure.internalError(exception.getMessage());
     }
 
-    @ExceptionHandler(PolicyOptimizationClientException.class)
+    @ExceptionHandler(MyServiceClientException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiFailure handleDeviceManagerClientException(final HttpServletRequest request, final PolicyOptimizationClientException exception) {
+    public ApiFailure handleDeviceManagerClientException(final HttpServletRequest request, final MyServiceClientException exception) {
         logError(HttpStatus.BAD_REQUEST, request, exception);
 
         return ApiFailure.clientError(exception.getMessage());

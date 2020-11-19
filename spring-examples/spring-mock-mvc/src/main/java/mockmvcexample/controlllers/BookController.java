@@ -1,5 +1,7 @@
 package mockmvcexample.controlllers;
 
+import mockmvcexample.exceptions.MyServiceClientException;
+import mockmvcexample.exceptions.MyServiceServerException;
 import mockmvcexample.model.Book;
 import mockmvcexample.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +38,15 @@ public class BookController {
         bookService.addBook(book);
     }
 
+    //Example - GET http://127.0.0.1:8090/api/v1/books/exceptionserver
+    @GetMapping("/exceptionserver")
+    public void serverExceptionExample() throws MyServiceServerException{
+        throw new MyServiceServerException("my msg1");
+    }
+
+    //Example - GET http://127.0.0.1:8090/api/v1/books/exceptionclient
+    @GetMapping("/exceptionclient")
+    public void clientExceptionExample() throws MyServiceClientException {
+        throw new MyServiceClientException("my msg2");
+    }
 }
