@@ -28,6 +28,7 @@
         <spring-security-test-version>5.3.1.RELEASE</spring-security-test-version>
         <spring-security-web-version>5.2.3.RELEASE</spring-security-web-version>
         <spring-security-config-version>5.2.3.RELEASE</spring-security-config-version>
+        <mockito.version>3.5.13</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -261,7 +262,12 @@
                 <version>3.15.0</version>
             </dependency>
 
-
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
 
             <!-- misc -->
 
