@@ -29,6 +29,7 @@
         <spring-security-web-version>5.2.3.RELEASE</spring-security-web-version>
         <spring-security-config-version>5.2.3.RELEASE</spring-security-config-version>
         <mockito.version>3.5.13</mockito.version>
+        <spring-boot-test.version>2.3.6.RELEASE</spring-boot-test.version>
     </properties>
 
     <dependencyManagement>
@@ -266,6 +267,13 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-test</artifactId>
+                <version>${spring-boot-test.version}</version>
                 <scope>test</scope>
             </dependency>
 

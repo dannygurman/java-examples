@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.testSecurityContext;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -40,6 +41,8 @@ import static org.mockito.Mockito.mock;
 @TestPropertySource(locations="classpath:application-test.properties")
 @WithUserDetails(userDetailsServiceBeanName = "testUserDetailsService")
 public class AbstractControllerTest {
+
+    protected final static ResultMatcher MOCK_MVC_EXPECTED_RESULT_STATUS_OK = MockMvcResultMatchers.status().isOk();
 
     private final static Authentication authentication = mock(Authentication.class);
 
