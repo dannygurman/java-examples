@@ -1,4 +1,4 @@
-package microbenchmarking;
+package benchmarking.jmh;
 
 import org.openjdk.jmh.annotations.*;
 
