@@ -36,6 +36,7 @@
     <module>${spring.examples.dir}/spring-data-jdbc-example</module>
     <module>${spring.examples.dir}/spring-examples-aspect</module>
     <module>${spring.examples.dir}/spring-mock-mvc</module>
+    <module>${spring.examples.dir}/spring-mvc-deferred-result</module>
     <!--<module>${spring.examples.dir}/</module>
     <module>${spring.examples.dir}/spring.cache.guava</module>
     <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
