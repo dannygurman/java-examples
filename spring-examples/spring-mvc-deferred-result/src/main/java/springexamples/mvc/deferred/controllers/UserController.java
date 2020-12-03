@@ -37,15 +37,21 @@ public class UserController {
      */
 
 
-    private static final String API_PARAM_USER_NAME = "id";
+    private static final String API_PARAM_USER_NAME = "name";
     private final static String USER_CREATION_OPERATION_DESCRIPTION = "createUser";
 
     @Autowired UserService userService;
 
     @Autowired
-    @Qualifier(TaskExecutorsConfiguration.BEAN_NAME_UNUSED_RULES_ASYNC_API_EXECUTOR)
+    @Qualifier(TaskExecutorsConfiguration.BEAN_NAME_USER_ASYNC_API_EXECUTOR)
     private Executor UserAsyncApiTaskExecutor;
 
+
+    //Note the API is NOT Async - it sync!!!. it will still  return only after supplier will finish but it
+    //will not use HTTP resources
+
+
+    //Example - POST http://127.0.0.1:8091/users/danny
     @PostMapping(value="/{" + API_PARAM_USER_NAME + ":.+}")
     public DeferredResult<User> createUser( @PathVariable(API_PARAM_USER_NAME) String userName) {
         SupplierWithException<User> supplier = () -> userService.createUserLongOperation(userName);

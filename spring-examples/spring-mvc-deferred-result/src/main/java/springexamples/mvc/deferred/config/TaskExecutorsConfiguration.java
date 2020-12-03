@@ -26,7 +26,7 @@ public static final String BEAN_NAME_USER_ASYNC_API_EXECUTOR = "usersAsyncApiExe
 
 
     @Bean(name = BEAN_NAME_USER_ASYNC_API_EXECUTOR)
-    public Executor getUsersAsyncApiTaskExecutor() {
+    public Executor getUnusedRulesAsyncApiTaskExecutor() {
         return generateTaskExecutor(BEAN_NAME_USER_ASYNC_API_EXECUTOR,
             THREAD_NAME_PREFIX_USER_ASYNC_API,
             waitForJobsToCompleteOnShutdownUserApi,
