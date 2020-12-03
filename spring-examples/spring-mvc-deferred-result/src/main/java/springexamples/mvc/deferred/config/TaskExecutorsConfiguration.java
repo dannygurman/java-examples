@@ -12,26 +12,25 @@ import java.util.concurrent.Executor;
 @Configuration
 public class TaskExecutorsConfiguration {
 
-public static final String BEAN_NAME_UNUSED_RULES_ASYNC_API_EXECUTOR = "unusedRulesAsyncApiExecutor";
-    private static final String THREAD_NAME_PREFIX_UNUSED_RULES_ASYNC_API = "Unused-Rules-Async-Api-";
+public static final String BEAN_NAME_USER_ASYNC_API_EXECUTOR = "usersAsyncApiExecutor";
+    private static final String THREAD_NAME_PREFIX_USER_ASYNC_API = "Users-Async-Api-";
 
     private static final int NUMBER_OF_PROCESSORS = Runtime.getRuntime().availableProcessors();
 
-    private static final boolean WAIT_FOR_JOB_TO_COMPLETE_DEFAULT = false;
 
-    @Value("${taskExecutor.waitForJobComplete.unusedRulesPersist:false}")
-    private boolean waitForJobsToCompleteOnShutdownUnusedRulesPersist;
+    @Value("${taskExecutor.waitForJobComplete.userApi:false}")
+    private boolean waitForJobsToCompleteOnShutdownUserApi;
 
-    @Value("${taskExecutor.awaitTerminationSeconds.unusedRulesPersist:1}")
-    private int awaitTerminationSecondsUnusedRulesPersist;
+    @Value("${taskExecutor.awaitTerminationSeconds.userApi:1}")
+    private int awaitTerminationSecondsUserApi;
 
 
-    @Bean(name = BEAN_NAME_UNUSED_RULES_ASYNC_API_EXECUTOR)
-    public Executor getUnusedRulesAsyncApiTaskExecutor() {
-        return generateTaskExecutor(BEAN_NAME_UNUSED_RULES_ASYNC_API_EXECUTOR,
-            THREAD_NAME_PREFIX_UNUSED_RULES_ASYNC_API,
-            waitForJobsToCompleteOnShutdownUnusedRulesPersist,
-            awaitTerminationSecondsUnusedRulesPersist );
+    @Bean(name = BEAN_NAME_USER_ASYNC_API_EXECUTOR)
+    public Executor getUsersAsyncApiTaskExecutor() {
+        return generateTaskExecutor(BEAN_NAME_USER_ASYNC_API_EXECUTOR,
+            THREAD_NAME_PREFIX_USER_ASYNC_API,
+            waitForJobsToCompleteOnShutdownUserApi,
+            awaitTerminationSecondsUserApi );
     }
 
     private Executor generateTaskExecutor(String beanName, String threadPrefixName,

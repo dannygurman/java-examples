@@ -7,8 +7,9 @@ import springexamples.mvc.deferred.dtos.User;
 @Service
 public class UserService {
 
-    public User getUserById(String userId) {
-        return User.builder().id(userId).name("name1").build();
+    public User createUserLongOperation(String userName) {
+        //Do some relative long processing
+        return User.builder().id("userId").name(userName).build();
     }
 
 }

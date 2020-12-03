@@ -3,8 +3,8 @@ package springexamples.mvc.deferred.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -21,8 +21,24 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class UserController {
 
-    private static final String API_PARAM_USER_ID = "id";
-    private final static String GET_UNUSED_RULES_OPERATION_DESCRIPTION = "get unused rules";
+/*    Asynchronous support was introduced in Servlet 3.0 and, simply put,
+    it allows processing an HTTP request in another thread than the request receiver thread.
+
+    DeferredResult, available from Spring 3.2 onwards, assists in offloading a long-running computation
+     from an http-worker thread to a separate thread.
+
+    Although the other thread will take some resources for computation, the worker threads are
+    not blocked in the meantime and can handle incoming client requests.
+
+    The async request processing model is very useful as it helps scale an application
+     well during high loads, especially for IO intensive operations.
+
+     It could be also used as rate limiting - [rate-limiting-throttling ]
+     */
+
+
+    private static final String API_PARAM_USER_NAME = "id";
+    private final static String USER_CREATION_OPERATION_DESCRIPTION = "createUser";
 
     @Autowired UserService userService;
 
@@ -30,11 +46,11 @@ public class UserController {
     @Qualifier(TaskExecutorsConfiguration.BEAN_NAME_UNUSED_RULES_ASYNC_API_EXECUTOR)
     private Executor UserAsyncApiTaskExecutor;
 
-    @GetMapping(value="/{" + API_PARAM_USER_ID + ":.+}")
-    public DeferredResult<User> getUserById(
-          @PathVariable(API_PARAM_USER_ID) String userId) {
-
-        SupplierWithException<User> supplier = () -> userService.getUserById(userId);
-        return ControllerUtils.performDeferredOperation(UserAsyncApiTaskExecutor, supplier,  GET_UNUSED_RULES_OPERATION_DESCRIPTION);
+    @PostMapping(value="/{" + API_PARAM_USER_NAME + ":.+}")
+    public DeferredResult<User> createUser( @PathVariable(API_PARAM_USER_NAME) String userName) {
+        SupplierWithException<User> supplier = () -> userService.createUserLongOperation(userName);
+        return ControllerUtils.performDeferredOperation(UserAsyncApiTaskExecutor,
+            supplier,
+            USER_CREATION_OPERATION_DESCRIPTION);
     }
 }
