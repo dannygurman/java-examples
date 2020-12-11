@@ -17,7 +17,7 @@ public class ThenApplySync {
 
         Supplier<String> whatsYourNameSupplier  = () -> {
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);
             }
@@ -26,7 +26,7 @@ public class ThenApplySync {
 
         Function <String , String > helloFunction = name ->  "Hello " + name;
 
-        Function <String , String > welcomeFunction = name ->  "Hello " + name;
+        Function <String , String > welcomeFunction = name ->  "Welcome " + name;
 
         CompletableFuture<String> whatsYourNameFuture = CompletableFuture.supplyAsync(whatsYourNameSupplier);
 

@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>spring-examples-mvc-basic</artifactId>
+	<artifactId>spring-examples-async-controller</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
-	<name>spring-examples-mvc-basic</name>
+	<name>spring-examples-async-controller</name>
 
 	<parent>
 		<groupId>examples.spring</groupId>
@@ -22,22 +22,14 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-
-		<!-- to enable JSP -->
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
 
-    </dependencies>
+
+
+	</dependencies>
 
 	<!--<build>
 	to build war (deployed on tomcat server)
@@ -58,7 +50,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>springexamples.asynccontroller.AsyncApiExampleApplication</mainClass>
+					<mainClass>springexamples.mvc.Application</mainClass>
 					<layout>JAR</layout>
 				</configuration>
 			</plugin>
