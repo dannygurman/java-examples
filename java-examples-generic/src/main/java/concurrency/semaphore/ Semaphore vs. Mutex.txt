@@ -1,0 +1,1 @@
+Mutex acts similarly to a binary semaphore, we can use it to implement mutual exclusion.
