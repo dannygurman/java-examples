@@ -1,0 +1,29 @@
+annotating a method of a bean with @Async will make it execute in a separate thread
+ i.e. the caller will not wait for the completion of the called method.
+
+ enabling asynchronous processing with Java configuration – by
+ simply adding the @EnableAsync to a configuration class:
+
+ @Configuration
+ @EnableAsync
+ public class SpringAsyncConfig { ... }
+ First – let's go over the rules – @Async has two limitations:
+
+ it must be applied to public methods only
+ self-invocation – calling the async method from within the same class – won't work
+ The reasons are simple – the method needs to be public so that
+ it can be proxied. And self-invocation doesn't work because it bypasses
+  the proxy and calls the underlying method directly.
+
+  @Async can also be applied to a method with return type –
+  by wrapping the actual return in the Future:
+
+  Spring also provides an AsyncResult class which implements Future.
+  This can be used to track the result of asynchronous method execution.
+
+  When a method return type is a Future, exception handling is easy – Future.get() method will throw the exception.
+
+  But, if the return type is void, exceptions will not be propagated to the
+  calling thread. Hence we need to add extra configurations to handle exceptions.
+    We'll create a custom async exception handler by
+     implementing AsyncUncaughtExceptionHandler interface. The handleUncaughtException() method is invoked when there are any uncaught asynchronous exceptions:

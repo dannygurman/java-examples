@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import springexamples.asynccontroller.web.model.*;
 
 @RestController
-public class EmployeeDataController
-{
+public class EmployeeDataController {
     private static Logger log = LoggerFactory.getLogger(EmployeeDataController.class);
 
     @RequestMapping(value = "/addresses", method = RequestMethod.GET)
-    public EmployeeAddresses getAddresses()    {
+    public EmployeeAddresses getAddresses()  {
         log.info("get addresses Start");
         EmployeeAddresses employeeAddressesList = new EmployeeAddresses();
         EmployeeAddress employeeAddress1 = new EmployeeAddress();

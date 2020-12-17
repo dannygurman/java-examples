@@ -1,0 +1,45 @@
+ACID
+@Transactional provides annotation-based declarative transaction support which is similar
+to EJB container-managed transaction.
+With this annotation, we can specify transaction behavior to individual methods
+without coupling business logic with transaction code.
+
+Describes a transaction attribute on an individual method or on a class.
+ At the class level, this annotation applies as a default to all methods
+ of the declaring class and its subclasses
+
+
+ISOLATION LEVEL:
+ISOLATION_READ_COMMITTED :Indicates that dirty reads are prevented;
+non-repeatable reads and phantom reads can occur.
+
+TransactionDefinition.ISOLATION_READ_UNCOMMITTED-Indicates that dirty reads, non-repeatable
+ reads and phantom reads can occur.
+
+A non-repeatable read occurs, when during the course of a transaction,
+a row is retrieved twice and the values within the row differ between reads.
+
+A phantom read occurs when, in the course of a transaction, two identical queries are executed, and the
+ collection of rows returned by the second query is different from the first.
+Simple examples:
+
+User A runs the same query twice.
+In between, User B runs a transaction and commits.
+
+Non-repeatable read:
+The A row that user A has queried has a different value the second time.
+
+Phantom read: All the rows in the query have the same value before and after,
+but different rows are being selected (because B has deleted or inserted some).
+ Example: select sum(x) from table; will return a different result even if none of the affected rows
+themselves have been updated, if rows have been added or deleted.
+
+Spring @Transactional Annotation : Self Invocation - will not work
+
+In proxy mode (which is the default),
+only external method calls coming in through the proxy are intercepted.
+This means that self-invocation, in effect, a method within the
+target object calling another method of the target object,
+will NOT lead to an actual transaction at runtime even if the
+invoked method is marked with @Transactional.
+
