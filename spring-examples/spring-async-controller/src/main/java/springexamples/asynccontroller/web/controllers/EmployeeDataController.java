@@ -25,10 +25,8 @@ public class EmployeeDataController {
         {
             employeeAddress1.setHouseNo("1111");
             employeeAddress1.setStreetNo("111");
-            employeeAddress1.setZipCode("111111");
             employeeAddress2.setHouseNo("222");
             employeeAddress2.setStreetNo("222");
-            employeeAddress2.setZipCode("222222");
             addressList.add(employeeAddress1);
             addressList.add(employeeAddress2);
             employeeAddressesList.setEmployeeAddressList(addressList);
@@ -37,25 +35,9 @@ public class EmployeeDataController {
         return employeeAddressesList;
     }
 
-    @RequestMapping(value = "/phones", method = RequestMethod.GET)
-    public EmployeePhone getPhoneNumbers(){
-        log.info("get phones Start");
-
-        EmployeePhone employeePhone = new EmployeePhone();
-        {
-            ArrayList<String> phoneNumberList = new ArrayList<String>();
-            phoneNumberList.add("100000");
-            phoneNumberList.add("200000");
-            employeePhone.setPhoneNumbers(phoneNumberList);
-        }
-
-        return employeePhone;
-    }
-
     @RequestMapping(value = "/names", method = RequestMethod.GET)
     public EmployeeNames getEmployeeName()  {
         log.info("get names Start");
-
         EmployeeNames employeeNamesList = new EmployeeNames();
         EmployeeName employeeName1 = new EmployeeName();
         EmployeeName employeeName2 = new EmployeeName();

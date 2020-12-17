@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AsyncApiExampleApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AsyncApiExampleApplication.class, args);
+        // close the application context to shut down the custom ExecutorService
+        SpringApplication.run(AsyncApiExampleApplication.class, args)
+                .close();
     }
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
       to hold the result of an asynchronous computation.
         */
 @Configuration
-@EnableAsync
+@EnableAsync //- NOTE
 public class AsyncConfiguration {
 
     public static final String ASYNC_EXECUTOR = "asyncExecutor";
