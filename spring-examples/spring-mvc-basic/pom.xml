@@ -52,15 +52,10 @@
 	</build>-->
 
 	<build>
-		<finalName>spring-mvc-basics</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>springexamples.asynccontroller.AsyncApiExampleApplication</mainClass>
-					<layout>JAR</layout>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
