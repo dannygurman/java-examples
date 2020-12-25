@@ -1,0 +1,37 @@
+Following is a brief description about semaphore data structures.
+Semaphores are useful in solving a variety of synchronised problems.
+The concept has been introduced by Dijkstra(1968) where he introduced the
+idea of semaphores as part of the operating system in order to synchronise
+processes with each other and with hardware.
+
+The structure of a typical semaphore involves 4 stages:
+
+Non-critical region
+Entry protocol
+Critical region
+Exit protocol
+
+The non-critical region:
+ is any code which can be carried out concurrently by 2-n threads.
+
+The entry protocol:
+ is the code which must be executed by a process prior to entering a critical region.
+  It is designed to prevent the process from entering the critical region
+  if another process is already using shared resources.
+
+The critical region is the section of code in which a shared
+resource is being accessed.
+
+The exit protocol is the code that the process must execute immediately
+on completion of its critical region.
+
+Semaphores can be put to different uses:
+
+for mutual exclusive access to a single shared resource,
+in which case the semaphore is called a binary semaphore
+
+to protect access to multiple instances of a resource (a counting semaphore)
+
+to synchronise two processes (a blocking semaphore)
+The versatility of the semaphore mechanism is
+achieved through correct initialisation.
