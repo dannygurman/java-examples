@@ -1,9 +1,9 @@
 package concurrency.semaphore.ex3;
 
 public class ReceivingThread implements Runnable {
-    private SimpleSemaphore semaphore = null;
+    private MySemaphore semaphore = null;
 
-    public ReceivingThread(SimpleSemaphore semaphore){
+    public ReceivingThread(MySemaphore semaphore){
         this.semaphore = semaphore;
     }
 

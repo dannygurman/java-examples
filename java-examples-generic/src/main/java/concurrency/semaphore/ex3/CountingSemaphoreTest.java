@@ -1,9 +1,9 @@
 package concurrency.semaphore.ex3;
 
-public class SimpleSemaphoreTest {
-    //Using Semaphores for Signaling
+public class CountingSemaphoreTest {
+
     public static void main(String[] args) {
-        MySemaphore semaphore = new SimpleSemaphore();
+        MySemaphore semaphore = new CountingSemaphore();
 
         SendingThread sender = new SendingThread(semaphore);
         ReceivingThread receiver = new ReceivingThread(semaphore);
@@ -11,4 +11,5 @@ public class SimpleSemaphoreTest {
         new Thread(sender).start();
         new Thread(receiver).start();
     }
+
 }

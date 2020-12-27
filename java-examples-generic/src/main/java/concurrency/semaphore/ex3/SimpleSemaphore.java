@@ -15,7 +15,7 @@ package concurrency.semaphore.ex3;
  * The names take() and release() may seem a bit odd when using a semaphore for signaling.
  * The names origin from the use of semaphores as locks
  */
-public class SimpleSemaphore {
+public class SimpleSemaphore  implements MySemaphore{
 
     private boolean signal = false;
 

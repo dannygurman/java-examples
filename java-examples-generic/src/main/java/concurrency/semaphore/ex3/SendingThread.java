@@ -1,9 +1,9 @@
 package concurrency.semaphore.ex3;
 
 public class SendingThread implements Runnable{
-    private SimpleSemaphore semaphore = null;
+    private MySemaphore semaphore = null;
 
-    public SendingThread(SimpleSemaphore semaphore){
+    public SendingThread(MySemaphore semaphore){
         this.semaphore = semaphore;
     }
 
@@ -11,7 +11,12 @@ public class SendingThread implements Runnable{
         while(true){
             //do something, then signal
             System.out.println("Sending - before take ");
-            this.semaphore.take();
+            try {
+                this.semaphore.take();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            }
             System.out.println("Sending - after take ");
 
         }
