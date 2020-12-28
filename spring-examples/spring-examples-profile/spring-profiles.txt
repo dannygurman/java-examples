@@ -128,4 +128,100 @@ This command will package the application for prod profile.
   The Default Profile
   ----------------------
   Any bean that does not specify a profile belongs to the default profile.
-  Spring also provides a way to set the default profile when no other profile is active — by using the spring.profiles.default property.
+  Spring also provides a way to set the default profile when no other profile is active —
+  by using the spring.profiles.default property.
+
+  Get Active Profiles
+  ----------------------
+  Spring's active profiles drive the behavior of the @Profile annotation for enabling/disabling beans.
+   However, we may also wish to access the list of active profiles programmatically.
+  We have two ways to do it, using Environment or spring.active.profile.
+  ---1. Using Environment
+  We can access the active profiles from the Environment object by injecting it:
+  public class ProfileManager {
+      @Autowired
+      private Environment environment;
+      public void getActiveProfiles() {
+          for (String profileName : environment.getActiveProfiles()) {
+              System.out.println("Currently active profile - " + profileName);
+          }
+      }
+  }
+  ---2. Using spring.active.profile
+  Alternatively, we could access the profiles by injecting the property spring.profiles.active:
+  @Value("${spring.profiles.active}")
+  private String activeProfile;
+
+  Here, our activeProfile variable will contain the name of the profile that is currently active, and if there are several,
+  it'll contain their names separated by a comma.
+  However, we should consider what would happen if there is no active profile at all.
+   With our code above, the absence of an active profile would prevent the application context from being created.
+   This would result in an IllegalArgumentException owing to the missing placeholder for injecting into the variable.
+    In order to avoid this, we can define a default value:
+  @Value("${spring.profiles.active:}")
+  private String activeProfile;
+
+  Now, if no profiles are active, our activeProfile will just contain an empty string
+
+  --if we want to access the list of them just like in the previous example, we can do it by splitting the activeProfile variable:
+    public class ProfileManager {
+      @Value("${spring.profiles.active:}")
+      private String activeProfiles;
+
+      public String getActiveProfiles() {
+          for (String profileName : activeProfiles.split(",")) {
+              System.out.println("Currently active profile - " + profileName);
+          }
+      }
+  }
+
+
+  Profiles in Spring Boot
+  -----------------------------------
+  Spring Boot supports all the profile configuration outlined so far, with a few additional features.
+    The initialization parameter spring.profiles.active, introduced, can also be set up as a property in
+    Spring Boot to define currently active profiles.
+    This is a standard property that Spring Boot will pick up automatically:
+  spring.profiles.active=dev
+  To set profiles programmatically, we can also use the SpringApplication class:
+  SpringApplication.setAdditionalProfiles("dev");
+
+  To set profiles using Maven in Spring Boot, we can specify profile names under spring-boot-maven-plugin in pom.xml:
+  <plugins>
+      <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <configuration>
+              <profiles>
+                  <profile>dev</profile>
+              </profiles>
+          </configuration>
+      </plugin>
+      ...
+  </plugins>
+  and execute the Spring Boot-specific Maven goal:
+  mvn spring-boot:run
+  !!!!
+  --The most important profiles-related feature that Spring Boot brings is profile-specific properties files.
+  These have to be named in the format application-{profile}.properties.
+
+  Spring Boot will automatically load the properties in an application.properties file for all profiles,
+   and the ones in profile-specific .properties files only for the specified profile.
+
+  For example, we can configure different data sources for dev and production profiles by using two files named
+   application-dev.properties and application-production.properties:
+
+  In the application-production.properties file, we can set up a MySql data source:
+  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+  spring.datasource.url=jdbc:mysql://localhost:3306/db
+  spring.datasource.username=root
+
+  Then we can configure the same properties for the dev profile in the
+  application-dev.properties file,   to use an in-memory H2 database:
+  spring.datasource.driver-class-name=org.h2.Driver
+  spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+  spring.datasource.username=sa
+
+  In this way, we can easily provide different configurations for different environments.
+
+
