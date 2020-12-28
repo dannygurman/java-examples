@@ -1,0 +1,131 @@
+Overview:
+--------------
+Profiles are a core feature of the framework — allowing us to map
+ our beans to different profiles — for example, dev, test, and prod.
+
+Use @Profile on a Bean
+--------------
+ We use the @Profile annotation — we are mapping the bean to that particularprofile;
+ the annotation simply takes the names of one (or multiple) profiles.
+
+ Consider a basic scenario:
+  We have a bean that should only be active during development but
+  not deployed in production.
+   We annotate that bean with a dev profile, and it will only be present in
+   the container during development.
+   In production, the dev simply won't be active:
+
+   @Component
+   @Profile("dev")
+   public class DevDatasourceConfig
+
+   Profile names can also be prefixed with a NOT operator,
+    e.g., !dev, to exclude them from a profile.
+   In the example the component is activated only if dev profile is not active:
+
+   @Component
+   @Profile("!dev")
+   public class DevDatasourceConfig
+
+Set Profiles
+=================
+The next step is to activate and set the profiles so that the respective beans
+are registered in the container.
+This can be done in a variety of ways
+---
+1. Programmatically via WebApplicationInitializer Interface
+@Configuration
+public class MyWebApplicationInitializer
+  implements WebApplicationInitializer {
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+         servletContext.setInitParameter(
+          "spring.profiles.active", "dev");
+    }
+}
+---
+2. Programmatically via ConfigurableEnvironment
+We can also set profiles directly on the environment:
+@Autowired
+private ConfigurableEnvironment env;
+env.setActiveProfiles("someProfile");
+------
+3. Context Parameter in web.xml
+we can define the active profiles in the web.xml file of the web application,
+ using a context parameter:
+
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/app-config.xml</param-value>
+</context-param>
+<context-param>
+    <param-name>spring.profiles.active</param-name>
+    <param-value>dev</param-value>
+</context-param>
+----------
+4. JVM System Parameter
+The profile names can also be passed in via a JVM system parameter.
+These profiles will be activated during application startup:
+-Dspring.profiles.active=dev
+----------------
+5.Environment Variable
+In a Unix environment, profiles can also be activated via the environment variable:
+export spring_profiles_active=dev
+6. Maven Profile
+--------------------------
+Spring profiles can also be activated via Maven profiles,
+by specifying the spring.profiles.active configuration property.
+
+In every Maven profile, we can set a spring.profiles.active property:
+<profiles>
+    <profile>
+        <id>dev</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <spring.profiles.active>dev</spring.profiles.active>
+        </properties>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <properties>
+            <spring.profiles.active>prod</spring.profiles.active>
+        </properties>
+    </profile>
+</profiles>
+Its value will be used to replace the @spring.profiles.active@ placeholder in application.properties:
+spring.profiles.active=@spring.profiles.active@
+Now we need to enable resource filtering in pom.xml:
+<build>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+    ...
+</build>
+and append a -P parameter to switch which Maven profile will be applied:
+mvn clean package -Pprod
+This command will package the application for prod profile.
+ It also applies the spring.profiles.active value prod for this application when it is running.
+ See also screenshot from intellij
+
+ 7. @ActiveProfile in Tests
+ Tests make it very easy to specify what profiles are active using the @ActiveProfile annotation to enable specific profiles:
+  @ActiveProfiles("dev")
+
+  Priority:
+  --------------------
+  there are multiple ways of activating profiles. The priority over the other and what happens if we use more than one, from highest to lowest priority:
+  -1Context parameter in web.xml
+  -2WebApplicationInitializer
+  -3JVM System parameter
+  -4Environment variable
+  -5Maven profile
+
+  The Default Profile
+  ----------------------
+  Any bean that does not specify a profile belongs to the default profile.
+  Spring also provides a way to set the default profile when no other profile is active — by using the spring.profiles.default property.

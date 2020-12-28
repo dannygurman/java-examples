@@ -1,5 +1,5 @@
 package spring.examples.profiles.config;
 
-public interface DatasourceConfig {
+public interface MyDatasourceConfig {
     void setup();
 }

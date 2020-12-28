@@ -1,0 +1,131 @@
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.io.PathResource;
+import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.context.support.StandardServletEnvironment;
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.servlet.DispatcherServlet;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+@Slf4j
+public class WebInitializer implements WebApplicationInitializer {
+
+    @Override
+    public void onStartup(final ServletContext container) {
+        // Enable entity manager in view (for lazy loading in view)
+        container.addFilter("SpringOpenEntityManagerInViewFilter", OpenEntityManagerInViewFilter.class).addMappingForUrlPatterns(null, true, "/*");
+        container.addFilter("DistributionDiagnosticFilter", DistributionDiagnosticFilter.class).addMappingForUrlPatterns(null, true, "/*");
+
+        // Create the dispatcher servlet's Spring application context
+        final AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext() {
+            @Override
+            protected ConfigurableEnvironment createEnvironment() {
+                return new StandardServletEnvironment() {
+                    @Override
+                    protected void customizePropertySources(final MutablePropertySources propertySources) {
+                        try {
+                            // make possible to define spring's active profiles via MACHINE_CONFIG_FILE, e.g.:
+                            // spring.profiles.active=default,profiling
+                            propertySources.addLast(new ResourcePropertySource(new PathResource(MACHINE_CONFIG_FILE.getPath())));
+                        } catch (IOException e) {
+                            // ignore if file does not exist
+                        }
+                        super.customizePropertySources(propertySources);
+                    }
+                };
+            }
+        };
+        dispatcherContext.register(RootConfiguration.class);
+        dispatcherContext.registerShutdownHook();
+
+        String includeProfiles = String.valueOf(dispatcherContext.getEnvironment().getSystemProperties().getOrDefault("spring.profiles.include", ""));
+        //When we add profiles the default profile is removed, so add it first
+        dispatcherContext.getEnvironment().addActiveProfile("default");
+        log.info("Adding active profiles: {}", includeProfiles);
+        dispatcherContext.getEnvironment().addActiveProfile(includeProfiles);
+
+        if (dispatcherContext.getEnvironment().acceptsProfiles(PROFILING_SPRING_PROFILE_NAME)) {
+            log.info("Profiling is turned on.");
+            // name of this filter should be exactly the same as it's used for Bean Name in  WebConfiguration
+            container.addFilter("endpointMetricsFilter", DelegatingFilterProxy.class).addMappingForUrlPatterns(null, true, "/*");
+        } else {
+            log.info("Profiling is turned off. To turn it on add 'spring.profiles.active=default,{}' to file '{}' or as JVM arguments", PROFILING_SPRING_PROFILE_NAME, MACHINE_CONFIG_FILE.getAbsolutePath());
+        }
+
+        container.addListener(new ContextLoaderListener(dispatcherContext));
+        container.addListener(new RequestContextListener());
+        container.setInitParameter("defaultHtmlEscape", "true");
+
+        ServletRegistration.Dynamic dispatcher = container.addServlet("appServlet", new DispatcherServlet(dispatcherContext));
+
+        // Enable multipart
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(null, 50000000, 50000000, 0);
+        dispatcher.setMultipartConfig(multipartConfigElement);
+
+        dispatcher.setAsyncSupported(true);
+        dispatcher.setLoadOnStartup(1);
+        dispatcher.addMapping("/");
+
+        configureSpringSecurity(container, dispatcherContext);
+
+        try {
+            // Create a trust manager that does not validate certificate chains
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+
+                @Override
+                public void checkClientTrusted(final X509Certificate[] certs, final String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(final X509Certificate[] certs, final String authType) {
+                }
+            }
+            };
+
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+            // Create all-trusting host name verifier
+            HostnameVerifier allHostsValid = (hostname, session) -> true;
+
+            // Install the all-trusting host verifier
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        } catch (NoSuchAlgorithmException | KeyManagementException ex) {
+            log.error("error", ex);
+        }
+
+    }
+
+    private void configureSpringSecurity(final ServletContext servletContext, final WebApplicationContext rootContext) {
+        FilterRegistration.Dynamic springSecurity = servletContext.addFilter("springSecurityFilterChain",
+            new DelegatingFilterProxy("springSecurityFilterChain", rootContext));
+        springSecurity.addMappingForUrlPatterns(null, true, "/*");
+    }
+}
+
