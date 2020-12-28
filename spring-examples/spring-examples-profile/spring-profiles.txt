@@ -5,7 +5,7 @@ Profiles are a core feature of the framework — allowing us to map
 
 Use @Profile on a Bean
 --------------
- We use the @Profile annotation — we are mapping the bean to that particularprofile;
+ We use the @Profile annotation — we are mapping the bean to that particular profile;
  the annotation simply takes the names of one (or multiple) profiles.
 
  Consider a basic scenario:
