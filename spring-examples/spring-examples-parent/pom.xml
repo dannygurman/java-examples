@@ -30,6 +30,8 @@
         <spring-security-config-version>5.2.3.RELEASE</spring-security-config-version>
         <mockito.version>3.5.13</mockito.version>
         <spring-boot-test.version>2.3.6.RELEASE</spring-boot-test.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <hibernate-validator.version>6.1.6.Final</hibernate-validator.version>
     </properties>
 
     <dependencyManagement>
@@ -192,6 +194,11 @@
                 <version>1.2</version>
             </dependency>
 
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax-validation.version}</version>
+            </dependency>
 
 
             <!-- persistence -->
@@ -207,6 +214,11 @@
                 <version>${hibernate.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
             <dependency>
                 <groupId>javax.transaction</groupId>
                 <artifactId>jta</artifactId>
