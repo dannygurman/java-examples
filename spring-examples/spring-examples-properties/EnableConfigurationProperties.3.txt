@@ -1,0 +1,44 @@
+Purpose of @EnableConfigurationProperties Annotation
+-------------------
+@EnableConfigurationProperties annotation is strictly connected to @ConfiguratonProperties.
+It enables support for @ConfigurationProperties annotated classes in our application.
+However, it's worth to point out that the Spring Boot documentation says,
+every project automatically includes @EnableConfigurationProperties.
+Therefore, @ConfiguratonProperties support is *implicitly* turned on in every Spring Boot application.
+
+In order to use a configuration class in our project, we need to register it as a regular Spring bean.
+First of all, we can annotate such a class with @Component.
+Alternatively- we can use a @Bean factory method.
+
+However, in certain situations, we may prefer to keep a @ConfigurationProperties class as a simple POJO.
+This is when @EnableConfigurationProperties comes in handy.
+
+We can specify all configuration beans directly on this annotation.
+This is a convenient way to quickly register @ConfigurationProperties annotated beans.
+
+3. Using @EnableConfigurationProperties
+Now, let's see how to use @EnableConfigurationProperties in practice.
+First, we need to define our example configuration class:
+
+@ConfigurationProperties(prefix = "additional")
+public class AdditionalProperties {
+
+    private String unit;
+    private int max;
+
+    // standard getters and setters
+}
+Note that we annotated the AdditionalProperties only with @ConfigurationProperties.
+It's still a simple POJO! (Not @Component)
+
+Finally, let's register our configuration bean using @EnableConfigurationProperties:
+
+@Configuration
+@EnableConfigurationProperties(AdditionalProperties.class)
+public class AdditionalConfiguration {
+
+    @Autowired
+    private AdditionalProperties additionalProperties;
+    // make use of the bound properties
+}
+That's all! We can now use AdditionalProperties like any other Spring bean.
