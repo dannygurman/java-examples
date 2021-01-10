@@ -225,3 +225,14 @@ This command will package the application for prod profile.
   In this way, we can easily provide different configurations for different environments.
 
 
+  Example for special profile annotation
+  ------------------------------------
+  @Target({ElementType.TYPE})
+  @Retention(RetentionPolicy.RUNTIME)
+  @Profile({"!dev && !test && !dockerDev"})
+  public @interface ProdProfile {
+      String NAME = "prod";
+  }
+
+
+
