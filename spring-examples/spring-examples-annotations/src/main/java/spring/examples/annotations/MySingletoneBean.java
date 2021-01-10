@@ -3,9 +3,9 @@ package spring.examples.annotations;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-public class MyBean {
+public class MySingletoneBean {
 
-    public MyBean() {
+    public MySingletoneBean() {
         System.out.println("MyBean instance created");
     }
 

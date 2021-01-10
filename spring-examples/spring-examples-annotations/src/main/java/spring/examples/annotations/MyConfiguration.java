@@ -9,8 +9,8 @@ public class MyConfiguration {
 
     @Bean
     @Scope(value="singleton")
-    public MyBean myBean() {
-        return new MyBean();
+    public MySingletoneBean mySingletoneBean() {
+        return new MySingletoneBean();
     }
 
 }
