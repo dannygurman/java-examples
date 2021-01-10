@@ -1,14 +1,16 @@
 package spring.examples.annotations;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Component
-public class MyCompoenent {
+@Scope(value="prototype")
+public class MyPrototypeComponent {
 
-    public MyCompoenent() {
+    public MyPrototypeComponent() {
         System.out.println("MyCompoenent instance created");
     }
 
