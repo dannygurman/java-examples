@@ -42,6 +42,7 @@
     <module>${spring.examples.dir}/spring-examples-profile</module>
     <module>${spring.examples.dir}/spring-examples-properties</module>
     <module>${spring.examples.dir}/spring-examples-annotations</module>
+    <module>${spring.examples.dir}/spring-examples-factorybean</module>
     <!--<module>${spring.examples.dir}/</module>
     <module>${spring.examples.dir}/spring.cache.guava</module>
     <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
