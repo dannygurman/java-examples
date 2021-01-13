@@ -9,27 +9,35 @@ import spring.examples.factorybean.factories.ToolFactory;
 @Configuration
 public class FactoryBeanAppConfig {
 
-    @Bean(name = "tool")
+    public static final Integer NON_SINGLE_TOOL_1_ID = 11;
+    public static final Integer NON_SINGLE_TOOL_2_ID = 12;
+    public static final Integer SINGLETONE_TOOL_ID = 13;
+
+    public static final String BEAN_NAME_NON_SINGLE_TOOL_1 = "non_single_tool1";
+    public static final String BEAN_NAME_NON_SINGLE_TOOL_2 = "non_single_tool2";
+    public static final String BEAN_NAME_SINGLETONE_TOOL_1 = "singletone_tool1";
+
+    @Bean(name = BEAN_NAME_NON_SINGLE_TOOL_1)
     public ToolFactory toolFactory() {
         ToolFactory factory = new ToolFactory();
         factory.setFactoryId(1);
-        factory.setToolId(11);
+        factory.setToolId(NON_SINGLE_TOOL_1_ID);
         return factory;
     }
 
-    @Bean(name = "tool2")
+    @Bean(name = BEAN_NAME_NON_SINGLE_TOOL_2)
     public NonSingleToolFactory nonSingleToolFactory() {
         NonSingleToolFactory factory = new NonSingleToolFactory();
         factory.setFactoryId(2);
-        factory.setToolId(12);
+        factory.setToolId(NON_SINGLE_TOOL_2_ID);
         return factory;
     }
 
-    @Bean(name = "tool3")
+    @Bean(name = BEAN_NAME_SINGLETONE_TOOL_1)
     public SingleToolFactory singleToolFactory() {
         SingleToolFactory factory = new SingleToolFactory();
         factory.setFactoryId(3);
-        factory.setToolId(13);
+        factory.setToolId(SINGLETONE_TOOL_ID);
         return factory;
     }
 }
