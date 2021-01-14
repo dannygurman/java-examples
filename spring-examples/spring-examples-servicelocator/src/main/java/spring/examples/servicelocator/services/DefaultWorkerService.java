@@ -14,12 +14,12 @@ import spring.examples.servicelocator.parsers.ContentType;
 
 @Service
 @Slf4j
-public class DefaultAvengersService implements AvengersService {
+public class DefaultWorkerService implements WorkersService {
 
   private ContentType.ParserFactory parserFactory;
 
   @Autowired
-  public DefaultAvengersService(ContentType.ParserFactory parserFactory) {
+  public DefaultWorkerService(ContentType.ParserFactory parserFactory) {
     this.parserFactory = parserFactory;
   }
 

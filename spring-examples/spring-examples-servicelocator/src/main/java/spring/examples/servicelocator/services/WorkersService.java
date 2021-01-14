@@ -4,7 +4,7 @@ import spring.examples.servicelocator.model.Worker;
 import spring.examples.servicelocator.parsers.ContentType;
 import java.util.List;
 
-public interface AvengersService {
+public interface WorkersService {
 
   List<Worker> getAll(ContentType contentType);
 }

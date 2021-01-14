@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.examples.servicelocator.model.Worker;
 import spring.examples.servicelocator.parsers.ContentType;
-import spring.examples.servicelocator.services.AvengersService;
+import spring.examples.servicelocator.services.WorkersService;
 
 /**
  * http://localhost:9000/api/workers/json
@@ -20,10 +20,10 @@ import spring.examples.servicelocator.services.AvengersService;
 @RequestMapping(value = "/api/workers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class WorkersController {
 
-  private AvengersService service;
+  private WorkersService service;
 
   @Autowired
-  public WorkersController(AvengersService service) {
+  public WorkersController(WorkersService service) {
     this.service = service;
   }
 
