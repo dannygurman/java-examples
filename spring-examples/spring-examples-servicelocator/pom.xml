@@ -15,10 +15,15 @@
 
 
     <dependencies>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-<!--            <artifactId>spring-boot-starter</artifactId>-->
+&lt;!&ndash;            <artifactId>spring-boot-starter</artifactId>&ndash;&gt;
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -28,10 +33,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.simpleflatmapper</groupId>
+            <artifactId>sfm-csv</artifactId>
+            <version>8.2.3</version>
+        </dependency>
     </dependencies>
 
    
