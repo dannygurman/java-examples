@@ -11,9 +11,9 @@ import spring.examples.servicelocator.exception.ParserIOException;
 import spring.examples.servicelocator.model.Worker;
 
 
-@Component(ContentType.TypeConstants.XML_PARSER)
+@Component(TypeConstants.XML_PARSER)
 @Slf4j
-public class XMLParser implements ContentType.Parser {
+public class XMLParser implements Parser {
 
   private static XmlMapper _cached;
 

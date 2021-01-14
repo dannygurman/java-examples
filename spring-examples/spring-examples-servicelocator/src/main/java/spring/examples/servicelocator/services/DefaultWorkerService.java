@@ -11,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.examples.servicelocator.model.Worker;
 import spring.examples.servicelocator.parsers.ContentType;
+import spring.examples.servicelocator.parsers.ParserFactory;
 
 @Service
 @Slf4j
 public class DefaultWorkerService implements WorkersService {
 
-  private ContentType.ParserFactory parserFactory;
+  private ParserFactory parserFactory;
 
   @Autowired
-  public DefaultWorkerService(ContentType.ParserFactory parserFactory) {
+  public DefaultWorkerService(ParserFactory parserFactory) {
     this.parserFactory = parserFactory;
   }
 

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import spring.examples.servicelocator.exception.ParserIOException;
 import spring.examples.servicelocator.model.Worker;
 
-@Component(ContentType.TypeConstants.CSV_PARSER)
+@Component(TypeConstants.CSV_PARSER)
 @Slf4j
-public class CSVParser implements ContentType.Parser {
+public class CSVParser implements Parser {
 
   private static CsvParser.MapToDSL _cached;
 

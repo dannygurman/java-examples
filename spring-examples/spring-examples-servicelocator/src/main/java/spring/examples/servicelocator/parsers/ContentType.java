@@ -40,25 +40,5 @@ public enum ContentType {
     return parserName;
   }
 
-  // object interface
-  public interface Parser {
 
-    List<Worker> parse(Reader r);
-
-    List<Worker> parse(String payload);
-  }
-
-  // factory interface
-  public interface ParserFactory {
-
-    Parser getParser(ContentType contentType);
-  }
-
-  // parserNames
-  public interface TypeConstants {
-
-    String CSV_PARSER = "csvParser";
-    String JSON_PARSER = "jsonParser";
-    String XML_PARSER = "xmlParser";
-  }
 }

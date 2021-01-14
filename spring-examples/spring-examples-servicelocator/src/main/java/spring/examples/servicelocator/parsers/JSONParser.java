@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
-@Component(ContentType.TypeConstants.JSON_PARSER)
+@Component(TypeConstants.JSON_PARSER)
 @Slf4j
-public class JSONParser implements ContentType.Parser {
+public class JSONParser implements Parser {
 
   private static ObjectMapper _cached;
 
