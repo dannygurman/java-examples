@@ -1,7 +1,7 @@
 package spring.examples.servicelocator.services;
 
 import spring.examples.servicelocator.model.Worker;
-import spring.examples.servicelocator.parsers.ContentType;
+import spring.examples.servicelocator.config.ContentType;
 import java.util.List;
 
 public interface WorkersService {

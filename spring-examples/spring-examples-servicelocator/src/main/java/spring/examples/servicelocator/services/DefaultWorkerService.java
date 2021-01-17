@@ -10,8 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.examples.servicelocator.model.Worker;
-import spring.examples.servicelocator.parsers.ContentType;
-import spring.examples.servicelocator.parsers.ParserFactory;
+import spring.examples.servicelocator.config.ContentType;
+import spring.examples.servicelocator.parsers.Parser;
+import spring.examples.servicelocator.factory.ParserFactory;
 
 @Service
 @Slf4j
@@ -26,12 +27,14 @@ public class DefaultWorkerService implements WorkersService {
 
   @Override
   public List<Worker> getAll(ContentType contentType) {
-    String fileName = contentType.fileName();
+    String fileName = contentType.fileName;
     log.info("Fetching list from file {}", fileName);
 
-    return parserFactory
-        .getParser(contentType)
-        .parse(getFileHandle(fileName));
+    //return matching parser
+    Parser parser = parserFactory.getParser(contentType);
+
+    Reader reader = getFileHandle(fileName);
+    return parser.parse(reader);
   }
 
   private Reader getFileHandle(String fileName) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.examples.servicelocator.model.Worker;
-import spring.examples.servicelocator.parsers.ContentType;
+import spring.examples.servicelocator.config.ContentType;
 import spring.examples.servicelocator.services.WorkersService;
 
 /**
