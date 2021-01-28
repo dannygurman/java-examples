@@ -14,10 +14,9 @@ public class FlatMapBasicExample extends ObservableExampleAbs {
 
 
         Function<String, Observable<String> > bookToTitleObservableMapper = bookName -> getTitleObservable(bookName);
-
-        Observable.just("book1", "book2")
-                .flatMap(bookToTitleObservableMapper)
-                .subscribe(onNextStringPrintln);
+        Observable <String> booksNamesObservable = Observable.just("book1", "book2");
+        Observable <String> bookTitleObservable  = booksNamesObservable.flatMap(bookToTitleObservableMapper);
+        bookTitleObservable.subscribe(onNextStringPrintln);
     }
 
     //return observable - therefore flattmap is required

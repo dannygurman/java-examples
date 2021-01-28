@@ -8,7 +8,7 @@ public class CreateObservableExample {
 
     public static void main(String[] args) {
 
-        System.out.println("Creating onservable using OnSubscribe Lambda ");
+        System.out.println("Creating observableOnSubscribe using OnSubscribe Lambda ");
 
         //ObservableOnSubscribe - functional interface with
         //void subscribe(@NonNull ObservableEmitter<T> var1)
