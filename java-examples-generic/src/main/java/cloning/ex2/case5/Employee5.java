@@ -47,13 +47,6 @@ public class Employee5 implements Cloneable {
 		System.out.println(objectDetails);
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
 
 	public void setBasicSalary(double basicSalary) {
 		packDetails.setBasicSalary(basicSalary);
@@ -77,10 +70,21 @@ public class Employee5 implements Cloneable {
 		//The copy constructor of Employee did not know about this new class(AdvancedPayPackDetails) created.
 		//We can actually modify the Employee constructor to include instanceOf checks for PayPackDetails, 
 		//but this is not the right way of doing things.
-		//Rather it is better if we revert back to our earlier solution where
+		//Rather it is better if we revert back to our
+		// earlier solution where
 		//we used copy constructor in case of final fields
 		//and use clone method for the classes which have Inheritance hierarchy.
 
+		/* protected Employee(Employee emp) throws CloneNotSupportedException{
+			name = emp.name;
+			identifier = emp.identifier;
+			packDetails = emp.packDetails.clone();
+		}
+
+		@Override
+		public Employee clone() throws CloneNotSupportedException {
+			return new Employee(this);
+		}*/
 
 	}
 }

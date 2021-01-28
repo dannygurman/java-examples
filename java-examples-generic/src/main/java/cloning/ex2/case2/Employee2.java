@@ -1,6 +1,8 @@
 package cloning.ex2.case2;
 
-/** This example solve the issue describe in case1- see  below 
+import lombok.Data;
+
+/** This example solve the issue describe in case1- see  below
  * BUT -
  * If PayPackDetails is composed with other object references, we have to override clone method for that object too 
  * and call its clone method inside PayPackDetails.
@@ -14,7 +16,7 @@ package cloning.ex2.case2;
  *  The solution: Use a copy constructor and return the new instance from the clone (see case 3).
 
  * **/
-
+@Data
 public class Employee2 implements Cloneable {
 
 	private String name;
@@ -27,21 +29,6 @@ public class Employee2 implements Cloneable {
 		this.packDetails = packDetails;
 	}
 
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public PayPackDetails2 getPackDetails() {
-		return packDetails;
-	}
 
 	@Override
 	public Employee2 clone() throws CloneNotSupportedException {

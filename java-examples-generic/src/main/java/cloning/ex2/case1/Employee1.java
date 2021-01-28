@@ -1,7 +1,10 @@
 package cloning.ex2.case1;
 
+import lombok.Data;
+
 /** this example demonstrate the problem of shallow cloning - see remarks below **/
 
+@Data
 public class Employee1 implements Cloneable {
 
 	private String name;
@@ -12,22 +15,6 @@ public class Employee1 implements Cloneable {
 		this.name = name;
 		this.identifier = identifier;
 		this.packDetails = packDetails;
-	}
-
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public PayPackDetails1 getPackDetails() {
-		return packDetails;
 	}
 
 	@Override
@@ -52,7 +39,8 @@ public class Employee1 implements Cloneable {
 		System.out.println("2:");
 		employee2.print();
 
-		employee2.setName("Krish"); employee2.setIdentifier("2");		
+		employee2.setName("Krish");
+		employee2.setIdentifier("2");
 		employee2.getPackDetails().setBasicSalary(700000d);
 
 		System.out.println("3:");
