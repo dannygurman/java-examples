@@ -2,7 +2,6 @@ Monads are simple yet powerful types that could give better structure to the cod
  some cases can also help dealing with unwanted side effects
 
  Technically, a monad is a parameterised type such as Optional and Stream in Java which:
-
  Implements flatMap (a.k.a. bind)
  and unit (a.k.a. identity, return, Optional.of(), etc…).
 
