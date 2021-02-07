@@ -1,5 +1,8 @@
 package cloning.ex2.case4;
 
+import lombok.Data;
+
+@Data
 public class PayPackDetails4 {
 
 	private double basicSalary = 500000d;
@@ -13,23 +16,6 @@ public class PayPackDetails4 {
 		incentive = details.getIncentive();
 	}
 
-
-
-	public double getBasicSalary() {
-		return basicSalary;
-	}
-
-	public void setBasicSalary(double basicSalary) {
-		this.basicSalary = basicSalary;
-	}
-
-	public double getIncentive() {
-		return incentive;
-	}
-
-	public void setIncentive(double incentive) {
-		this.incentive = incentive;
-	}
 
 	public double getSalary() {	
 		return getBasicSalary()+getIncentive();	
