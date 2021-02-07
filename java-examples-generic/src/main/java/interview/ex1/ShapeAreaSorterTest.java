@@ -35,7 +35,7 @@ public class ShapeAreaSorterTest {
     }
 
     @Test
-    public void shapeAreaSorterShouldReturnInputInRightOrder() throws Exception {
+    public void shapeAreaSorterShouldReturnInputInRightOrder()  {
         List<String> actualResults = shapeSorter.sortShapes(input);
 
         validateResults(actualResults);
