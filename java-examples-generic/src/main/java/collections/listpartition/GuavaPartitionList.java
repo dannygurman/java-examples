@@ -13,10 +13,10 @@ public class GuavaPartitionList {
         List<Integer> intList = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 8);
         int partitionSize = 3;
         List<List<Integer>> subSets = Lists.partition(intList, partitionSize);
+        assertThat(subSets.size(), equalTo(3));
 
         List<Integer> lastPartition = subSets.get(2);
         List<Integer> expectedLastPartition = Lists.<Integer> newArrayList(7, 8);
-        assertThat(subSets.size(), equalTo(3));
         assertThat(lastPartition, equalTo(expectedLastPartition));
     }
 }
