@@ -42,7 +42,7 @@ public class ConcurrentHashMapDemo {
         m.put(101, "Geeks");
         m.put(102, "Geeks");
 
-        // Here we cant add Hello because 101 key
+        // Here  Hello will not be added because 101 key
         // is already present in ConcurrentHashMap object
         m.putIfAbsent(101, "Hello");
 
