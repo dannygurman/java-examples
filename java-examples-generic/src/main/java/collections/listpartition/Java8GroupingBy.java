@@ -26,13 +26,13 @@ public class Java8GroupingBy {
             stream().
             collect(Collectors.groupingBy(classifier));
 
+        // example for 4 : 4 -> (4-1 /3) = 1 so 4 key is 1
         //{0=[1, 2, 3], 1=[4, 5, 6], 2=[7, 8]}
         List<List<Integer>> subSets = new ArrayList<List<Integer>>(groups.values());
+        assertThat(subSets.size(), equalTo(3));
 
         List<Integer> lastPartition = subSets.get(2);
         List<Integer> expectedLastPartition = Lists.<Integer> newArrayList(7, 8);
-
-        assertThat(subSets.size(), equalTo(3));
         assertThat(lastPartition, equalTo(expectedLastPartition));
     }
 

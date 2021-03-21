@@ -28,8 +28,13 @@ public class TestOverriding {
 	public static void main(String[] args) {
 		Cat myCat = new Cat();
 		Animal myAnimal = myCat;
+        System.out.println("1");
 		Animal.testClassMethod ();
-		myAnimal.testInstanceMethod();
+        System.out.println("2");
+        Cat.testClassMethod();
+        System.out.println("3");
+        myAnimal.testInstanceMethod();
+
 	}
 
 }

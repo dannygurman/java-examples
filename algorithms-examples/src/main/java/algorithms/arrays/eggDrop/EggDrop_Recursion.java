@@ -35,14 +35,14 @@ class EggDrop_Recursion {
             // of drops to test the floors between 21 and 40, or between 81 and 100. In all
             // three situations, we tested 20 floors
             int min_trails_upper_flower = eggDropMinimalTrails(n_eggs, k_floors - floor_id);
-            res = Math.max(min_trails_lower_flower_minus_egg,
-                    min_trails_upper_flower);
+
+            res = Math.max(min_trails_lower_flower_minus_egg,min_trails_upper_flower);
             if (res < min)
                 //updae minimum
                 min = res;
         }
 
-        return min + 1;
+        return min + 1;//Adding this drop
     }
 
     // Driver code

@@ -23,12 +23,17 @@ public class SplitListAsSeparator {
     public void givenList_whenSplittingBySeparator_thenCorrect() {
         List<Integer> intList = Lists.newArrayList(1, 2, 3, 0, 4, 5, 6, 0, 7, 8);
 
-        IntStream intStream1 = IntStream.of(-1);
+        IntPredicate filter1 = i -> intList.get(i) == 0;
 
-        IntPredicate filter = i -> intList.get(i) == 0;
-        IntStream intStream2 = IntStream.
-            range(0, intList.size()).filter(filter);//3, 7
+        IntStream intStream2temp = IntStream.range(0, intList.size());
+       // intStream2temp.boxed().collect(Collectors.toList()); -> 0-9
+
+        IntStream intStream2= intStream2temp.filter(filter1);
+        //intStream2.boxed().collect(Collectors.toList()); 3,7 (indexes where value is 0)
+
         IntStream intStream3 =  IntStream.of(intList.size());//10
+
+        IntStream intStream1 = IntStream.of(-1);
 
         int[] indexes =
             Stream.of(intStream1, intStream2, intStream3)
@@ -42,6 +47,7 @@ public class SplitListAsSeparator {
                range(0, indexes.length - 1)
                 .mapToObj(mapper)
                 .collect(Collectors.toList());
+
 
         List<Integer> lastPartition = subSets.get(2);
         List<Integer> expectedLastPartition = Lists.<Integer> newArrayList(7, 8);
