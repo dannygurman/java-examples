@@ -10,7 +10,7 @@ public abstract class TraversalExample {
 
 
     protected void testTreeTraverese(){
-        BinaryTree tree = BinaryTree.buildExampleBinaryTree();
+        BinaryTree tree = BinaryTree.buildExampleRegularBinaryTree();
         List<Node> orderedNode =  traverseTree( tree);
         orderedNode.stream().map(n -> n.value).forEach(System.out::println);
     }
