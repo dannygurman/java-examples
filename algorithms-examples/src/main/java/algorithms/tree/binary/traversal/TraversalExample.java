@@ -1,6 +1,6 @@
 package algorithms.tree.binary.traversal;
 
-import algorithms.tree.binary.BinaryTree;
+import algorithms.tree.binary.BinaryTreeUtils;
 import algorithms.tree.binary.Node;
 
 import java.util.ArrayList;
@@ -10,14 +10,14 @@ public abstract class TraversalExample {
 
 
     protected void testTreeTraverese(){
-        BinaryTree tree = BinaryTree.buildExampleRegularBinaryTree();
+        BinaryTreeUtils tree = BinaryTreeUtils.buildExampleRegularBinaryTree();
         List<Node> orderedNode =  traverseTree( tree);
         orderedNode.stream().map(n -> n.value).forEach(System.out::println);
     }
 
 
 
-    protected  List traverseTree(BinaryTree tree){
+    protected  List traverseTree(BinaryTreeUtils tree){
         List <Node> list = new ArrayList();
         traverseTreeInternal(list , tree.root);
         return list;

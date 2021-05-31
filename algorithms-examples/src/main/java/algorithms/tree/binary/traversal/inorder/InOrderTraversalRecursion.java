@@ -1,10 +1,8 @@
 package algorithms.tree.binary.traversal.inorder;
 
-import algorithms.tree.binary.BinaryTree;
 import algorithms.tree.binary.Node;
 import algorithms.tree.binary.traversal.TraversalExample;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InOrderTraversalRecursion extends TraversalExample {

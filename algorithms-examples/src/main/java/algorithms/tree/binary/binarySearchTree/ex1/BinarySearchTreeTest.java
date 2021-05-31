@@ -1,18 +1,19 @@
-package algorithms.tree.binary.ex1;
+package algorithms.tree.binary.binarySearchTree.ex1;
 
 import algorithms.tree.binary.Node;
+import algorithms.tree.binary.binarySearchTree.BSTUtils;
 
 /**
  * Created by dannyg on 1/8/2018.
  */
-public class BinaryTreeTest {
+public class BinarySearchTreeTest {
 
     //Building tree complexity:
     //expected time is O(n log n).
     // The worst case is still O(n^2)
 
     public static void main(String[] args) {
-        new BinaryTreeTest().run();
+        new BinarySearchTreeTest().run();
     }
 
 
@@ -23,18 +24,16 @@ public class BinaryTreeTest {
         // build the simple tree from chapter 11.
         Node root = new Node(5);
 
-
         System.out.println("\nBuilding tree with root value " + root.value);
-        insert(root, 1);
-        insert(root, 3);
-        insert(root, 2);
-        insert(root, 4);
-        insert(root, 7);
-        insert(root, 8);
-        insert(root, 6);
-        insert(root, 3);
-        insert(root, 9);
-
+        BSTUtils.insert(root, 1);
+        BSTUtils.insert(root, 3);
+        BSTUtils.insert(root, 2);
+        BSTUtils.insert(root, 4);
+        BSTUtils.insert(root, 7);
+        BSTUtils.insert(root, 8);
+        BSTUtils.insert(root, 6);
+        BSTUtils.insert(root, 3);
+        BSTUtils.insert(root, 9);
         //Result:
        // Inserted 1 to left of 5
         //Inserted 3 to right of 1
@@ -74,28 +73,6 @@ public class BinaryTreeTest {
     }
 
 
-    public void insert(Node node, int value) {
-        if (value < node.value) {
-            if (node.left != null) {
-                //recursion call
-                insert(node.left, value);
-            } else {
-                System.out.println("  Inserted " + value + " to left of "  + node.value);
-                //New node
-                node.left = new Node(value);
-            }
-        } else if (value > node.value) {
-            if (node.right != null) {
-                insert(node.right, value);
-            } else {
-                System.out.println("  Inserted " + value + " to right of "  + node.value);
-                //New node
-                node.right = new Node(value);
-            }
-        }
-    }
-
-    //recursion
     public void printInOrder(Node node) {
         if (node != null) {
             printInOrder(node.left);
