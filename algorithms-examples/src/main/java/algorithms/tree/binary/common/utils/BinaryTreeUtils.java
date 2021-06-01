@@ -1,5 +1,6 @@
 package algorithms.tree.binary.common.utils;
 
+import algorithms.tree.binary.common.model.BinaryTree;
 import algorithms.tree.binary.common.model.Node;
 
 import java.util.LinkedList;
@@ -12,22 +13,13 @@ public class BinaryTreeUtils {
     public static final Integer MIN_VALUE = 1;
     public static final Integer MAX_VALUE = 100;
 
-    // Root of Binary Tree
-    public Node root;
-
-    BinaryTreeUtils() {
-        root = null;
-    }
-
-
-    // see algorithms-examples\src\main\java\algorithms\tree\binary\example_binary_tree.gif
-    public static BinaryTreeUtils buildExampleRegularBinaryTree() {
-
+     // see algorithms-examples\src\main\java\algorithms\tree\binary\example_binary_tree.gif
+    public static BinaryTree buildExampleRegularBinaryTree() {
         //         1
         //     2            3
         //  4          5    6      7
 
-        BinaryTreeUtils tree = new BinaryTreeUtils();
+        BinaryTree tree = new BinaryTree();
         tree.root = new Node(MIN_VALUE);
         tree.root.left = new Node(2);
         tree.root.right = new Node(3);

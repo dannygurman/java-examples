@@ -1,5 +1,6 @@
 package algorithms.tree.binary.common.utils;
 
+import algorithms.tree.binary.common.model.BinaryTree;
 import algorithms.tree.binary.common.utils.BinaryTreeUtils;
 import algorithms.tree.binary.traversal.TreeTraversal;
 import algorithms.tree.binary.traversal.inorder.InOrderTraversalRecursion;
@@ -28,7 +29,7 @@ public class TreeTraversalUtil {
         private TreeTraversal traversalImplementor;
     }
 
-    public static List<Integer> traversalTree(BinaryTreeUtils tree, TraversalType traversalType) {
+    public static List<Integer> traversalTree(BinaryTree tree, TraversalType traversalType) {
         return traversalType.traversalImplementor.travereseTree(tree);
     }
 
