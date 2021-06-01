@@ -5,19 +5,20 @@ import algorithms.tree.binary.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public abstract class TraversalExample {
+public abstract class TreeTraversal {
 
-
-    protected void testTreeTraverese(){
-        BinaryTreeUtils tree = BinaryTreeUtils.buildExampleRegularBinaryTree();
+    public List <Integer> travereseTree(BinaryTreeUtils tree){
         List<Node> orderedNode =  traverseTree( tree);
-        orderedNode.stream().map(n -> n.value).forEach(System.out::println);
+        return orderedNode.stream()
+                .map(n -> Integer.valueOf(n.value))
+                .collect(Collectors.toList());
     }
 
 
 
-    protected  List traverseTree(BinaryTreeUtils tree){
+    protected List <Node> traverseTree(BinaryTreeUtils tree){
         List <Node> list = new ArrayList();
         traverseTreeInternal(list , tree.root);
         return list;

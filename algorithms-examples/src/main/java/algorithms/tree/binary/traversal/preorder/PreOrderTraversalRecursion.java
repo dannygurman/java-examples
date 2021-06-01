@@ -1,19 +1,13 @@
 package algorithms.tree.binary.traversal.preorder;
 
 import algorithms.tree.binary.Node;
-import algorithms.tree.binary.traversal.TraversalExample;
-import algorithms.tree.binary.traversal.postorder.PostOrderTraversalRecursion;
+import algorithms.tree.binary.traversal.TreeTraversal;
 
 import java.util.List;
 
-public class PreOrderTraversalRecursion extends TraversalExample {
-    public static void main(String[] args) {
-        PreOrderTraversalRecursion travereseExample = new PreOrderTraversalRecursion();
-        travereseExample.testTreeTraverese();
+public class PreOrderTraversalRecursion extends TreeTraversal {
+
        /* Preorder (Root, Left, Right) : 1 2 4 5 3*/
-
-    }
-
 
 
     protected  void traverseTreeInternal(List<Node> list, Node node){

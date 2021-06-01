@@ -1,18 +1,14 @@
 package algorithms.tree.binary.traversal.inorder;
 
 import algorithms.tree.binary.Node;
-import algorithms.tree.binary.traversal.TraversalExample;
+import algorithms.tree.binary.traversal.TreeTraversal;
 
 import java.util.List;
 import java.util.Stack;
 
-public class InOrderTraversalStack extends TraversalExample {
-
-    public static void main(String[] args) {
-        InOrderTraversalStack travereseExample = new InOrderTraversalStack();
-        travereseExample.testTreeTraverese();
+public class InOrderTraversalStack extends TreeTraversal {
         /* left root right       4        2        5        1        3*/
-    }
+
     protected  void traverseTreeInternal(List<Node> list, Node node) {
 
         //Stack for the nodes

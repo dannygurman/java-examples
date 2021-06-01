@@ -89,9 +89,9 @@ public class BinaryTreeUtils {
     //------ DELETE
     // Function to delete deepest element in binary tree
     //Using queue instead of recursion
-  // Assumption - the node  to delete is already the DEEPESET (last leaf)
+    // Assumption - the node  to delete is already the DEEPESET (last leaf)
 
-   private static void deleteDeepest(Node root, Node nodeToDelete) {
+    private static void deleteDeepest(Node root, Node nodeToDelete) {
         Queue<Node> q = new LinkedList<>();
         q.add(root);
         Node temp;
@@ -129,51 +129,41 @@ public class BinaryTreeUtils {
     }
 
 
+    /*    Function to delete given element in binary tree
+          Algorithm :
+        1. Starting at root, find the deepest and RIGHT MOSET node in binary tree and node which we want to delete.
+        2. Replace the deepest rightmost node’s data with node to be deleted.
+        3. Then delete the deepest rightmost node.
 
+        See deletion-in-binary-tree.png
 
+        //Note: We can also replace node’s data that is to be deleted with any node whose left and right child
+         points to NULL but we only use deepest node in order to maintain the BALANCE34  of a binary tree.
 
-
-/*    Function to delete given element in binary tree
-      Algorithm :
-    1. Starting at root, find the deepest and RIGHT MOSET node in binary tree and node which we want to delete.
-    2. Replace the deepest rightmost node’s data with node to be deleted.
-    3. Then delete the deepest rightmost node.
-
-    See deletion-in-binary-tree.png
-
-    //Note: We can also replace node’s data that is to be deleted with any node whose left and right child
-     points to NULL but we only use deepest node in order to maintain the BALANCE34  of a binary tree.
-
-    */
-    static void deleteNodeByValue(Node root, int nodeToDeleteKey)
-    {
+        */
+    public static void deleteNodeByValue(Node root, int nodeToDeleteKey) {
         if (root == null)
             return;
 
-        if (root.left == null &&
-                root.right == null)
-        {
-            if (root.value == nodeToDeleteKey)
-            {
-                root=null;
+        if (!hasChildren(root)) {
+            if (root.value == nodeToDeleteKey) {
+                root = null;
                 return;
-            }
-            else
+            } else
                 return;
         }
         Queue<Node> q = new LinkedList<Node>();
         q.add(root);
-        Node temp = null, keyNode = null;
+        Node temp = null, nodeMatchingKey = null;
 
         // Do level order traversal until
         // we find key and last node.
-        while (!q.isEmpty())
-        {
+        while (!q.isEmpty()) {
             temp = q.peek();
             q.remove();
 
             if (temp.value == nodeToDeleteKey)
-                keyNode = temp;
+                nodeMatchingKey = temp;
 
             if (temp.left != null)
                 q.add(temp.left);
@@ -182,12 +172,17 @@ public class BinaryTreeUtils {
                 q.add(temp.right);
         }
 
-        if (keyNode != null)
-        {
-            int x = temp.value;
-            deleteDeepest(root, temp);
-            keyNode.value = x;
+        Node deepesetNode = temp;
+
+        if (nodeMatchingKey != null) {
+            int x = deepesetNode.value;
+            deleteDeepest(root, deepesetNode);
+            nodeMatchingKey.value = x;
         }
+    }
+
+    public static boolean hasChildren(Node node) {
+        return ((node.left != null) || (node.right != null));
     }
 
 }

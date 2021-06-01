@@ -1,21 +1,16 @@
 package algorithms.tree.binary.traversal.preorder;
 
 import algorithms.tree.binary.Node;
-import algorithms.tree.binary.traversal.TraversalExample;
+import algorithms.tree.binary.traversal.TreeTraversal;
 
 import java.util.List;
 import java.util.Stack;
 
-public class PreOrderTraversalStack extends TraversalExample {
+public class PreOrderTraversalStack extends TreeTraversal {
 
    // https://www.geeksforgeeks.org/iterative-preorder-traversal/
-
-    public static void main(String[] args) {
-        PreOrderTraversalStack travereseExample = new PreOrderTraversalStack();
-        travereseExample.testTreeTraverese();
        /* Preorder (Root, Left, Right) : 1 2 4 5 3*/
 
-    }
 
     protected  void traverseTreeInternal(List<Node> list, Node node) {
 

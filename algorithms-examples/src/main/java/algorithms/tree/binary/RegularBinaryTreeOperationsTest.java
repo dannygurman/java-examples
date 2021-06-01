@@ -1,4 +1,4 @@
-package algorithms.tree.binary.findMaxOrMin;
+package algorithms.tree.binary;
 
 import algorithms.tree.binary.BinaryTreeUtils;
 import org.junit.Test;
