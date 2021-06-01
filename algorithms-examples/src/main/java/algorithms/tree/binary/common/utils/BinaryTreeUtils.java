@@ -2,10 +2,15 @@ package algorithms.tree.binary.common.utils;
 
 import algorithms.tree.binary.common.model.BinaryTree;
 import algorithms.tree.binary.common.model.Node;
+import algorithms.tree.binary.common.model.TraversalType;
+import lombok.Getter;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.BiFunction;
+
+import static algorithms.tree.binary.common.utils.BinaryTreeUtils.TreeValues.*;
 
 //Utils for regular (NOT BST) binary tree
 public class BinaryTreeUtils {
@@ -13,23 +18,45 @@ public class BinaryTreeUtils {
     public static final Integer MIN_VALUE = 1;
     public static final Integer MAX_VALUE = 100;
 
+    @Getter
+    public enum TreeValues {
+        A(MIN_VALUE),
+        B(2),
+        C(3),
+        D(4),
+        E(5),
+        F(20),
+        G(MAX_VALUE);
+
+        TreeValues(int value) {
+            this.value = value;
+        }
+        private int value;
+    }
+
      // see algorithms-examples\src\main\java\algorithms\tree\binary\example_binary_tree.gif
     public static BinaryTree buildExampleRegularBinaryTree() {
-        //         1
-        //     2            3
-        //  4          5    6      7
+        //         1(A)
+        //     2 (B)                     3(C)
+        //  4 (D)         5(E)    20(F)      G(100)
 
         BinaryTree tree = new BinaryTree();
-        tree.root = new Node(MIN_VALUE);
-        tree.root.left = new Node(2);
-        tree.root.right = new Node(3);
-        tree.root.left.left = new Node(4);
-        tree.root.left.right = new Node(5);
-        tree.root.right.left = new Node(20);
-        tree.root.right.right = new Node(MAX_VALUE);
+        tree.root = new Node(A.value);
+        tree.root.left = new Node(B.value);
+        tree.root.right = new Node(C.value);
+        tree.root.left.left = new Node(D.value);
+        tree.root.left.right = new Node(E.value);
+        tree.root.right.left = new Node(F.value);
+        tree.root.right.right = new Node(G.value);
 
         return tree;
     }
+
+    //---------------Traversal -------------------------
+    public static List<Integer> traversalTree(BinaryTree tree, TraversalType traversalType) {
+        return traversalType.getTraversalImplementor().travereseTree(tree);
+    }
+
 
 
     //---------------MIN MAX -------------------------
