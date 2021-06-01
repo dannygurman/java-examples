@@ -1,6 +1,6 @@
 package algorithms.tree.binary.traversal;
 
-import algorithms.tree.binary.common.BinaryTreeUtils;
+import algorithms.tree.binary.common.utils.BinaryTreeUtils;
 import algorithms.tree.binary.common.model.Node;
 
 import java.util.ArrayList;

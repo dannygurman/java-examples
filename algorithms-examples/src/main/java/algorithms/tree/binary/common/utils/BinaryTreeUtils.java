@@ -1,4 +1,4 @@
-package algorithms.tree.binary.common;
+package algorithms.tree.binary.common.utils;
 
 import algorithms.tree.binary.common.model.Node;
 
