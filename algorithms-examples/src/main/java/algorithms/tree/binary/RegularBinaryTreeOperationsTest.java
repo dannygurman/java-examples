@@ -36,8 +36,16 @@ public class RegularBinaryTreeOperationsTest {
     public void testNodesTraverersalInorder_ImplementedBy_Recursion() {
         BinaryTreeUtils.TreeValues[] expectedOrderedValues = {D, B, E, A , F, C ,G};
         ////4(D), 2(B),5(E),1(A) ,20(F),3(C),100(G)
-        verifyNodesTraverersalInternal(TraversalType.INORDER_RECURSION,expectedOrderedValues);
+        verifyNodesTraverersalInternal(TraversalType.INORDER_RECURSION, expectedOrderedValues);
     }
+
+    @Test
+    public void testNodesTraverersalInorder_ImplementedBy_Stack() {
+        BinaryTreeUtils.TreeValues[] expectedOrderedValues = {D, B, E, A , F, C ,G};
+        ////4(D), 2(B),5(E),1(A) ,20(F),3(C),100(G)
+        verifyNodesTraverersalInternal(TraversalType.INORDER_STACK, expectedOrderedValues);
+    }
+
 
     private void verifyNodesTraverersalInternal(TraversalType traversalType,
                                                 BinaryTreeUtils.TreeValues[] expectedOrderedValues ) {
