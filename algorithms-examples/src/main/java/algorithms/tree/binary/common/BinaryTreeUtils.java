@@ -1,4 +1,6 @@
-package algorithms.tree.binary;
+package algorithms.tree.binary.common;
+
+import algorithms.tree.binary.common.model.Node;
 
 import java.util.LinkedList;
 import java.util.Queue;

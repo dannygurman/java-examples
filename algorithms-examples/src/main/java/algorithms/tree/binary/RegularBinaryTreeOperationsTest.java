@@ -1,6 +1,6 @@
 package algorithms.tree.binary;
 
-import algorithms.tree.binary.BinaryTreeUtils;
+import algorithms.tree.binary.common.BinaryTreeUtils;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

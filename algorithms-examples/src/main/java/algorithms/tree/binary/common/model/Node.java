@@ -1,4 +1,4 @@
-package algorithms.tree.binary;
+package algorithms.tree.binary.common.model;
 
 /**
  * Created by dannyg on 1/8/2018.

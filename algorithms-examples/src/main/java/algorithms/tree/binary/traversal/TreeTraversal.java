@@ -1,7 +1,7 @@
 package algorithms.tree.binary.traversal;
 
-import algorithms.tree.binary.BinaryTreeUtils;
-import algorithms.tree.binary.Node;
+import algorithms.tree.binary.common.BinaryTreeUtils;
+import algorithms.tree.binary.common.model.Node;
 
 import java.util.ArrayList;
 import java.util.List;

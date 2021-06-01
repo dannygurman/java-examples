@@ -1,6 +1,6 @@
 package algorithms.tree.binary.traversal;
 
-import algorithms.tree.binary.BinaryTreeUtils;
+import algorithms.tree.binary.common.BinaryTreeUtils;
 import algorithms.tree.binary.traversal.inorder.InOrderTraversalRecursion;
 import algorithms.tree.binary.traversal.inorder.InOrderTraversalStack;
 import algorithms.tree.binary.traversal.postorder.PostOrderTraversalRecursion;

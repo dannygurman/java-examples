@@ -1,6 +1,6 @@
 package algorithms.tree.binary.traversal.inorder;
 
-import algorithms.tree.binary.Node;
+import algorithms.tree.binary.common.model.Node;
 import algorithms.tree.binary.traversal.TreeTraversal;
 
 import java.util.List;

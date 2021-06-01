@@ -1,6 +1,6 @@
 package algorithms.tree.binary.binarySearchTree.ex1;
 
-import algorithms.tree.binary.Node;
+import algorithms.tree.binary.common.model.Node;
 import algorithms.tree.binary.binarySearchTree.BSTUtils;
 
 /**
