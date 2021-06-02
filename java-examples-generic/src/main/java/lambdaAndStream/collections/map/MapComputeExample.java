@@ -57,7 +57,7 @@ public class MapComputeExample {
         //Not exist key
         stringToIntMap.compute("x" ,multipleBiFunctionNullSafe);
 
-        System.out.println("\nPrint initial map:");
+        System.out.println("\nPrint multiplied map:");
         stringToIntMap.forEach(printEntryAction);
     }
 
@@ -70,9 +70,11 @@ public class MapComputeExample {
 
         Function <String , List<Person>> initListFunction =   key -> new ArrayList<>();
 
-        // key, newValue
-        idToPersonListMap.computeIfAbsent("one",initListFunction).add(new Person("danny" , 41));
-        System.out.println("\nPrint initial map:");
+        // key, newValue - if absent computing function on key and adding to map
+        List <Person> computedListForKey = idToPersonListMap.computeIfAbsent("one",initListFunction);
+        computedListForKey.add(new Person("danny" , 41));
+
+        System.out.println("\nPrint computed map:");
         idToPersonListMap.forEach(printEntryAction);
     }
 
