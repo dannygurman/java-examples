@@ -90,4 +90,19 @@ public class RegularBinaryTreeOperationsTest {
         ////4(D), 2(B),5(E),1(A) ,20(F),3(C),100(G)
         assertEquals(expectedOrderedTreeNodeValues, orderedTreeNodeValues);
     }
+
+
+    @Test
+    public void test_deleteNode_ByValue() {
+        printTreeElementsInOrder();
+        BinaryTreeUtils.deleteNodeByValue(this.tree.root, 3);
+        System.out.println("After delete:");
+        printTreeElementsInOrder();
+    }
+
+    private void printTreeElementsInOrder() {
+        System.out.println("-----------------------");
+        List<Integer>  orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
+        orderedTreeNodeValues.forEach(System.out::println);
+    }
 }
