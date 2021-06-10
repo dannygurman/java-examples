@@ -94,9 +94,11 @@ public class RegularBinaryTreeOperationsTest {
 
     @Test
     public void test_deleteNode_ByValue() {
+        int nodeToDeleteKey = 1;
         printTreeElementsInOrder();
-        BinaryTreeUtils.deleteNodeByValue(this.tree.root, 3);
-        System.out.println("After delete:");
+        List<Integer>  orderedTreeNodeValuesBeforeDeletion = BinaryTreeUtils.traversalTree(this.tree,  TraversalType.INORDER_RECURSION);
+        BinaryTreeUtils.deleteNodeByValue(this.tree.root, nodeToDeleteKey);
+        System.out.println("\nAfter delete:" + nodeToDeleteKey);
         printTreeElementsInOrder();
     }
 

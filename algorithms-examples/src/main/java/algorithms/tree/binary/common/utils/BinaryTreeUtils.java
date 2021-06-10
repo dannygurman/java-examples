@@ -152,7 +152,7 @@ public class BinaryTreeUtils {
 
     /*    Function to delete given element in binary tree
           Algorithm :
-        1. Starting at root, find the deepest and RIGHT MOSET node in binary tree and node which we want to delete.
+        1. Starting at root, find the deepest and RIGHT MOST node in binary tree and node which we want to delete.
         2. Replace the deepest rightmost node’s data with node to be deleted.
         3. Then delete the deepest rightmost node.
 
@@ -166,7 +166,7 @@ public class BinaryTreeUtils {
         if (root == null)
             return;
 
-        if (!hasChildren(root)) {
+        if ( ! hasChildren(root)) {
             if (root.value == nodeToDeleteKey) {
                 root = null;
                 return;
@@ -197,6 +197,8 @@ public class BinaryTreeUtils {
 
         if (nodeMatchingKey != null) {
             int x = deepesetNode.value;
+            //delete deepest node
+            //Note !  :setting  deepesetNode = null will NOT work - will only set deepeset Node reference to null  but parent node right/left reference will not be null.
             deleteDeepest(root, deepesetNode);
             nodeMatchingKey.value = x;
         }
