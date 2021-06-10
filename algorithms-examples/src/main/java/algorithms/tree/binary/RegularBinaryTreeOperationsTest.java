@@ -112,6 +112,24 @@ public class RegularBinaryTreeOperationsTest {
         assertThat(orderedTreeNodeValuesAfterDeletion, not(hasItems(nodeToDeleteKey)));
     }
 
+    @Test
+    public void test_FindDeepest() {
+        BinaryTreeUtils.DeepestResult result = BinaryTreeUtils.findDeepestRightMostNode_2(this.tree.root);
+        assertEquals(3, result.deepestLevel);
+        assertEquals(G.getValue(), result.deepestValue);
+    }
+
+    @Test
+    public void test_InsertInDeepestRightMost() {
+        int value = 200;
+        BinaryTreeUtils.insertInDeepestRightMost(this.tree.root, value);
+
+        BinaryTreeUtils.DeepestResult result = BinaryTreeUtils.findDeepestRightMostNode_2(this.tree.root);
+        assertEquals(4, result.deepestLevel);
+        assertEquals(value, result.deepestValue);
+    }
+
+
     private void printTreeElementsInOrder() {
         System.out.println("-----------------------");
         List<Integer>  orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);

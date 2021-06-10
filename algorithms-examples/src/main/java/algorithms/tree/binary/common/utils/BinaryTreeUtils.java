@@ -205,7 +205,7 @@ public class BinaryTreeUtils {
         Queue<Node> q = new LinkedList<Node>();
         q.add(root);
         Node temp = null;
-        // Do level order traversal until
+        // Do LEVEL ORDER  traversal until
         // we find key and last node.
         while (!q.isEmpty()) {
             temp = q.peek();
@@ -243,6 +243,73 @@ public class BinaryTreeUtils {
             }
         }
         return null; //Not found
+    }
+
+    public static class DeepestResult {
+        public DeepestResult(int deepestValue, int deepestLevel) {
+            this.deepestValue = deepestValue;
+            this.deepestLevel = deepestLevel;
+        }
+
+        public int deepestValue;
+        public int deepestLevel;
+    }
+
+    public static DeepestResult findDeepestRightMostNode_2(Node root) {
+        return findDeepestInternal(root, 0, new DeepestResult(0, 0));
+    }
+
+    private static DeepestResult findDeepestInternal(Node node, int level, DeepestResult deepesetResult) {
+        int deepestValue = deepesetResult.deepestValue;
+        int deepestLevel = deepesetResult.deepestLevel;
+        if (node != null) {
+            level++;
+            DeepestResult deepesetResultFound = findDeepestInternal(node.left, level, deepesetResult);
+            deepestValue = deepesetResultFound.deepestValue;
+            deepestLevel = deepesetResultFound.deepestLevel;
+
+            if (level >= deepestLevel) {
+                deepestValue = node.value;
+                deepestLevel = level;
+            }
+
+            deepesetResultFound = findDeepestInternal(node.right, level, new DeepestResult(deepestValue, deepestLevel));
+            deepestValue = deepesetResultFound.deepestValue;
+            deepestLevel = deepesetResultFound.deepestLevel;
+        }
+        return new DeepestResult(deepestValue, deepestLevel);
+    }
+
+
+    /*function to insert element in binary tree */
+    static public void insertInDeepestRightMost(Node root, int key) {
+        Node temp = root;
+        if (root == null) {
+            root = new Node(key);
+            return;
+        }
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(temp);
+        // Do level order traversal until we find
+        // an empty place.
+        while (!q.isEmpty()) {
+            temp = q.peek();
+            q.remove();
+
+            if (temp.left == null) {
+                temp.left = new Node(key);
+                break;
+            } else {
+                q.add(temp.left);
+            }
+
+            if (temp.right == null) {
+                temp.right = new Node(key);
+                break;
+            } else {
+                q.add(temp.right);
+            }
+        }
     }
 
 }
