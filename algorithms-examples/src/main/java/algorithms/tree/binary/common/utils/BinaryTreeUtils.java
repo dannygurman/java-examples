@@ -112,7 +112,7 @@ public class BinaryTreeUtils {
     //Using queue instead of recursion
     // Assumption - the node  to delete is already the DEEPESET (last leaf)
 
-    private static void deleteDeepest(Node root, Node nodeToDelete) {
+    private static void deleteNode(Node root, Node nodeToDelete) {
         Queue<Node> q = new LinkedList<>();
         q.add(root);
         Node temp;
@@ -122,32 +122,37 @@ public class BinaryTreeUtils {
             q.remove();
 
             if (temp == nodeToDelete) {
-                //we found it  -delete by setting null;
                 temp = null;
                 return;
             }
-
-            //searching on right
-            if (temp.right != null) {
-                if (temp.right == nodeToDelete) {
-                    //we found it  -delete by setting null;
-                    temp.right = null;
-                    return;
-                } else
-                    q.add(temp.right);
+            if (isNodeMatch(temp.right, q, nodeToDelete)) {
+               //Removing reference
+                temp.right = null;
+                return;
             }
-
-            if (temp.left != null) {
-                if (temp.left == nodeToDelete) {
-                    //we found it  -delete by setting null;
-                    temp.left = null;
-                    return;
-                } else
-                    q.add(temp.left);
+            if (isNodeMatch(temp.left, q, nodeToDelete)) {
+                //Removing reference
+                temp.left = null;
+                return;
             }
         }
-
     }
+
+    /**
+     * @parm queue - adding currentNode to queue if not match (and not null
+     * @return - Boolean - If found
+     */
+    private static boolean isNodeMatch(Node currentNode, Queue<Node> queue, Node nodeToDelete) {
+        if (currentNode == null) {
+            return false;
+        }
+        if (currentNode == nodeToDelete) {
+            return true;
+        } else
+            queue.add(currentNode);
+        return false;
+    }
+
 
 
     /*    Function to delete given element in binary tree
@@ -199,7 +204,7 @@ public class BinaryTreeUtils {
             int x = deepesetNode.value;
             //delete deepest node
             //Note !  :setting  deepesetNode = null will NOT work - will only set deepeset Node reference to null  but parent node right/left reference will not be null.
-            deleteDeepest(root, deepesetNode);
+            deleteNode(root, deepesetNode);
             nodeMatchingKey.value = x;
         }
     }
