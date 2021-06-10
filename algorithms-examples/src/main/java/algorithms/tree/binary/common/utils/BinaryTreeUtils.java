@@ -178,39 +178,71 @@ public class BinaryTreeUtils {
             } else
                 return;
         }
-        Queue<Node> q = new LinkedList<Node>();
-        q.add(root);
-        Node temp = null, nodeMatchingKey = null;
 
-        // Do level order traversal until
-        // we find key and last node.
-        while (!q.isEmpty()) {
-            temp = q.peek();
-            q.remove();
-
-            if (temp.value == nodeToDeleteKey)
-                nodeMatchingKey = temp;
-
-            if (temp.left != null)
-                q.add(temp.left);
-
-            if (temp.right != null)
-                q.add(temp.right);
-        }
-
-        Node deepesetNode = temp;
+        //Note: We can find nodeMatchingKey and deepesetNode in one traversal
+        // on the tree but for readability we separate to 2 different methods.
+        Node nodeMatchingKey = searchNodeByValue(root, nodeToDeleteKey);
 
         if (nodeMatchingKey != null) {
+
+            Node deepesetNode = findDeepestRightMostNode( root);
+
             int x = deepesetNode.value;
             //delete deepest node
             //Note !  :setting  deepesetNode = null will NOT work - will only set deepeset Node reference to null  but parent node right/left reference will not be null.
             deleteNode(root, deepesetNode);
+
             nodeMatchingKey.value = x;
         }
     }
 
     public static boolean hasChildren(Node node) {
         return ((node.left != null) || (node.right != null));
+    }
+
+    //  // Do level order traversal until we find key and last node.
+    public static Node findDeepestRightMostNode(Node root) {
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(root);
+        Node temp = null;
+        // Do level order traversal until
+        // we find key and last node.
+        while (!q.isEmpty()) {
+            temp = q.peek();
+            q.remove();
+
+            if (temp.left != null) {
+                q.add(temp.left);
+            }
+            if (temp.right != null) {
+                q.add(temp.right);
+            }
+        }
+        return temp;
+    }
+
+    public static Node searchNodeByValue(Node root, int searchValue) {
+        Queue<Node> q = new LinkedList<Node>();
+        q.add(root);
+        Node temp = null;
+        // Do level order traversal until we find key
+        while (!q.isEmpty()) {
+            temp = q.peek();
+            q.remove();
+
+            if (temp.value == searchValue) {
+                return temp;
+            } else {
+                if (temp.left != null) {
+                    q.add(temp.left);
+                }
+
+                if (temp.right != null) {
+                    q.add(temp.right);
+                }
+            }
+        }
+        return null; //Not found
     }
 
 }

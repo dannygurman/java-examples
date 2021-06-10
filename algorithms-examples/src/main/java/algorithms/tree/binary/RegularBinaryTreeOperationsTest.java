@@ -9,7 +9,9 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.TreeValues.*;
 
@@ -94,12 +96,20 @@ public class RegularBinaryTreeOperationsTest {
 
     @Test
     public void test_deleteNode_ByValue() {
-        int nodeToDeleteKey = 1;
+        int nodeToDeleteKey = A.getValue();
+
+        System.out.println("\nBefore deleting:" + nodeToDeleteKey);
         printTreeElementsInOrder();
         List<Integer>  orderedTreeNodeValuesBeforeDeletion = BinaryTreeUtils.traversalTree(this.tree,  TraversalType.INORDER_RECURSION);
+        assertThat(orderedTreeNodeValuesBeforeDeletion, hasItems(nodeToDeleteKey));
+
         BinaryTreeUtils.deleteNodeByValue(this.tree.root, nodeToDeleteKey);
+
         System.out.println("\nAfter delete:" + nodeToDeleteKey);
         printTreeElementsInOrder();
+        List<Integer>  orderedTreeNodeValuesAfterDeletion = BinaryTreeUtils.traversalTree(this.tree,  TraversalType.INORDER_RECURSION);
+        //Assert NOT contain item after deletion
+        assertThat(orderedTreeNodeValuesAfterDeletion, not(hasItems(nodeToDeleteKey)));
     }
 
     private void printTreeElementsInOrder() {
