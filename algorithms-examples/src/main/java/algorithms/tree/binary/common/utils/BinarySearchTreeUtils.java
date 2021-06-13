@@ -19,7 +19,7 @@ public class BinarySearchTreeUtils {
               2
         */
         BinaryTree tree = new BinaryTree();
-        for (TreeValues value :TreeValues.getMixedValues()) {
+        for (TreeValues value : TreeValues.getMixedValues()) {
             tree.root = insert(tree.root, value.getValue());
         }
         return tree;
@@ -33,9 +33,8 @@ public class BinarySearchTreeUtils {
 
     private static Node insertRecursive(Node current, int valueToAdd) {
         if (current == null) {
-            current =  new Node(valueToAdd);
-        }
-        else  if (valueToAdd < current.value) {
+            current = new Node(valueToAdd);
+        } else if (valueToAdd < current.value) {
             current.left = insertRecursive(current.left, valueToAdd);
         } else if (valueToAdd > current.value) {
             current.right = insertRecursive(current.right, valueToAdd);
@@ -43,25 +42,35 @@ public class BinarySearchTreeUtils {
             // value already exists - do nothing
         }
 
+        //Need to return - as java object reference are passed by value
         return current;
     }
 
     //Insert for Binary Search Tree
-    public static void insert_Ver2(Node node, int value) {
+    public static Node insert_Ver2(Node root, Integer valueToAdd) {
+        if (root == null) {
+            root = new Node(valueToAdd);
+        }
+        insert_Ver2Internal(root, valueToAdd);
+        return root;
+    }
+
+    //Insert for Binary Search Tree
+    private static void insert_Ver2Internal(Node node, Integer value) {
         if (value < node.value) {
             if (node.left != null) {
                 //recursion call
-                insert_Ver2(node.left, value);
+                insert_Ver2Internal(node.left, value);
             } else {
-                System.out.println("  Inserted " + value + " to left of "  + node.value);
+                System.out.println("  Inserted " + value + " to left of " + node.value);
                 //New node
                 node.left = new Node(value);
             }
         } else if (value > node.value) {
             if (node.right != null) {
-                insert_Ver2(node.right, value);
+                insert_Ver2Internal(node.right, value);
             } else {
-                System.out.println("  Inserted " + value + " to right of "  + node.value);
+                System.out.println("  Inserted " + value + " to right of " + node.value);
                 //New node
                 node.right = new Node(value);
             }
