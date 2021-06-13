@@ -15,12 +15,16 @@ public class BinarySearchTreeOperationsTest {
 
     @Before
     //TREE:
-    //         1(A)
-    //     2 (B)                     3(C)
-    //  4 (D)         5(E)    20(F)      G(100)
+   /*             4
+
+             3            20
+
+        1	          5      100
+
+              2
+        */
     public void setUp() {
         tree = BinarySearchTreeUtils.buildExampleSearchBinaryTree();
-
     }
 
 

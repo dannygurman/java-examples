@@ -33,16 +33,16 @@ public class BinarySearchTreeUtils {
 
     private static Node insertRecursive(Node current, int valueToAdd) {
         if (current == null) {
-            return new Node(valueToAdd);
+            current =  new Node(valueToAdd);
         }
-        if (valueToAdd < current.value) {
+        else  if (valueToAdd < current.value) {
             current.left = insertRecursive(current.left, valueToAdd);
         } else if (valueToAdd > current.value) {
             current.right = insertRecursive(current.right, valueToAdd);
         } else {
-            // value already exists
-            return current;
+            // value already exists - do nothing
         }
+
         return current;
     }
 
