@@ -40,6 +40,13 @@ public class BinarySearchTreeOperationsTest {
     }
 
     @Test
+    public void test_printFrontToBack() {
+        int camera = BinaryTreeUtils.TreeValues.E.getValue();
+        BinarySearchTreeUtils.printFrontToBack(tree.root, camera);
+
+    }
+
+    @Test
     public void test_Insert_ver1() {
         BiFunction <Node, Integer, Node> insertNodeFunction = BinarySearchTreeUtils::insert;
         test_Insert_internal(insertNodeFunction);

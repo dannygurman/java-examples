@@ -90,10 +90,9 @@ public class BinarySearchTreeUtils {
             printFrontToBack(node.right, camera);
             System.out.println("  Traversed " + node.value);
             printFrontToBack(node.left, camera);
-        } else {
-
+        } else {//Equal
             printFrontToBack(node.left, camera);
-
+            System.out.println("  Traversed " + node.value);
             printFrontToBack(node.right, camera);
         }
     }
