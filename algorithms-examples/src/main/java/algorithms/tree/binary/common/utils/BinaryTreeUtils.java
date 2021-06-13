@@ -27,11 +27,17 @@ public class BinaryTreeUtils {
         E(5),
         F(20),
         G(MAX_VALUE);
+        private static TreeValues[] mixedValues = new TreeValues[]{D, C, F, D, A, G, B, E};
 
         TreeValues(int value) {
             this.value = value;
         }
+
         private int value;
+
+        public static TreeValues[] getMixedValues() {
+            return mixedValues;
+        }
     }
 
      // see algorithms-examples\src\main\java\algorithms\tree\binary\example_binary_tree.gif
