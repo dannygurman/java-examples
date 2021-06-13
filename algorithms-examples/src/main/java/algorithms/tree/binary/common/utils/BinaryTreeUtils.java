@@ -81,7 +81,7 @@ public class BinaryTreeUtils {
             return getMinOrMaxElementInternal(compareFunction, root);
         }
     }
-
+//NON BST !
     private static int getMinOrMaxElementInternal(BiFunction<Integer, Integer, Integer> compareFunction, Node node) {
 
         int leftMaxOrMin, rightMaxOrMin;
