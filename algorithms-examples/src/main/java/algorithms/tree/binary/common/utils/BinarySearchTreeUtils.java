@@ -90,37 +90,42 @@ public class BinarySearchTreeUtils {
         if (current == null) {
             return null;
         }
-
         if (value == current.value) {
             // Node to delete found
-            if (current.left == null && current.right == null) {
-                //a node has no children-we just need to replace this node with null in its parent node
-                return null;
-            }
-            //a node has exactly one child – in the parent node, we replace this node with its only child.
-            //We're returning the non-null child so it can be assigned to the parent node
-            if (current.right == null) {
-                return current.left;
-            }
-            if (current.left == null) {
-                return current.right;
-            }
-            //Both childs exists - requires a tree reorganization
-            //First, we need to find the node that will replace the deleted node.
-            // We'll use the smallest node of the soon to be deleted node's right sub-tree:
-            int smallestValue = findBinarySearchTreeMinElement(current.right);
-            //Then we assign the smallest value to the node to delete, and after that, we'll delete it from the right sub-tree:
-            current.value = smallestValue;
-            //And after that, we'll delete smallestValue from the right sub-tree:
-            current.right = deleteRecursive(current.right, smallestValue);
-            return current;
+            return deleteNodeInternal(current);
         }
+
         if (value < current.value) {
             current.left = deleteRecursive(current.left, value);
             return current;
+        } else {
+            current.right = deleteRecursive(current.right, value);
         }
-        current.right = deleteRecursive(current.right, value);
         return current;
+    }
+
+    private static Node deleteNodeInternal(Node nodeToDelete) {
+        if (nodeToDelete.left == null && nodeToDelete.right == null) {
+            //a node has no children-we just need to replace this node with null in its parent node
+            return null;
+        }
+        //a node has exactly one child – in the parent node, we replace this node with its only child.
+        //We're returning the non-null child so it can be assigned to the parent node
+        if (nodeToDelete.right == null) {
+            return nodeToDelete.left;
+        }
+        if (nodeToDelete.left == null) {
+            return nodeToDelete.right;
+        }
+        //Both childs exists - requires a tree reorganization
+        //First, we need to find the node that will replace the deleted node.
+        // We'll use the smallest node of the soon to be deleted node's right sub-tree:
+        int smallestValue = findBinarySearchTreeMinElement(nodeToDelete.right);
+        //Then we assign the smallest value to the node to delete, and after that, we'll delete it from the right sub-tree:
+        nodeToDelete.value = smallestValue;
+        //And after that, we'll delete smallestValue from the right sub-tree:
+        nodeToDelete.right = deleteRecursive(nodeToDelete.right, smallestValue);
+        return nodeToDelete;
     }
 
 
