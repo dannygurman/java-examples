@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MAX_VALUE;
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MIN_VALUE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class BinarySearchTreeOperationsTest {
 
@@ -21,13 +21,13 @@ public class BinarySearchTreeOperationsTest {
 
     @Before
     //TREE:
-   /*             4
+   /*             4(D)
 
-             3            20
+             3(C)           20(F)
 
-        1	          5      100
+        1(A)	          5(E)       100(G)
 
-              2
+              2(B)
         */
     public void setUp() {
         tree = BinarySearchTreeUtils.buildExampleSearchBinaryTree();
@@ -36,8 +36,7 @@ public class BinarySearchTreeOperationsTest {
 
     @Test
     public void test_PrintTree() {
-        List<Integer> orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
-        orderedTreeNodeValues.forEach(System.out::println);
+       printInorder();
     }
 
     @Test
@@ -74,6 +73,35 @@ public class BinarySearchTreeOperationsTest {
         int maxElement = BinarySearchTreeUtils.findBinarySearchTreeMaxElement(tree.root);
         assertEquals((int)MIN_VALUE, minElement);
         assertEquals((int)MAX_VALUE, maxElement);
+    }
+
+    @Test
+    public void test_DeleteElements() {
+        System.out.println("Before delete");
+        printInorder();
+        deleteAndVerify(BinaryTreeUtils.TreeValues.F);
+        deleteAndVerify(BinaryTreeUtils.TreeValues.E);
+        deleteAndVerify(BinaryTreeUtils.TreeValues.D);
+
+    }
+
+    private void deleteAndVerify(BinaryTreeUtils.TreeValues treeValue) {
+        int valueToDelete =  treeValue.getValue();//20
+        List<Integer> treeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
+        assertTrue(treeNodeValues.contains(valueToDelete));
+
+        BinarySearchTreeUtils.delete(tree.root, valueToDelete);
+
+        //After delete
+        System.out.println("\nAfter deleting:"+ valueToDelete);
+        printInorder();
+        treeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
+        assertFalse(treeNodeValues.contains(valueToDelete));
+    }
+
+    private void printInorder() {
+        List<Integer> orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
+        orderedTreeNodeValues.forEach(System.out::println);
     }
 
 }

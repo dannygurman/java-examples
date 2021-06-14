@@ -12,13 +12,14 @@ public class BinarySearchTreeUtils {
 
 
     public static BinaryTree buildExampleSearchBinaryTree() {
-     /*             4
+        //TREE:
+   /*             4(D)
 
-             3            20
+             3(C)           20(F)
 
-        1	          5      100
+        1(A)	          5(E)       100(G)
 
-              2
+              2(B)
         */
         BinaryTree tree = new BinaryTree();
         for (TreeValues value : TreeValues.getMixedValues()) {
@@ -79,6 +80,53 @@ public class BinarySearchTreeUtils {
         }
     }
 
+    //DELETE
+
+    public static void delete(Node root, int value) {
+        deleteRecursive(root, value);
+    }
+
+    private static Node deleteRecursive(Node current, int value) {
+        if (current == null) {
+            return null;
+        }
+
+        if (value == current.value) {
+            // Node to delete found
+            if (current.left == null && current.right == null) {
+                //a node has no children-we just need to replace this node with null in its parent node
+                return null;
+            }
+            //a node has exactly one child – in the parent node, we replace this node with its only child.
+            //We're returning the non-null child so it can be assigned to the parent node
+            if (current.right == null) {
+                return current.left;
+            }
+            if (current.left == null) {
+                return current.right;
+            }
+            //Both childs exists - requires a tree reorganization
+            //First, we need to find the node that will replace the deleted node.
+            // We'll use the smallest node of the soon to be deleted node's right sub-tree:
+            int smallestValue = findBinarySearchTreeMinElement(current.right);
+            //Then we assign the smallest value to the node to delete, and after that, we'll delete it from the right sub-tree:
+            current.value = smallestValue;
+            //And after that, we'll delete smallestValue from the right sub-tree:
+            current.right = deleteRecursive(current.right, smallestValue);
+            return current;
+        }
+        if (value < current.value) {
+            current.left = deleteRecursive(current.left, value);
+            return current;
+        }
+        current.right = deleteRecursive(current.right, value);
+        return current;
+    }
+
+
+
+
+    //--------  printFrontToBack
     public static void printFrontToBack(Node node, int camera) {
         if (node == null)
             return;
