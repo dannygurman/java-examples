@@ -129,8 +129,6 @@ public class BinarySearchTreeUtils {
     }
 
 
-
-
     //--------  printFrontToBack
     public static void printFrontToBack(Node node, int camera) {
         if (node == null)
@@ -168,6 +166,33 @@ public class BinarySearchTreeUtils {
             return findBinarySearchTreeMaxElement(root.right);
         }
     }
+
+    ///-----------------Check if  binary is search tree
+
+
+    public static boolean isBST_V1(Node node) {
+        //Correct but NOT  efficient - since it traverses over some parts of the tree many times
+        if (node == null) {
+            return true;
+        }
+        /* false if the max of the left is >= than us */
+        if (node.left != null &&
+                (findBinarySearchTreeMaxElement(node.left) >= node.value)) {
+            return false;
+        }
+        /* false if the min of the right is <= than us */
+        if (node.right != null &&
+                (findBinarySearchTreeMinElement(node.right) <= node.value)) {
+            return false;
+        }
+        /* false if, recursively, the left or right is NOT  a BST */
+        if (!isBST_V1(node.left) || !isBST_V1(node.right)) {
+            return false;
+        }
+        /* passing all that, it's a BST */
+        return true;
+    }
+
 
 
 }
