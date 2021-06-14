@@ -66,8 +66,6 @@ public class BinaryTreeUtils {
 
 
     //---------------MIN MAX -------------------------
-
-
     public static int getRegularBinaryTreeMinElement(Node root) {
         BiFunction<Integer, Integer, Integer> compareFunction = Math::min;
         return getMinOrMaxElement(compareFunction, root);
@@ -87,6 +85,7 @@ public class BinaryTreeUtils {
             return getMinOrMaxElementInternal(compareFunction, root);
         }
     }
+
 //NON BST !
     private static int getMinOrMaxElementInternal(BiFunction<Integer, Integer, Integer> compareFunction, Node node) {
 

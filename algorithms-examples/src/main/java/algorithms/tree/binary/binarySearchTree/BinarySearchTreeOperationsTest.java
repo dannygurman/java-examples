@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MAX_VALUE;
+import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MIN_VALUE;
 import static org.junit.Assert.assertEquals;
 
 public class BinarySearchTreeOperationsTest {
@@ -65,6 +66,14 @@ public class BinarySearchTreeOperationsTest {
         List<Integer> orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
         int lastMostRightValue = orderedTreeNodeValues.get(orderedTreeNodeValues.size() -1);
         assertEquals(valueToAdd, lastMostRightValue);
+    }
+
+    @Test
+    public void test_FindMinAndMix() {
+        int minElement = BinarySearchTreeUtils.findBinarySearchTreeMinElement(tree.root);
+        int maxElement = BinarySearchTreeUtils.findBinarySearchTreeMaxElement(tree.root);
+        assertEquals((int)MIN_VALUE, minElement);
+        assertEquals((int)MAX_VALUE, maxElement);
     }
 
 }

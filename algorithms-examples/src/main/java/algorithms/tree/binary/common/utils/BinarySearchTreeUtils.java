@@ -3,6 +3,8 @@ package algorithms.tree.binary.common.utils;
 import algorithms.tree.binary.common.model.BinaryTree;
 import algorithms.tree.binary.common.model.Node;
 
+import java.util.function.BiFunction;
+
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.TreeValues;
 
 //Methods for binary SEARCH tree
@@ -94,6 +96,23 @@ public class BinarySearchTreeUtils {
             printFrontToBack(node.left, camera);
             System.out.println("  Traversed " + node.value);
             printFrontToBack(node.right, camera);
+        }
+    }
+
+    //---------------MIN MAX -------------------------
+    public static int findBinarySearchTreeMinElement(Node root) {
+        if (root.left == null) {
+            return root.value;
+        } else {
+            return findBinarySearchTreeMinElement(root.left);
+        }
+    }
+
+    public static int findBinarySearchTreeMaxElement(Node root) {
+        if (root.right == null) {
+            return root.value;
+        } else {
+            return findBinarySearchTreeMaxElement(root.right);
         }
     }
 
