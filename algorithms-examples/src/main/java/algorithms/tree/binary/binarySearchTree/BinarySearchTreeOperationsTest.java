@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MAX_VALUE;
 import static algorithms.tree.binary.common.utils.BinaryTreeUtils.MIN_VALUE;
@@ -102,6 +103,24 @@ public class BinarySearchTreeOperationsTest {
     private void printInorder() {
         List<Integer> orderedTreeNodeValues = BinaryTreeUtils.traversalTree(this.tree, TraversalType.INORDER_RECURSION);
         orderedTreeNodeValues.forEach(System.out::println);
+    }
+
+    @Test
+    public void test_IsBST_V1() {
+        //Correct - but not efficient
+        Function<Node, Boolean> isBstFunction = BinarySearchTreeUtils::isBST_V1;
+        checkIfTreeIsBSTInternal(isBstFunction);
+    }
+
+    private void checkIfTreeIsBSTInternal(Function<Node, Boolean> isBstFunction) {
+        BinaryTree binarySearchTree = this.tree;
+        boolean isBinaryTree = isBstFunction.apply(binarySearchTree.root);
+        assertTrue(isBinaryTree);
+
+        //Not BST:
+        BinaryTree regularTree = BinaryTreeUtils.buildExampleRegularBinaryTree();
+        isBinaryTree = isBstFunction.apply(regularTree.root);
+        assertFalse(isBinaryTree);
     }
 
 }
