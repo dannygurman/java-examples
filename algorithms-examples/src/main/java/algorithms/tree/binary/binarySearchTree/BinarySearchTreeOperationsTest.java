@@ -4,6 +4,7 @@ import algorithms.tree.binary.common.model.BinaryTree;
 import algorithms.tree.binary.common.model.Node;
 import algorithms.tree.binary.common.model.TraversalType;
 import algorithms.tree.binary.common.utils.BinarySearchTreeUtils;
+import algorithms.tree.binary.common.utils.BinarySearchTreeUtils_2;
 import algorithms.tree.binary.common.utils.BinaryTreeUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -116,10 +117,20 @@ public class BinarySearchTreeOperationsTest {
         checkIfTreeIsBSTInternal(BinarySearchTreeUtils::isBST_V2);
     }
 
+    @Test
+    public void test_IsBST_V3() {
+        checkIfTreeIsBSTInternal(BinarySearchTreeUtils::isBST_V3);
+    }
+    @Test
+    public void test_IsBST_V4() {
+        Function<Node, Boolean> isBstFunction = new BinarySearchTreeUtils_2()::isBST_V4;
+        checkIfTreeIsBSTInternal(isBstFunction);
+    }
+
     private void checkIfTreeIsBSTInternal(Function<Node, Boolean> isBstFunction) {
-        BinaryTree binarySearchTree = this.tree;
-        boolean isBinaryTree = isBstFunction.apply(binarySearchTree.root);
-        assertTrue(isBinaryTree);
+       BinaryTree binarySearchTree = this.tree;
+       boolean isBinaryTree = isBstFunction.apply(binarySearchTree.root);
+       assertTrue(isBinaryTree);
 
         //Not BST:
         BinaryTree regularTree = BinaryTreeUtils.buildExampleRegularBinaryTree();

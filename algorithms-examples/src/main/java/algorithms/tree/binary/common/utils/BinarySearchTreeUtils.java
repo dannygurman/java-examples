@@ -215,13 +215,15 @@ public class BinarySearchTreeUtils {
 
     public static boolean isBST_V2(Node root) {
         // The initial values for min and max should be INT_MIN and INT_MAX — they narrow from there.
+        //Note!!: This method is not applicable if there are duplicate elements with value INT_MIN or INT_MAX.
+        //Time Complexity: O(n)
+        //Auxiliary Space: O(1) if Function Call Stack size is not considered, otherwise O(n)
         return isBSTV2Util(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     /* Returns true if the given tree is a BST and itsvalues are >= min and <= max.*
     * Traverses down the tree keeping track of the narrowing min and max allowed values as it goes,
     * looking at each node only once.
-        Note!!: This method is not applicable if there are duplicate elements with value INT_MIN or INT_MAX.
     *
     * */
     private static boolean isBSTV2Util(Node node, int min, int max)  {
@@ -234,7 +236,30 @@ public class BinarySearchTreeUtils {
         }
         /* otherwise check the subtrees recursively tightening the min/max constraints */
         // Allow only distinct values
-        return (isBSTV2Util(node.left, min, node.value-1) &&
-                isBSTV2Util(node.right, node.value+1, max));
+        return (isBSTV2Util(node.left, min, node.value-1) && isBSTV2Util(node.right, node.value+1, max));
     }
+
+
+    public static boolean isBST_V3(Node root) {
+       // Note!!: This method is not applicable if there are duplicate elements with value INT_MIN or INT_MAX.
+        return isBST_V3Util(root, null, null);
+    }
+
+    private static boolean isBST_V3Util(Node node, Node l, Node r) {
+        // Base condition{
+        if (node == null) {
+            return true;
+        }
+        // if left node exist then check it has correct data or not -i.e. left node's data should be less than root's data
+        if (l != null && node.value <= l.value) {
+            return false;
+        }
+        // if right node exist then check it has correct data or not -i.e. right node's data  should be greater than root's data
+        if (r != null && node.value >= r.value) {
+            return false;
+        }
+        // check recursively for every node.
+        return (isBST_V3Util(node.left, l, node) && isBST_V3Util(node.right, node, r));
+    }
+
 }
