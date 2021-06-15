@@ -178,15 +178,12 @@ public class BinarySearchTreeUtils {
         if (node == null) {
             return true;
         }
-
         /* False if left is > than node */
         if (node.left != null && node.left.value > node.value)
             return false;
-
         /* False if right is < than node */
         if (node.right != null && node.right.value < node.value)
             return false;
-
         /* False if, recursively, the left or right is not a BST */
         if (!isBST_WRONG(node.left) || !isBST_WRONG(node.right))
             return false;
@@ -201,13 +198,11 @@ public class BinarySearchTreeUtils {
             return true;
         }
         /* false if the max of the left is >= than us */
-        if (node.left != null &&
-                (findBinarySearchTreeMaxElement(node.left) >= node.value)) {
+        if (node.left != null && (findBinarySearchTreeMaxElement(node.left) >= node.value)) {
             return false;
         }
         /* false if the min of the right is <= than us */
-        if (node.right != null &&
-                (findBinarySearchTreeMinElement(node.right) <= node.value)) {
+        if (node.right != null && (findBinarySearchTreeMinElement(node.right) <= node.value)) {
             return false;
         }
         /* false if, recursively, the left or right is NOT  a BST */
@@ -218,6 +213,28 @@ public class BinarySearchTreeUtils {
         return true;
     }
 
+    public static boolean isBST_V2(Node root) {
+        // The initial values for min and max should be INT_MIN and INT_MAX — they narrow from there.
+        return isBSTV2Util(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
 
-
+    /* Returns true if the given tree is a BST and itsvalues are >= min and <= max.*
+    * Traverses down the tree keeping track of the narrowing min and max allowed values as it goes,
+    * looking at each node only once.
+        Note!!: This method is not applicable if there are duplicate elements with value INT_MIN or INT_MAX.
+    *
+    * */
+    private static boolean isBSTV2Util(Node node, int min, int max)  {
+        /* an empty tree is BST */
+        if (node == null)
+            return true;
+        /* false if this node violates the min/max constraints */
+        if (node.value< min || node.value> max) {
+            return false;
+        }
+        /* otherwise check the subtrees recursively tightening the min/max constraints */
+        // Allow only distinct values
+        return (isBSTV2Util(node.left, min, node.value-1) &&
+                isBSTV2Util(node.right, node.value+1, max));
+    }
 }

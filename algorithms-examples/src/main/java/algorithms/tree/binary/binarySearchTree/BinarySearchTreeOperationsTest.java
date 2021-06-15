@@ -108,8 +108,12 @@ public class BinarySearchTreeOperationsTest {
     @Test
     public void test_IsBST_V1() {
         //Correct - but not efficient
-        Function<Node, Boolean> isBstFunction = BinarySearchTreeUtils::isBST_V1;
-        checkIfTreeIsBSTInternal(isBstFunction);
+        checkIfTreeIsBSTInternal(BinarySearchTreeUtils::isBST_V1);
+    }
+
+    @Test
+    public void test_IsBST_V2() {
+        checkIfTreeIsBSTInternal(BinarySearchTreeUtils::isBST_V2);
     }
 
     private void checkIfTreeIsBSTInternal(Function<Node, Boolean> isBstFunction) {
