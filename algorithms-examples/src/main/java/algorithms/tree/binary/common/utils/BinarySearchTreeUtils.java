@@ -169,6 +169,31 @@ public class BinarySearchTreeUtils {
 
     ///-----------------Check if  binary is search tree
 
+    boolean isBST_WRONG(Node node) {
+        //This approach is WRONG as this will return true for below binary tree (and below tree is not a
+        // BST because 4 is in left subtree of 3)
+        //         3
+        //  2                  5
+        //1     4
+        if (node == null) {
+            return true;
+        }
+
+        /* False if left is > than node */
+        if (node.left != null && node.left.value > node.value)
+            return false;
+
+        /* False if right is < than node */
+        if (node.right != null && node.right.value < node.value)
+            return false;
+
+        /* False if, recursively, the left or right is not a BST */
+        if (!isBST_WRONG(node.left) || !isBST_WRONG(node.right))
+            return false;
+        /* Passing all that, it's a BST */
+        return true;
+    }
+
 
     public static boolean isBST_V1(Node node) {
         //Correct but NOT  efficient - since it traverses over some parts of the tree many times
