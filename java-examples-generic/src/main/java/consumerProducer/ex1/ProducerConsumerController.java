@@ -28,6 +28,7 @@ public class ProducerConsumerController {
             threadPool.execute(new Consumer("consumer1", broker));
             threadPool.execute(new Consumer("consumer2", broker));
 
+            //When submitting Runnable , and not callable - the Future get will return null upon success
             Future producerStatus = threadPool.submit(new Producer(broker));
 
             /// this will wait for the producer to finish its execution.
@@ -35,7 +36,9 @@ public class ProducerConsumerController {
             producerStatus.get();
             System.out.println("After producer Status get");
 
-            //shut down
+            //shut down - Initiates an orderly shutdown in which previously submitted tasks are executed,
+            //but no new tasks will be accepted.
+            //Invocation has no additional effect if already shut down.
             threadPool.shutdown();
         }  catch (Exception e) {
             e.printStackTrace();
