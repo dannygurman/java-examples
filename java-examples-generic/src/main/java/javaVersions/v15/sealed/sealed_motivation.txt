@@ -31,3 +31,7 @@ For example, in a graphics library, the author of a class Shape may intend that 
     It would be helpful to relax this assumption so that an author can declare a class hierarchy that is not open
      for extension by arbitrary classes.
       Code reuse would still be possible within such a closed class hierarchy, but not beyond.
+
+
+      records do have some restrictions.
+       Among other things, they are always final, they cannot be declared abstract, and they can't use native methods.
