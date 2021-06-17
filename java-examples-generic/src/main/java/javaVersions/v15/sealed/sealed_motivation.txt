@@ -1,0 +1,33 @@
+Sealed classes and interfaces restrict which other classes or interfaces may extend or implement them.
+
+Goals
+- Allow the author of a class or interface to control which code is responsible for implementing it.
+
+- Provide a more declarative way than access modifiers to restrict the use of a superclass.
+-
+Support future directions in pattern matching by underpinning the exhaustive analysis of patterns.
+
+In Java, a class hierarchy enables the reuse of code via inheritance:
+ The methods of a superclass can be inherited (and thus reused) by many subclasses.
+
+  However, the purpose of a class hierarchy is not always to reuse code.
+   Sometimes, its purpose is to model the various possibilities that exist in a domain,
+   such as the kinds of shapes supported by a graphics library
+   or the kinds of loans supported by a financial application.
+
+    When the class hierarchy is used in this way, restricting the set of subclasses can streamline the modeling.
+
+For example, in a graphics library, the author of a class Shape may intend that only particular classes can extend Shape,
+ since much of the library's work involves handling each kind of shape in the appropriate way.
+
+  The author is interested in the clarity of code that handles known subclasses of Shape,
+   and not interested in writing code to defend against unknown subclasses of Shape.
+
+   Allowing arbitrary classes to extend Shape, and thus inherit its code for reuse,  is NOT a goal in this case.
+
+   Unfortunately, Java assumes that code reuse is always a goal:
+   If Shape can be extended at all, then it can be extended by any number of classes.
+
+    It would be helpful to relax this assumption so that an author can declare a class hierarchy that is not open
+     for extension by arbitrary classes.
+      Code reuse would still be possible within such a closed class hierarchy, but not beyond.
