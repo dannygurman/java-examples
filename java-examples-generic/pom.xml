@@ -10,7 +10,7 @@
 
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
         <junit.version>4.11</junit.version>
         <spring.version>4.1.4.RELEASE</spring.version>
         <assertj.version>3.8.0</assertj.version>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
 
