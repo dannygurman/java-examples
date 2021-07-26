@@ -30,9 +30,12 @@ class EggDrop_Recursion {
             int min_trails_lower_flower_minus_egg = eggDropMinimalTrails(n_eggs - 1, floor_id - 1);
 
             //in case egg was NOT  broken - we have left with all eggs - checking upper floor
-            //The floors we want to test aren't important; in fact, the number of remaining floors is what matters.
-            //For example, testing the floors between 1 and 20 (both 1 and 20 included) would require the same number
-            // of drops to test the floors between 21 and 40, or between 81 and 100. In all
+            //The floors we want to test aren't important;
+            //in fact, the number of remaining floors is what matters.
+            //For example, testing the floors between 1 and 20 (both 1 and 20 included)
+            //would require the same number
+            // of drops to test the floors between 21 and 40 (after knowing that we can drop from floor 20 and the egg will not be broken)
+            //, or between 81 and 100. In all
             // three situations, we tested 20 floors
             int min_trails_upper_flower = eggDropMinimalTrails(n_eggs, k_floors - floor_id);
 
@@ -47,11 +50,11 @@ class EggDrop_Recursion {
 
     // Driver code
     public static void main(String args[]) {
-        int n = 2, k = 10;
+        int n_eggs = 2, k_floors = 100;
         System.out.print("Minimum number of "
                 + "trials in worst case with "
-                + n + " eggs and " + k
-                + " floors is " + eggDropMinimalTrails(n, k));
+                + n_eggs + " eggs and " + k_floors
+                + " floors is " + eggDropMinimalTrails(n_eggs, k_floors));
     }
     // This code is contributed by Ryuga.
 }

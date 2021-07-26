@@ -24,14 +24,19 @@ class EggDrop_DynamicPrograming {
         }
 
         // We always need j trials for one egg and j floors.
-        for (floor_id = 1; floor_id <= k_floors; floor_id++)
+        for (floor_id = 1; floor_id <= k_floors; floor_id++) {
             eggFloor[1][floor_id] = floor_id;
+        }
+
+
 
         // Fill rest of the entries in table using optimal substructure
         // property
         for (egg_count = 2; egg_count <= n_eggs; egg_count++) {
             for (floor_id = 2; floor_id <= k_floors; floor_id++) {
+               //First - init to max
                 eggFloor[egg_count][floor_id] = Integer.MAX_VALUE;
+
                 for (x = 1; x <= floor_id; x++) {
                     //in case egg broken - we have left with minus 1 egg - checking lower floor
                     int min_trails_lower_flower_minus_egg = eggFloor[egg_count - 1][x - 1];
@@ -52,9 +57,9 @@ class EggDrop_DynamicPrograming {
     /* Driver program to test to pront printDups*/
     public static void main(String args[])
     {
-        int n = 2, k = 10;
+        int n_eggs = 2, k_floors = 100;
         System.out.println("Minimum number of trials in "+
                 "worst case with "
-                + n + " eggs and " + k + " floors is " + eggDrop(n, k));
+                + n_eggs+ " eggs and " + k_floors + " floors is " + eggDrop(n_eggs, k_floors));
     }
 }
