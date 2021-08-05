@@ -11,10 +11,8 @@ import java.util.Comparator;
 
 @Data
 @AllArgsConstructor
-public class Fruit implements Comparable<Fruit>{
-
+public class Fruit implements Comparable<Fruit> {
     private String fruitName;
-    private String fruitDesc;
     private int quantity;
 
     public int compareTo(Fruit compareFruit) {

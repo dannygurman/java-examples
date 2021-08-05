@@ -13,7 +13,6 @@ public class Dog implements Comparator<Dog>, Comparable<Dog> {
     private String name;
     private int age;
 
-
     // Overriding the compareTo method
     public int compareTo(Dog d){
         return (this.name).compareTo(d.name);
