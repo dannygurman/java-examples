@@ -7,9 +7,9 @@ import algorithms.utils.AlgorithmUtils;
 
 public class PlusOne {
     public static void main(String[] args) {
-        int [] digits =  { 1 , 9 ,9 , 9 };// { 9 , 9 ,9 , 9 };
+        int [] digits =  { 1 , 9 ,9 , 9 };
         int  [] result = plusOne(digits);
-        AlgorithmUtils.printArray(result);
+        AlgorithmUtils.printArray(result);//2000
     }
 
     public static int [] plusOne (int [] digits) {
@@ -23,9 +23,9 @@ public class PlusOne {
             //else
             digits [i] = 0; //setting current digit to 0 and adding 1 to next digit (by moving to next iteration
         }
-        //if we got here we need to add digit  000000 n tims + 1
+        //if we got here we need to add digit  000000 n times + 1
         int [] newNumber = new int [ n + 1];
-        newNumber [0] = 1 ; //first digit is 1
+        newNumber [0] = 1 ; //first digit is 1 - other 0
         return  newNumber;
 
     }

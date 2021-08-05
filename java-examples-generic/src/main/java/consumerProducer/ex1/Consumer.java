@@ -4,7 +4,7 @@ package consumerProducer.ex1;
 // However, key points to note are:
 
 // 1. The loop to process data is an endless loop, that runs on two conditions –
-// until the producer is producing and there is some data with the broker
+// the producer is producing and there is some data with the broker
 
 //2. Again, the Thread.sleep is used to create effective and different scenarios
 
@@ -21,11 +21,13 @@ public class Consumer implements Runnable {
 
     @Override
     public void run()     {
-        long sleepTimeMillis = 1000;
+        long dataProcessSimulateSleepTimeMillis = 1000;
         try  {
             Integer data = broker.get();
+            //If data == null  meaning broker is empty (if not null we fetch item)
+            //broker.getContinueProducing() - producing was not ended
             while (broker.getContinueProducing() || data != null)  {
-                Thread.sleep(sleepTimeMillis);
+                Thread.sleep(dataProcessSimulateSleepTimeMillis);
                 System.out.println("Consumer " + this.name + " processed data from broker: " + data);
                 data = broker.get();
             }

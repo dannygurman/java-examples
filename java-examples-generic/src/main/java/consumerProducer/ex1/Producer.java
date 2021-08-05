@@ -35,6 +35,7 @@ public class Producer implements Runnable {
             }
 
             //Producing ended
+            System.out.println("Producer setContinueProducing to false .");
             this.broker.setContinueProducing( Boolean.FALSE);
 
             System.out.println("Producer finished its job; terminating.");
