@@ -1,38 +1,41 @@
 package compareSort.arraySort;
 
+import compareSort.AbstractSortingTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-public class SortStringArrayTest {
+public class SortStringArrayTest extends AbstractSortingTest {
 
-    String[] fruits;
-    String[] expectedSortedFruitsByName;
-    String[] expectedSortedFruitsByReverseNameOrder;
+   private String[] fruits, expectedSortedFruitsByNameRegularOrder, expectedSortedFruitsByNameReverseOrder;
 
     @Before
     public void before() {
         String pine = "Pineapple" , apple = "Apple", orange = "Orange", banana = "Banana";
         fruits = new String[] {pine, apple , orange, banana};
-        expectedSortedFruitsByName = new String[] {apple, banana, orange, pine};
+        expectedSortedFruitsByNameRegularOrder = new String[] {apple, banana, orange, pine};
+        expectedSortedFruitsByNameReverseOrder = generateReversedArrayCopy(expectedSortedFruitsByNameRegularOrder);
     }
 
     @Test
     public void testSortStringArray() {
         Arrays.sort(fruits);
-
-        iterateArrayAndPrint(fruits);
-        Assert.assertArrayEquals( expectedSortedFruitsByName, fruits);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByNameRegularOrder);
     }
 
 
-    private void iterateArrayAndPrint(String[] fruits){
-        int i=0;
-        for(String fruit: fruits){
-            System.out.println("fruits " + ++i + " : " + fruit);
-        }
+    @Test
+    public void testSortStringArrayWithAscendingComparator() {
+        Arrays.sort(fruits, Comparators.stringInsensitiveAscendingComparator);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByNameRegularOrder);
+    }
+
+    @Test
+    public void testSortStringArrayWithDesendingComparator() {
+        Arrays.sort(fruits, Comparators.stringInsensitiveDescendingComparator);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByNameReverseOrder);
     }
 
 }

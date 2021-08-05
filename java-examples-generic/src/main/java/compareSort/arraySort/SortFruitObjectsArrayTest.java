@@ -17,11 +17,6 @@ public class SortFruitObjectsArrayTest extends AbstractSortingTest {
 
     @Before
     public void before() {
-        Fruit pineapple = new Fruit("Pineapple",3);
-        Fruit apple = new Fruit("Apple",2);
-        Fruit orange = new Fruit("Orange",  1);
-        Fruit banana = new Fruit("Banana",4);
-
         fruits = new Fruit[]{pineapple, apple, orange, banana};
         expectedSortedFruitsByQuantity = new Fruit[]{orange, apple, pineapple, banana};
         expectedSortedFruitsByName = new Fruit[]{ apple, banana, orange, pineapple};
@@ -46,18 +41,6 @@ public class SortFruitObjectsArrayTest extends AbstractSortingTest {
         verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByNameInverseOrder);
     }
 
-
-    private void verifyExpectedArraySortInternal(Fruit[] actualSortedFruits, Fruit[] fruitsExpected) {
-        iterateArrayAndPrint(actualSortedFruits);
-        Assert.assertArrayEquals( fruitsExpected, actualSortedFruits);
-    }
-
-    private void iterateArrayAndPrint(Fruit[] fruits){
-        int i=0;
-        for(Fruit fruit: fruits){
-            System.out.println("fruits " + ++i + " : " + fruit);
-        }
-    }
 
 
 }

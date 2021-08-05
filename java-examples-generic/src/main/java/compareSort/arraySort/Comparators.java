@@ -11,6 +11,15 @@ public class Comparators {
         (Fruit fruit1, Fruit fruit2) -> compareFruitNames(fruit1, fruit2, false);
 
 
+    public static Comparator<String> stringInsensitiveAscendingComparator =
+        (String s1, String s2) ->compareStringInsensitive(s1, s2, true);
+
+    public static Comparator<String> stringInsensitiveDescendingComparator =
+        (String s1, String s2) ->compareStringInsensitive(s1, s2, false);
+
+
+
+
     private static int compareFruitNames(Fruit fruit1, Fruit fruit2, boolean ascendingOrder) {
         String fruitName1 = fruit1.getFruitName();
         String fruitName2 = fruit2.getFruitName();
