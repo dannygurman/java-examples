@@ -1,5 +1,7 @@
 package compareSort.arraySort;
 
+import com.google.common.collect.Lists;
+import compareSort.AbstractSortingTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,11 +11,9 @@ import java.util.Arrays;
 /**
  * Created by dannyg on 01/08/2016.
  */
-public class SortFruitObjectsArrayTest {
+public class SortFruitObjectsArrayTest extends AbstractSortingTest {
 
-    private Fruit[] fruits;
-    private Fruit[] expectedSortedFruitsByQuantity;
-    private Fruit[] expectedSortedFruitsByName;
+    private Fruit[] fruits, expectedSortedFruitsByQuantity, expectedSortedFruitsByName, expectedSortedFruitsByNameInverseOrder;
 
     @Before
     public void before() {
@@ -25,21 +25,31 @@ public class SortFruitObjectsArrayTest {
         fruits = new Fruit[]{pineapple, apple, orange, banana};
         expectedSortedFruitsByQuantity = new Fruit[]{orange, apple, pineapple, banana};
         expectedSortedFruitsByName = new Fruit[]{ apple, banana, orange, pineapple};
+        expectedSortedFruitsByNameInverseOrder =  generateReversedArrayCopy(expectedSortedFruitsByName);
     }
+
 
     @Test
    public void testSortComparableObjectArray() {
         Arrays.sort(fruits);
-
-        iterateArrayAndPrint(fruits);
-        Assert.assertArrayEquals( expectedSortedFruitsByQuantity, fruits);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByQuantity);
     }
     @Test
-    public void testSortObjectArrayUsingComparator() {
-        Arrays.sort(fruits, Fruit.FruitNameComparator);
+    public void testSortObjectArrayUsingNameAscendingComparator() {
+        Arrays.sort(fruits, Comparators.FruitNameAscendingComparator);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByName);
+    }
 
-        iterateArrayAndPrint(fruits);
-        Assert.assertArrayEquals( expectedSortedFruitsByName, fruits);
+    @Test
+    public void testSortObjectArrayUsingNameDescendingComparator() {
+        Arrays.sort(fruits, Comparators.FruitNameDescendingComparator);
+        verifyExpectedArraySortInternal(fruits, expectedSortedFruitsByNameInverseOrder);
+    }
+
+
+    private void verifyExpectedArraySortInternal(Fruit[] actualSortedFruits, Fruit[] fruitsExpected) {
+        iterateArrayAndPrint(actualSortedFruits);
+        Assert.assertArrayEquals( fruitsExpected, actualSortedFruits);
     }
 
     private void iterateArrayAndPrint(Fruit[] fruits){
