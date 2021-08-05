@@ -1,16 +1,23 @@
-package compareSort.comparable;
+package compareSort.arraySort;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Arrays;
 
 /**
  * Created by dannyg on 01/08/2016.
  */
-public class SortFruitObjectTest {
+public class SortFruitObjectsArrayTest {
 
-    public static void main(String args[]){
+    @Before
+    public void before() {
 
+    }
+
+    @Test
+   public void testSortComparableObjectArray() {
         Fruit[] fruits = new Fruit[4];
-
         Fruit pineappale = new Fruit("Pineapple", "Pineapple description",70);
         Fruit apple = new Fruit("Apple", "Apple description",100);
         Fruit orange = new Fruit("Orange", "Orange description",80);
@@ -30,4 +37,6 @@ public class SortFruitObjectTest {
         }
 
     }
+
+
 }

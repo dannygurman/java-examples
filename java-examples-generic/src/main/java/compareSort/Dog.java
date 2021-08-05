@@ -1,27 +1,18 @@
 package compareSort;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Comparator;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Dog implements Comparator<Dog>, Comparable<Dog> {
     private String name;
     private int age;
 
-
-   public  Dog(){
-    }
-
-   public  Dog(String n, int a){
-        name = n;
-        age = a;
-    }
-
-    public String getDogName(){
-        return name;
-    }
-
-    public int getDogAge(){
-        return age;
-    }
 
     // Overriding the compareTo method
     public int compareTo(Dog d){
@@ -33,4 +24,4 @@ public class Dog implements Comparator<Dog>, Comparable<Dog> {
         return d.age - d1.age;
     }
 
-}
+  }

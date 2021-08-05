@@ -1,4 +1,4 @@
-package compareSort.Comparator;
+package compareSort.arraySort;
 
 import java.util.Arrays;
 
