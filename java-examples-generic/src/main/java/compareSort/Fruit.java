@@ -1,9 +1,7 @@
-package compareSort.arraySort;
+package compareSort;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.Comparator;
 
 /**
  * Created by dannyg on 01/08/2016.

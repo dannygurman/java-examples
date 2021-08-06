@@ -1,7 +1,7 @@
-package compareSort.arraySort;
+package compareSort.tests;
 
-import compareSort.AbstractSortingTest;
-import org.junit.Assert;
+import compareSort.Comparators;
+import compareSort.tests.AbstractSortingTest;
 import org.junit.Before;
 import org.junit.Test;
 

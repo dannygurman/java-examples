@@ -1,4 +1,4 @@
-package compareSort.arraySort;
+package compareSort;
 
 import java.util.Comparator;
 
