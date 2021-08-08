@@ -10,8 +10,14 @@ public class FIndDuplicateAndMissingTest {
     private Integer expected_Missing = 5;
 
     @Test
-    public void test_duplicate_and_missing_method_a_sort() {
+    public void test_duplicate_and_missing_method_1_sort() {
         DuplicateAndMissingFinder finder = new UsingSort_1_DuplicateAndMissingFinder();
+        testInternal(finder);
+    }
+
+    @Test
+    public void test_duplicate_and_missing_method_2_countArray() {
+        DuplicateAndMissingFinder finder = new UsingCountArray_2_DuplicateAndMissingFinder();
         testInternal(finder);
     }
 

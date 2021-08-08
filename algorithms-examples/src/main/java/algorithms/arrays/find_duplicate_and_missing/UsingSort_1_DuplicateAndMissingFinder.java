@@ -9,9 +9,8 @@ import java.util.Arrays;
  * <p>
  * Time Complexity: O(nLogn) - SORT
  */
-public class UsingSort_1_DuplicateAndMissingFinder implements DuplicateAndMissingFinder {
+public class UsingSort_1_DuplicateAndMissingFinder extends DuplicateAndMissingFinder {
 
-    private FoundDuplicateAndMissingResult result = new FoundDuplicateAndMissingResult();
 
     public FoundDuplicateAndMissingResult findDuplicateAndMissing(int[] numbers) {
        //First sorting - o(nlogn) time
