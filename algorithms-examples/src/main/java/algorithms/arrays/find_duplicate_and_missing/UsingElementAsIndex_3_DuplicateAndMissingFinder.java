@@ -8,6 +8,9 @@ Method 3 (Use elements as Index and mark the visited places)
     negative to mark it visited.
      If something is already marked negative then this is the repeating element.
       To find missing, traverse the array again and look for a positive value.
+
+      Time Complexity: O(n)
+      No added space.
 */
 
 public class UsingElementAsIndex_3_DuplicateAndMissingFinder extends DuplicateAndMissingFinder {
