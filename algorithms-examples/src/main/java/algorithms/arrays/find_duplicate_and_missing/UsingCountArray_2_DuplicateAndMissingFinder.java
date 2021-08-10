@@ -12,7 +12,7 @@ package algorithms.arrays.find_duplicate_and_missing;
  * Time Complexity: O(n) *
  * Auxiliary Space: O(n)
  */
-public class UsingCountArray_2_DuplicateAndMissingFinder  extends DuplicateAndMissingFinder{
+public class UsingCountArray_2_DuplicateAndMissingFinder extends DuplicateAndMissingFinder {
 
         @Override
     public FoundDuplicateAndMissingResult findDuplicateAndMissing(final int[] numbers) {

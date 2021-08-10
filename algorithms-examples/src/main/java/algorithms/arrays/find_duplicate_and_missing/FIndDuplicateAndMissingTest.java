@@ -21,6 +21,12 @@ public class FIndDuplicateAndMissingTest {
         testInternal(finder);
     }
 
+    @Test
+    public void test_duplicate_and_missing_method_3_usingElementFinder() {
+        DuplicateAndMissingFinder finder = new UsingElementAsIndex_3_DuplicateAndMissingFinder();
+        testInternal(finder);
+    }
+
     private void testInternal(DuplicateAndMissingFinder finder) {
         FoundDuplicateAndMissingResult result = finder.findDuplicateAndMissing(numbers);
         Assert.assertEquals("checking expected duplicate", expected_duplicate, result.getDuplicate());
