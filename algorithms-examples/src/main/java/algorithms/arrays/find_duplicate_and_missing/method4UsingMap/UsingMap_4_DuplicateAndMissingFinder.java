@@ -1,4 +1,7 @@
-package algorithms.arrays.find_duplicate_and_missing;
+package algorithms.arrays.find_duplicate_and_missing.method4UsingMap;
+
+import algorithms.arrays.find_duplicate_and_missing.DuplicateAndMissingFinder;
+import algorithms.arrays.find_duplicate_and_missing.FoundDuplicateAndMissingResult;
 
 import java.util.HashMap;
 import java.util.Map;

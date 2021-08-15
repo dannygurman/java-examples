@@ -1,5 +1,9 @@
 package algorithms.arrays.find_duplicate_and_missing;
 
+import algorithms.arrays.find_duplicate_and_missing.method1UsingSort.UsingSort_1_DuplicateAndMissingFinder;
+import algorithms.arrays.find_duplicate_and_missing.method2UsingCountArray.UsingCountArray_2_DuplicateAndMissingFinder;
+import algorithms.arrays.find_duplicate_and_missing.method3UsingElementAsIndex.UsingElementAsIndex_3_DuplicateAndMissingFinder;
+import algorithms.arrays.find_duplicate_and_missing.method4UsingMap.UsingMap_4_DuplicateAndMissingFinder;
 import org.junit.Assert;
 import org.junit.Test;
 

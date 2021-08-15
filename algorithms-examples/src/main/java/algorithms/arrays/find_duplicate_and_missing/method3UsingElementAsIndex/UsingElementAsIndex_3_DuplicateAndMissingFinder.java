@@ -1,4 +1,4 @@
-package algorithms.arrays.find_duplicate_and_missing;
+package algorithms.arrays.find_duplicate_and_missing.method3UsingElementAsIndex;
 
 /*
 Method 3 (Use elements as Index and mark the visited places)
@@ -12,6 +12,9 @@ Method 3 (Use elements as Index and mark the visited places)
       Time Complexity: O(n)
       No added space.
 */
+
+import algorithms.arrays.find_duplicate_and_missing.DuplicateAndMissingFinder;
+import algorithms.arrays.find_duplicate_and_missing.FoundDuplicateAndMissingResult;
 
 public class UsingElementAsIndex_3_DuplicateAndMissingFinder extends DuplicateAndMissingFinder {
 
