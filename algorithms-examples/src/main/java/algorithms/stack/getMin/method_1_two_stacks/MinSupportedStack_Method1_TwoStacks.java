@@ -11,7 +11,17 @@ import java.util.Stack;
 /* A class that supports all the stack operations and one additional
 operation getMin() that returns the minimum element from stack at any time.
 This class inherits from the stack class and uses
-an auxiliary stack that holds minimum elements */
+an auxiliary stack that holds minimum elements
+
+Complexity Analysis:
+Time Complexity:
+For insert operation: O(1) (As insertion ‘push’ in a stack takes constant time)
+For delete operation: O(1) (As deletion ‘pop’ in a stack takes constant time)
+For ‘Get Min’ operation: O(1) (As we have used an auxiliary stack which has it’s top as the minimum element)
+
+Auxiliary Space: O(n). Use of auxiliary stack for storing values.
+
+*/
 
 public class MinSupportedStack_Method1_TwoStacks extends Stack<Integer> implements MinSupportedStack {
     private Stack<Integer> minimumsStack = new Stack<>();
