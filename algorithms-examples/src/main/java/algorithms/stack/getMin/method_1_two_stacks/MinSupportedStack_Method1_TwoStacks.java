@@ -50,6 +50,10 @@ public class MinSupportedStack_Method1_TwoStacks extends Stack<Integer> implemen
      This method makes sure that the min stack is also
      updated with appropriate minimum values */
     public Integer pop()  {
+        if (isEmpty()){
+            //otherwise  throwing EmptyStackException - Assuming returning null is OK
+            return null;
+        }
         int poppedValue = super.pop();
         //Popped also from min stack
         minimumsStack.pop();
@@ -58,7 +62,11 @@ public class MinSupportedStack_Method1_TwoStacks extends Stack<Integer> implemen
 
     /* SpecialStack's member method to get minimum element from it. */
 
-    public Integer getMinimumsStack(){
+    public Integer getMinimum(){
+        if (minimumsStack.isEmpty()){
+            //Note - calling peek (and also pop) on empty list will cause throwing EmptyStackException –
+            return null;
+        }
         return minimumsStack.peek();
     }
 

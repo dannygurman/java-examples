@@ -6,6 +6,7 @@ public interface MinSupportedStack {
 
     Integer pop() ;
 
-    Integer getMinimumsStack();
+    // Get the minimum number in the entire stack
+    Integer getMinimum();
 
 }

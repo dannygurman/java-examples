@@ -57,6 +57,10 @@ public class MinSupportedStack_Method2_TwoStacksImproved extends MinSupportedSta
      This method makes sure that the min stack is also
      updated with appropriate minimum values */
     public Integer pop() {
+        if (isEmpty()){
+            //otherwise  throwing EmptyStackException - Assuming returning null is OK
+            return null;
+        }
         int poppedValue = super.pop();
         //Popped also from min stack
         int poppedMinimum = minimumsStack.pop();
