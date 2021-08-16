@@ -1,6 +1,7 @@
 package algorithms.stack.getMin;
 
 import algorithms.stack.getMin.method_1_two_stacks.MinSupportedStack_Method1_TwoStacks;
+import algorithms.stack.getMin.method_2_two_stacks_improved.MinSupportedStack_Method2_TwoStacksImproved;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,10 +11,15 @@ public class MinSupportedStackTest {
     public void test_MinSupportedStack_Method1_Using2Stacks() {
         MinSupportedStack stack = new MinSupportedStack_Method1_TwoStacks();
         testMinSupportedStackInternal(stack);
-
     }
 
-    private void testMinSupportedStackInternal(MinSupportedStack stack){
+    @Test
+    public void test_MinSupportedStack_Method2_Using2Stacks_Improved() {
+        MinSupportedStack stack = new MinSupportedStack_Method2_TwoStacksImproved();
+        testMinSupportedStackInternal(stack);
+    }
+
+    private void testMinSupportedStackInternal(MinSupportedStack stack) {
         int minValueA = 10;
         int minValueB = 5;
 
@@ -30,7 +36,6 @@ public class MinSupportedStackTest {
         stack.pop();
         foundMin = stack.getMinimumsStack();
         Assert.assertEquals("Test get min 3", minValueA, foundMin);
-
 
     }
 }

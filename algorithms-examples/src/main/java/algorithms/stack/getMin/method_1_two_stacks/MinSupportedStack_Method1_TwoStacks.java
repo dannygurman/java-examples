@@ -24,7 +24,7 @@ Auxiliary Space: O(n). Use of auxiliary stack for storing values.
 */
 
 public class MinSupportedStack_Method1_TwoStacks extends Stack<Integer> implements MinSupportedStack {
-    private Stack<Integer> minimumsStack = new Stack<>();
+    protected Stack<Integer> minimumsStack = new Stack<>();
 
     /* SpecialStack's member method to insert an element to it. This method
     makes sure that the min stack is also updated with appropriate minimum values */
@@ -35,13 +35,13 @@ public class MinSupportedStack_Method1_TwoStacks extends Stack<Integer> implemen
         }
         else {
             super.push(valToPush);
-            int poppedMinimum = minimumsStack.pop();
-            minimumsStack.push(poppedMinimum);
-            if (valToPush < poppedMinimum) {
+            //Peek - Looks at the object at the top of this stack without removing it from the stack.
+            int peekedMinimum = minimumsStack.peek();
+            if (valToPush < peekedMinimum) {
                 minimumsStack.push(valToPush);
             }
             else {
-                    minimumsStack.push(poppedMinimum);
+                    minimumsStack.push(peekedMinimum);
                 }
         }
     }
