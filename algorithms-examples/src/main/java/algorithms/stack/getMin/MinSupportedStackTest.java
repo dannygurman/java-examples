@@ -3,6 +3,7 @@ package algorithms.stack.getMin;
 import algorithms.stack.getMin.method_1_two_stacks.MinSupportedStack_Method1_TwoStacks;
 import algorithms.stack.getMin.method_2_two_stacks_improved.MinSupportedStack_Method2_TwoStacksImproved;
 import algorithms.stack.getMin.method_3_minElementVariable.MinSupportedStack_Method3_MinElementVariable;
+import algorithms.stack.getMin.method_4_UsingNodeClass.MinSupportedStack_Method4_UsingNodeClass;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +27,11 @@ public class MinSupportedStackTest {
         testMinSupportedStackInternal(stack);
     }
 
-
+    @Test
+    public void test_MinSupportedStack_Method4_UsingNodeClass() {
+        MinSupportedStack stack = new MinSupportedStack_Method4_UsingNodeClass();
+        testMinSupportedStackInternal(stack);
+    }
 
     private void testMinSupportedStackInternal(MinSupportedStack stack) {
         int minValueA = 10;
