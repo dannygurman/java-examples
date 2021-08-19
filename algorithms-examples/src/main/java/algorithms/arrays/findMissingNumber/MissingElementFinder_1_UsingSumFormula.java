@@ -1,6 +1,4 @@
-package algorithms.arrays.findMissingElement;
-
-import algorithms.arrays.findMissingElement.MissingElementFinder;
+package algorithms.arrays.findMissingNumber;
 
 /**
  * Method 1: This method uses the technique of the summation formula.

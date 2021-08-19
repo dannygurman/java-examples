@@ -1,4 +1,4 @@
-package algorithms.arrays.findMissingElement;
+package algorithms.arrays.findMissingNumber;
 
 public interface MissingElementFinder {
 

@@ -1,4 +1,4 @@
-package algorithms.arrays.findMissingElement;
+package algorithms.arrays.findMissingNumber;
 /*
 Iterating - sum index and subtracting current value
 

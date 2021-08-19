@@ -1,4 +1,4 @@
-package algorithms.arrays.findMissingElement;
+package algorithms.arrays.findMissingNumber;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class MissingElementFinderTest {
     }
 
 
-    public void testMissingElementInternal( final MissingElementFinder finder )  {
+    private void testMissingElementInternal( final MissingElementFinder finder )  {
         int foundMissing = finder.findMissingElement(nums);
         Assert.assertEquals("Check foun missing", expectedMissing, foundMissing);
     }
