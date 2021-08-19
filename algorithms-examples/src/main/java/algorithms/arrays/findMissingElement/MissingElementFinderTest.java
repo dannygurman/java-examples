@@ -15,7 +15,7 @@ public class MissingElementFinderTest {
     }
 
     @Test
-    public void test_MissingElement_Method2_SumIndexAndSubstractElement() {
+    public void test_MissingElement_Method2_SumIndexAndSubtractElement() {
         MissingElementFinder finder = new MissingElementFinder_2_SumIndexAndSubtractElements();
         testMissingElementInternal(finder );
     }

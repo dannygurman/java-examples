@@ -32,11 +32,12 @@ public class MissingElementFinder_1_UsingSumFormula implements MissingElementFin
 
     @Override
     public int findMissingElement(final int[] nums) {
-        int length = nums.length;
+        int n = nums.length;
+      // 1+ 2+ ... + n = n(n+1) / 2,
+        //// total of  1 +... n + (n+1)  =  (n + 1) * (n + 2) / 2  - remind that nums (with length n)  has missing element
+        int total = (n + 1) * (n + 2) / 2; // total of  (1... n+1)
 
-        int total = (length + 1) * (length + 2) / 2;
-
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < n; i++) {
             total -= nums[i];
         }
         return total;
