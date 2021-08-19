@@ -20,6 +20,7 @@ public class MissingElementFinderTest {
         testMissingElementInternal(finder );
     }
 
+
     public void testMissingElementInternal( final MissingElementFinder finder )  {
         int foundMissing = finder.findMissingElement(nums);
         Assert.assertEquals("Check foun missing", expectedMissing, foundMissing);
