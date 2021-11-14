@@ -44,6 +44,7 @@
     <module>${spring.examples.dir}/spring-examples-annotations</module>
     <module>${spring.examples.dir}/spring-examples-factorybean</module>
     <module>${spring.examples.dir}/spring-examples-servicelocator</module>
+    <module>${spring.examples.dir}/spring-docs</module>
     <!--<module>${spring.examples.dir}/</module>
     <module>${spring.examples.dir}/spring.cache.guava</module>
     <module>${spring.examples.dir}/spring.caching.jsr107.ehcache</module>
