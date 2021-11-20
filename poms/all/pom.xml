@@ -18,8 +18,6 @@
 
     <modules>
         <module>../../java-examples-generic</module>
-        <module>../../java-rx-examples</module>
-        <module>../../reactor-core-examples</module>
         <module>../../java-functional-programming</module>
         <module>../../kafka-examples</module>
         <module>../spring-examples</module>
