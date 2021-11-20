@@ -18,7 +18,7 @@ public class DisappearedNumsFinderTest {
     }
 
     private void testDisappearedNumFinderInternal(final DisappearedNumsFinder finder){
-        List<Integer> foundMissingNumbers = finder.findMissingNubers(nums);
+        List<Integer> foundMissingNumbers = finder.findMissingNumbers(nums);
         //Assert 2 list matching ignore order - alternative using assertj hasSameElementsAs
         Assert.assertTrue(listAreEqualIgnoreOrder(expectedMissingNumbers, foundMissingNumbers));
     }

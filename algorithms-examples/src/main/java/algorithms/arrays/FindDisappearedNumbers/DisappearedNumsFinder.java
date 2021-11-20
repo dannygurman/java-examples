@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface DisappearedNumsFinder {
 
-    List<Integer> findMissingNubers(int[] nums);
+    List<Integer> findMissingNumbers(int[] nums);
 }

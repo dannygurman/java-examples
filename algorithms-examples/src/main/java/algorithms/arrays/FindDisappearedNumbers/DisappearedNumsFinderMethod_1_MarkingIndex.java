@@ -7,7 +7,7 @@ import java.util.List;
 public class DisappearedNumsFinderMethod_1_MarkingIndex implements DisappearedNumsFinder{
 
     @Override
-    public List<Integer> findMissingNubers(final int[] nums) {
+    public List<Integer> findMissingNumbers(final int[] nums) {
         System.out.println("Nums array before marking:\n" + Arrays.toString(nums));
         for (int i = 0; i < nums.length; i++) {
             int indexToMark = Math.abs(nums[i]) - 1;
