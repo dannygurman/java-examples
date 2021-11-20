@@ -1,8 +1,0 @@
-Given an array of size N, with negative and positive numbers, non repetitive and no 0,
-
- give an algorithm to print out any 3 indexes such that the sum of elements of the array in those
- indexes is 0 (Give just one triplet or output nine if there aren't any).
-
- Give time and space complexity.
-
-  Write in psuedocode if you wish.

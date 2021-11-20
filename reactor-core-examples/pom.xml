@@ -4,8 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>codeexamples</groupId>
-    <artifactId>reactor-
-        -examples</artifactId>
+    <artifactId>reactor-core-examples</artifactId>
     <version>1.0</version>
     <build>
         <plugins>
