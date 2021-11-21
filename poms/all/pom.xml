@@ -3,13 +3,12 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-
+    <groupId>examples.java</groupId>
     <artifactId>all-projects</artifactId>
-    <packaging>pom</packaging>
-    <groupId>examples</groupId>
-    <version>1</version>
     <name>all-projects</name>
+    <description>all-projects</description>
+    <packaging>pom</packaging>
+    <version>1</version>
 
     <properties>
         <spring.examples.dir>../../spring-examples</spring.examples.dir>
@@ -17,6 +16,7 @@
 
 
     <modules>
+        <module>../../java-example-parent</module>
         <module>../../java-examples-generic</module>
         <module>../../java-functional-programming</module>
         <module>../../kafka-examples</module>
