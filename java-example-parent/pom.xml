@@ -11,7 +11,7 @@
     <description>Parent for all java examples modules</description>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <junit.version>4.11</junit.version>
         <spring.version>4.1.4.RELEASE</spring.version>
         <assertj.version>3.8.0</assertj.version>
@@ -19,6 +19,8 @@
         <apache.commons-lang3.version>3.10</apache.commons-lang3.version>
         <kafka.version>2.0.1</kafka.version>
         <jackson.version>2.9.5</jackson.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <lombok.version>1.18.20</lombok.version>
     </properties>
 
 
@@ -134,7 +136,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.20</version>
+                <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -218,7 +220,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
