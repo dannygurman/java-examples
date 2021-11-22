@@ -1,4 +1,4 @@
-Testing:
+esting:
 hamcrest - - Matcher
   Assert.assertThat(singleRow.getDouble("suspectedEdge"), is(370.0));
   Assert.assertThat(results, Matchers.hasItems(303.0, 3.0));
