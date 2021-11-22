@@ -1,4 +1,0 @@
-AMQP Message Queue RabbiMQ Broker
-Dead Letter/Primary
-Direct Exchange
-Publisher Consumer

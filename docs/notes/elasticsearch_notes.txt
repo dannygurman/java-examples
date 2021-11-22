@@ -1,5 +1,0 @@
-Cerebro
-Elasticsearch Head
-replica
- Query DSL (Domain Specific Language
- Shards
