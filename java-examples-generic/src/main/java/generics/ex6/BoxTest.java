@@ -6,12 +6,12 @@ public class BoxTest {
 
 	public static void main(String[] args) {
 		Object someObject = new Object();
-		Integer someInteger = new Integer(10);
+		Integer someInteger = Integer.valueOf(10);
 		someObject = someInteger;   // OK
 		
 		BoxTest boxTest =new BoxTest();
-		boxTest.someMethod(new Integer(10));
-		boxTest.someMethod(new Double(1.2));
+		boxTest.someMethod(Integer.valueOf(10));
+		boxTest.someMethod(Double.valueOf(1.2));
 		
 		Box<Number> numberBox =new Box<Number>();
 		boxTest.boxTest(numberBox);

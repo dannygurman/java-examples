@@ -15,6 +15,7 @@ public class Test {
 
 		List<B> lb = new ArrayList<B>();
 	//	List<A> la = lb;   // compile-time error
+        List < ? extends A> lea = lb;
 
 		// Integer extends Number
 		List <Integer> listI =new ArrayList<Integer>();

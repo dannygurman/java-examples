@@ -18,7 +18,7 @@ public class ComareUtil {
 		intCompareListy.add(new IntegerCompare (4));
 		intCompareListy.add(new IntegerCompare (11));
 		
-		IntegerCompare  elem=new IntegerCompare(3);
+		IntegerCompare elem = new IntegerCompare(3);
 		
 		int count=ComareUtil.<IntegerCompare>countGreaterThan (intCompareListy, elem );
 		System.out.print("Count:"+count);
