@@ -14,7 +14,7 @@ But why is this needed when we can just skip the type in the lambda?
 If you need to apply an annotation just as @Nullable, you cannot do that without defining the type.
 
 Limitation of this feature – You must specify the type var on all parameters or none.
-Things like the following are not possible:
+Things like the following are NOT possible:
 
 
 (var s1, s2) -> s1 + s2 //no skipping allowed

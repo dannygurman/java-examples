@@ -1,4 +1,4 @@
-package javaVersions.v11;
+package javaVersions.v11.developerFeatures.stringMethods;
 
 public class StringRepeat {
 
