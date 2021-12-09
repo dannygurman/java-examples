@@ -27,7 +27,7 @@ class MyThread extends Thread {
         }
     }
 
-    public void performOperation(Runnable runnable){
+    private void performOperation(Runnable runnable){
         System.out.println("Starting " + threadName);
         try
         {

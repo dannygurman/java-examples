@@ -33,8 +33,13 @@ public class CircularArrayTest {
            /* while (caIter.hasNext()){
                 System.out.println(caIter.next());
             }*/
-            for ( ;caIter.hasNext(); ) {
+
+          /*  for ( ;caIter.hasNext(); ) {
                 System.out.println(caIter.next());
+            }*/
+
+            for (Object element :ca ) {
+                System.out.println(element);
             }
         }
 }
