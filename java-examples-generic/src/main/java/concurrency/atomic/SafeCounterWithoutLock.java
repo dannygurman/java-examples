@@ -13,8 +13,10 @@ public class SafeCounterWithoutLock {
         while(true) {
             int existingValue = getValue();
             int newValue = existingValue + 1;
+
             //Atomically sets the value to newValue if the current value == expectedValue,
-            if(counter.compareAndSet(existingValue, newValue)) {
+            boolean succeeded = counter.compareAndSet(existingValue, newValue);
+            if(succeeded) {
                 return;
             }
         }
