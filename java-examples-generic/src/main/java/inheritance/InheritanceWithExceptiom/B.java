@@ -12,13 +12,12 @@ public class B extends  A {
 
     }
 
-    @Override   //could throw RuntimeException (when super do no throe exception
+    @Override   //could throw RuntimeException (when super do no throw exception
     public void method_z ()  throws RuntimeException {
 
     }
 
-
-   /* will not compile - can increase exception level
+   /* will not compile - can NOT increase exception level
     public void method_z () throws Exception {
 
     }*/

@@ -27,12 +27,15 @@ public class TestOverriding {
 
 	public static void main(String[] args) {
 		Cat myCat = new Cat();
-		Animal myAnimal = myCat;
-        System.out.println("1");
+
+        System.out.println("1 Animal.testClassMethod");
 		Animal.testClassMethod ();
-        System.out.println("2");
+
+        System.out.println("2 Cat.testClassMethod");
         Cat.testClassMethod();
-        System.out.println("3");
+
+        System.out.println("3 System.out.println");
+        Animal myAnimal = myCat;
         myAnimal.testInstanceMethod();
 
 	}
@@ -40,5 +43,13 @@ public class TestOverriding {
 }
 
 //Output:
-//The class method in Animal.
-//The instance method in Cat.
+/*
+1 Animal.testClassMethod
+    The class method in Animal.
+
+    2 Cat.testClassMethod
+    The class method in Cat.
+
+    3 System.out.println
+    The instance method in Cat.
+    */
