@@ -1,14 +1,14 @@
 package concurrency.atomic;
 
-public class UnsafeCounter {
+public class UnsafeCounter implements Counter {
 
     private int counter;
 
-    int getValue() {
+    public int getValue() {
         return counter;
     }
 
-    void increment() {
+    public void increment() {
         counter++;
     }
 }

@@ -2,6 +2,8 @@ package objectMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class ObjectMapperExample {
@@ -10,13 +12,14 @@ public class ObjectMapperExample {
 
     public static void main(String[] args) throws Exception {
         POJO pojo = POJO.builder()
-            .field1Str("a")
+            .field1Str("xxx")
             .field2Map(new HashMap<>())
             .build();
 
         String json = OBJECT_MAPPER.writeValueAsString(pojo);
         System.out.println("Json: [" + json + "]");
-
+        Path path = Paths.get("examplefile.json");
+        OBJECT_MAPPER.writeValue(path.toFile(), pojo);
     }
 
 }

@@ -1,13 +1,13 @@
 package concurrency.atomic;
 
-public class SafeCounterWithLock {
+public class SafeCounterWithLock implements Counter{
     private volatile int counter;
 
-    int getValue() {
+    public int getValue() {
         return counter;
     }
 
-    synchronized void increment() {
+    public synchronized void increment() {
         counter++;
     }
 }

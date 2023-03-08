@@ -2,7 +2,7 @@ package concurrency.atomic;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SafeCounterWithoutLock {
+public class SafeCounterWithoutLock implements Counter {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     public int getValue() {
