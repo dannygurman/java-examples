@@ -53,7 +53,7 @@ public class CallableExample {
 			//Creating new callable for every word
 			Callable<Integer> wordLengthCallable = new WordLengthCallable(word);
 
-			//Send callable to executer thread pool which return the Future
+			//Send callable to executes thread pool which return the Future
 			Future<Integer> future = pool.submit(wordLengthCallable);
 			futureSet.add(future);
 		}
@@ -65,11 +65,14 @@ public class CallableExample {
 			System.out.printf("curLength is %s%n", curLength);
 			sum += future.get();
 		}
-		System.out.printf("The twosum of lengths is %s%n", sum);
+		System.out.printf("The sum of lengths is %s%n", sum);
 
 		System.exit(sum);
 	}
 
 }
-
+/*    curLength is 5
+    curLength is 5
+    curLength is 3
+    The sum of lengths is 13*/
 
