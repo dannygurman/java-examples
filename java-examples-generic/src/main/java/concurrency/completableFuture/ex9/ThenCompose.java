@@ -20,7 +20,7 @@ public class ThenCompose {
         Function<User, CompletableFuture<Double>> functionGetCreditCratingFuture = user -> thenComposeTest.getCreditRatingFuture(user);
 
 
-
+        //CompletableFuture of CompletableFuture
         CompletableFuture<CompletableFuture<Double>> result = userDetailsFuture.thenApply(functionGetCreditCratingFuture);
 
         //In earlier examples, the Supplier function passed to thenApply() callback would return a simple
@@ -35,6 +35,7 @@ public class ThenCompose {
         // If your callback function returns a CompletableFuture, and you want a flattened
         // result from the CompletableFuture chain (which in most cases you would), then use thenCompose().
 
+        //functionGetCreditCratingFuture will be called after calling get
         System.out.println("rating:" + result2.get());
         // Result:rating:4.0
     }

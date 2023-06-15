@@ -30,6 +30,7 @@ public class ThenAccept {
 
         CompletableFuture<Void> completableFutureProductDetails = CompletableFuture.supplyAsync(productSupplier).thenAccept(productConsumer);
 
+        //productConsumer will be called only when calling get
         completableFutureProductDetails.get();
 
 
@@ -39,7 +40,9 @@ public class ThenAccept {
 
         Supplier<Integer> zeroSupplier = () -> {return 0;/* Run some computation} */ };
         Runnable runnableAction = () -> { /* Computation Finished.*/};
-         CompletableFuture.supplyAsync(zeroSupplier).thenRun(runnableAction).get();
+        CompletableFuture<Void>  cf = CompletableFuture.supplyAsync(zeroSupplier).thenRun(runnableAction);
+       //runnableAction will run even if cf.get() not called
+        cf.get();
 
     }
 
