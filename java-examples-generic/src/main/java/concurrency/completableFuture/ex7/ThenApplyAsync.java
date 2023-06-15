@@ -38,8 +38,8 @@ public class ThenApplyAsync {
         // If you use thenApplyAsync() callback, then it will be executed
         // in a different thread obtained from ForkJoinPool.commonPool() -
 
-        Supplier <String>  supplySomething = () -> {return "Some Result";};
-        Function<String , String> doProcess = result ->{ return "Processed Result";};
+        Supplier <String>  supplySomething = () -> "Some Result";
+        Function<String , String> doProcess = result -> "Processed Result" + result;
 
         CompletableFuture.supplyAsync(supplySomething).thenApplyAsync(doProcess/* Executed in a different thread from ForkJoinPool.commonPool() */);
 
