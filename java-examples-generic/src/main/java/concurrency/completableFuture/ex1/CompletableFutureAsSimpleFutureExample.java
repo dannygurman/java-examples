@@ -15,7 +15,9 @@ public class CompletableFutureAsSimpleFutureExample  {
     public  void simpleFutureExample1() throws Exception {
         CompletableFuture<String> completableFuture = calculateAsync();
         //Waits if necessary for this future to complete, and then return result (blocking?)
+        System.out.println("1");
         String result = completableFuture.get();
+        System.out.println("2");
         Assert.assertEquals("Hello", result);
     }
 

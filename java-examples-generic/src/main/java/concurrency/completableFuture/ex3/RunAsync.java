@@ -19,7 +19,7 @@ public class RunAsync {
             System.out.println("I'll run in a separate thread than the main thread.");
         };
 
-
+       //Void CompletableFuture
         CompletableFuture<Void> future = CompletableFuture.runAsync(runnable);
 
         // Block and wait for the future to complete
