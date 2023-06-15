@@ -19,7 +19,8 @@ public class CompletableFutureAsSimpleFutureExample  {
         Assert.assertEquals("Hello", result);
     }
 
-    public  CompletableFuture<String> calculateAsync() throws InterruptedException {
+
+    public  CompletableFuture<String> calculateAsync() {
 
         CompletableFuture<String> completableFuture = new CompletableFuture<>();
 

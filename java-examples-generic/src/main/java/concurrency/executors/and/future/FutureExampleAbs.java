@@ -1,7 +1,5 @@
 package concurrency.executors.and.future;
 
-import concurrency.executors.and.future.ArchiveSearcher;
-import concurrency.executors.and.future.ArchiveSearcherImpl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

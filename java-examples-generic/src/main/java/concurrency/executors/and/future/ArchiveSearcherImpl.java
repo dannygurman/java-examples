@@ -1,6 +1,5 @@
 package concurrency.executors.and.future;
 
-import concurrency.executors.and.future.ArchiveSearcher;
 
 public class ArchiveSearcherImpl implements ArchiveSearcher {
 

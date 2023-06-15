@@ -25,6 +25,7 @@ public class FutureExample2 extends FutureExampleAbs {
             //Blocked -  Waits if necessary for the computation to complete, and then
             //     * retrieves its result.
             displayText(future.get()); // use future
+
         } catch (ExecutionException ex) { cleanup(); return; }
     }
 
