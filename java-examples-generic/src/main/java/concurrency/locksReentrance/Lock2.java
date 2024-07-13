@@ -7,7 +7,7 @@ package concurrency.locksReentrance;
 
  Additionally, we need to count the number of times the lock has been locked by the same thread.
  Otherwise, a single call to unlock() will unlock the lock, even if the lock has been locked multiple times.
-  We don't want the lock to be unloced until the thread that locked it, has executed the same amount of unlock() calls as lock() calls.
+  We don't want the lock to be unlocked until the thread that locked it, has executed the same amount of unlock() calls as lock() calls.
 
 The Lock class is now reentrant.
  */

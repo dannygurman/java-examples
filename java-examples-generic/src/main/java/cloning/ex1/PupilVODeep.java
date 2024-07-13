@@ -15,7 +15,8 @@ public class PupilVODeep implements Cloneable {
 
 
 	public Object clone() { // deep copy
-		PupilVODeep pupil = new PupilVODeep(name, subj.getName());
+		PupilVODeep pupil =
+				new PupilVODeep(name, subj.getName());
 		return pupil;
 	}
 

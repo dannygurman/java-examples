@@ -8,7 +8,7 @@ public class SleepMessage3 {
 	 *  and return immediately when an interrupt is received.
 What if a thread goes a long time without invoking a method that throws InterruptedException? 
 Then it must periodically invoke Thread.interrupted, which returns true if an interrupt has been received. 
-For example:
+For example (see also comments below code!!):
 	 */
 	public static void main(String args[])	 {
 		String inputs[] = {	"x"	};

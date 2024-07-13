@@ -9,7 +9,8 @@ public class PupilVOShallow implements Cloneable {
 	private String name;
 
 	public PupilVOShallow (String name, String sub) {
-		this.name = name; this.subj = new SubjectVO(sub);
+		this.name = name;
+		this.subj = new SubjectVO(sub);
 	}
 
 	// shallow copy
