@@ -5,8 +5,7 @@ import java.util.concurrent.Callable;
 
 public class ConsoleInputReadTask implements Callable<String> {
     public String call() throws IOException {
-        BufferedReader br = new BufferedReader(
-                new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("ConsoleInputReadTask run() called.");
         String input;
         do {

@@ -15,12 +15,13 @@ public class OptionalMapFlatMapExample {
 
         Optional<Optional<String>> nonEmptyOptionalGender = Optional.of(Optional.of("male"));
         System.out.println("Optional value   :: " + nonEmptyOptionalGender);
-        System.out.println("Optional.map     :: " + nonEmptyOptionalGender.map(gender -> gender.map(String::toUpperCase)));
-        System.out.println("Optional.flatMap :: " + nonEmptyOptionalGender.flatMap(gender -> gender.map(String::toUpperCase)));
 
-        Optional<String> flatMap =  nonEmptyOptionalGender.flatMap(gender -> gender.map(String::toUpperCase));
-        Optional  <Optional <String> > map =  nonEmptyOptionalGender.map(gender -> gender.map(String::toUpperCase));
-        map.isPresent();
+        Optional<Optional<String>> nonEmptyOptionalGenderMapped =  nonEmptyOptionalGender.map(gender -> gender.map(String::toUpperCase));
+        System.out.println("Optional.map     :: " +nonEmptyOptionalGenderMapped);
+
+        Optional<String> flatMap  =  nonEmptyOptionalGender.flatMap(gender -> gender.map(String::toUpperCase));
+        System.out.println("Optional.flatMap :: " + flatMap);
+
     }
   /*
     Output:
