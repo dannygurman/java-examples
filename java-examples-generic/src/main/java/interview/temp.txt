@@ -11,7 +11,8 @@ Answer: Assuming the table structure is (Courses - Id, Name : Students - Id, Nam
 
 the query is:
 select c.name, avg(grades.grade) from
-courses c join on c.id =  grades.course_id
+courses c
+ join on c.id =  grades.course_id
 group by course.name
 
 I ask also give all the courses for averages greater than 90. The addition to the query should be "having avg(grades.grade) > 90"

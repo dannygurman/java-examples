@@ -1,6 +1,7 @@
 package concurrency.thread.threadlocal;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 /**Each thread holds an implicit reference to its copy of a thread-local
  * variable as long as the thread is alive and the <tt>ThreadLocal</tt>
@@ -15,13 +16,10 @@ public class ThreadLocalExample2 {
 	// Atomic integer containing the next thread ID to be assigned
 	private static final AtomicInteger nextId = new AtomicInteger(0);
 
-	// Thread local variable containing each thread's ID
-	private static final ThreadLocal<Integer> threadId =new ThreadLocal<Integer>() {
-		//@Override
-		protected Integer initialValue() {
-			return nextId.getAndIncrement();
-		}
-	};
+    //@Override
+    // Thread local variable containing each thread's ID
+	private static Supplier <Integer> supplier = () -> nextId.getAndIncrement();
+	private static final ThreadLocal<Integer> threadId = ThreadLocal.withInitial(supplier);
 
 	// Returns the current thread's unique ID, assigning it if necessary
 	public static int get() {

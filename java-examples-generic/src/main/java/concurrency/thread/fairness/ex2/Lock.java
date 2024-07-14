@@ -2,7 +2,7 @@ package concurrency.thread.fairness.ex2;
 
 //A simple implementation of the Lock class could look like this:
 //If you look at the Synchronizer class above and look into this Lock implementation you will notice that threads are now blocked
-// trying to access the lock() method, if more than one thread calls lock() simultanously.
+// trying to access the lock() method, if more than one thread calls lock() simultaneously.
 //
 // Second, if the lock is locked, the threads are blocked in the wait() call inside the while(isLocked) loop in the lock() method.
 // Remember that a thread calling wait() releases the synchronization lock on the Lock instance, so threads waiting to enter lock() can now do so.

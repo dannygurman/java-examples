@@ -20,8 +20,10 @@ package concurrency.thread.ex1;
  //Oracle's recommendation is to use interruption only for cancellation.
  // /Also the classes in java.examples.persistence.util.concurrent are designed to use interrupt for cancellation.
 
-//In order to make this code quit once it's interrupted, rather then return to waiting, add a check for the interrupted
-// flag status to the loop condition, and have the catch block set the interrupt flag (which gets reset when the exception is thrown):
+//In order to make this code quit once it's interrupted, rather than return to waiting,
+// add a check for the interrupted
+// flag status to the loop condition, and have the catch block set the interrupt
+// flag (which gets reset when the exception is thrown):
 
 public class InterruptExample {
 
