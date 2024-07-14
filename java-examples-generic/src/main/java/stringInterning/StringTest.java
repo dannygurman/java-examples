@@ -6,7 +6,8 @@ package stringInterning;
 
 /**
  * Because strings are usually plentiful in most applications, Java goes to great lengths to make sure strings perform well.
- * First, strings are immutable, so they don't have to be thread-safe. Because synchronization is expensive, strings are spared that drag on performance.
+ * First, strings are immutable, so they don't have to be thread-safe
+ * Because synchronization is expensive, strings are spared that drag on performance.
  *
  * Second, as you might guess, strings specified at compile-time are flyweights—strings that contain the same character sequence are shared.
  *

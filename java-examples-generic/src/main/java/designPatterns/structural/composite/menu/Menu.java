@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 public class Menu extends MenuComponent { //This is the composite
-	ArrayList menuComponents = new ArrayList();
+	ArrayList<MenuComponent> menuComponents = new ArrayList();
 	String name;
 	String description;
   
@@ -22,7 +22,7 @@ public class Menu extends MenuComponent { //This is the composite
 	}
  
 	public MenuComponent getChild(int i) {
-		return (MenuComponent)menuComponents.get(i);
+		return menuComponents.get(i);
 	}
  
 	public String getName() {

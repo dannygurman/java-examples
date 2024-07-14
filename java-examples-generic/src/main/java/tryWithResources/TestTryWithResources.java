@@ -44,7 +44,7 @@ public class TestTryWithResources {
         }
     }
 
-    /*private static void printFile_java9() throws IOException {
+    private static void printFile_java9() throws IOException {
 
         //Before Java 9 a resource that is to be automatically closed must be created inside the parentheses of the try block of a try-with-resources construct.
         // From Java 9, this is no longer necessary.
@@ -59,5 +59,5 @@ public class TestTryWithResources {
                 data = input.read();
             }
         }
-    }*/
+    }
 }

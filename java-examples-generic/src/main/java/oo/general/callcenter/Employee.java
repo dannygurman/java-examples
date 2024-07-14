@@ -9,7 +9,8 @@ public class Employee {
     boolean free;
 
     Employee(int rank) {
-        this.rank = rank; }
+        this.rank = rank;
+    }
 
     void receiveCall(Call call) {
 //free = false
