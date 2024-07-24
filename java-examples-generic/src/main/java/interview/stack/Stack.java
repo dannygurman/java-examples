@@ -1,4 +1,4 @@
-package interview;
+package interview.stack;
 
 /* Java program to implement basic stack operations */
 public  class Stack {
