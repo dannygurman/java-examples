@@ -1,6 +1,7 @@
 package consumerProducer.ex1;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Broker {
@@ -11,13 +12,13 @@ public class Broker {
     //But, if the producers are slow, the consumers will wait for data to come in and if the array is full, the producers will wait for it to free.
 
     int capacity = 100;
-    public ArrayBlockingQueue <Integer> queue = new ArrayBlockingQueue(capacity);
+    public BlockingQueue<Integer> blockingQueue = new ArrayBlockingQueue(capacity);
 
     private  Boolean continueProducing = Boolean.TRUE;
 
     public void put(Integer data) throws InterruptedException    {
         //Inserts the specified element at the tail of this queue, waiting for space to become available if the queue is full.
-        this.queue.put(data);
+        this.blockingQueue.put(data);
     }
 
     public Integer get() throws InterruptedException   {
@@ -25,7 +26,7 @@ public class Broker {
         //timeout - how long to wait before giving up, in units of unit
        //return - he head of this queue, or null if the specified waiting time elapses before an element is available
         long timeoutInSec = 1;
-       return this.queue.poll(timeoutInSec, TimeUnit.SECONDS);
+       return this.blockingQueue.poll(timeoutInSec, TimeUnit.SECONDS);
     }
 
     public Boolean getContinueProducing() {

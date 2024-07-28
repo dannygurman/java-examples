@@ -10,8 +10,8 @@ public class Producer  implements Runnable {
 
     private BlockingQueue<Message> queue;
 
-    public Producer(BlockingQueue<Message> q){
-        this.queue=q;
+    public Producer(BlockingQueue<Message> queue){
+        this.queue=queue;
     }
     @Override
     public void run() {

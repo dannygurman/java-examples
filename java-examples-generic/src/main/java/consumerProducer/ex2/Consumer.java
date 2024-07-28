@@ -6,8 +6,8 @@ public class Consumer implements Runnable {
 
     private BlockingQueue<Message> queue;
 
-    public Consumer(BlockingQueue<Message> q){
-        this.queue=q;
+    public Consumer(BlockingQueue<Message> queue){
+        this.queue = queue;
     }
 
 
