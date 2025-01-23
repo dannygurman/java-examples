@@ -1,4 +1,4 @@
-package designPatterns.creational.builder.ex1;;
+package designPatterns.creational.builder.ex1;
 
 import java.util.Date;
 
