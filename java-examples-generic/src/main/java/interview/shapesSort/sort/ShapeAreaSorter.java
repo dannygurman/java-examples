@@ -1,7 +1,7 @@
-package interview.ex1.sort;
+package interview.shapesSort.sort;
 
-import interview.ex1.factory.ShapeFactory;
-import interview.ex1.shapes.Shape;
+import interview.shapesSort.factory.ShapeFactory;
+import interview.shapesSort.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,6 +1,6 @@
-package interview.ex1.sort;
+package interview.shapesSort.sort;
 
-import interview.ex1.shapes.Shape;
+import interview.shapesSort.shapes.Shape;
 
 import java.util.Comparator;
 

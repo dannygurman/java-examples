@@ -1,4 +1,4 @@
-package interview.ex1.sort;
+package interview.shapesSort.sort;
 
 import java.util.List;
 

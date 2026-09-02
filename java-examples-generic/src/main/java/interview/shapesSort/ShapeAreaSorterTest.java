@@ -1,7 +1,7 @@
-package interview.ex1;
+package interview.shapesSort;
 
-import interview.ex1.sort.ShapeAreaSorter;
-import interview.ex1.sort.ShapeSorter;
+import interview.shapesSort.sort.ShapeAreaSorter;
+import interview.shapesSort.sort.ShapeSorter;
 import org.junit.Before;
 import org.junit.Test;
 

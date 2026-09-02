@@ -1,4 +1,4 @@
-package interview.ex1.shapes;
+package interview.shapesSort.shapes;
 
 public class Square extends Shape {
 

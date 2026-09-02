@@ -1,8 +1,8 @@
-package interview.ex1.factory;
+package interview.shapesSort.factory;
 
-import interview.ex1.shapes.Circle;
-import interview.ex1.shapes.Shape;
-import interview.ex1.shapes.Square;
+import interview.shapesSort.shapes.Circle;
+import interview.shapesSort.shapes.Shape;
+import interview.shapesSort.shapes.Square;
 
 public class ShapeFactory {
     public Shape create(Integer initialValue) {

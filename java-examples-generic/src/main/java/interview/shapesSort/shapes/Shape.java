@@ -1,4 +1,4 @@
-package interview.ex1.shapes;
+package interview.shapesSort.shapes;
 
 import java.text.DecimalFormat;
 
