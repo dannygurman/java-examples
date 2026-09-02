@@ -1,6 +1,7 @@
 package interview.exercises.router.phase1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import interview.exercises.firewall.phase1.*;
 import org.junit.Before;
 import org.junit.Test;
 
