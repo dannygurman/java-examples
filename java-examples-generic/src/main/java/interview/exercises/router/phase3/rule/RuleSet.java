@@ -6,6 +6,7 @@ import interview.exercises.router.phase3.Packet;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A prioritised policy: the lowest-priority-number matching rule decides,
@@ -27,9 +28,11 @@ public class RuleSet {
     }
 
     public Decision decide(Packet packet) {
-        return rules.stream()
+        Optional<Rule> firstMatch = rules.stream()
                 .filter(rule -> rule.matches(packet))
-                .findFirst()
+                .findFirst();
+
+        return firstMatch
                 .map(rule -> new Decision(rule.id(), rule.action()))
                 .orElseGet(() -> new Decision(null, defaultAction));
     }

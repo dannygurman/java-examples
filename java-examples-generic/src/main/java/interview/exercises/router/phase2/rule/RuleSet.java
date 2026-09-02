@@ -5,6 +5,7 @@ import interview.exercises.router.phase2.Decision;
 import interview.exercises.router.phase2.Packet;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An ordered policy: the first matching rule decides, otherwise the default applies.
@@ -23,9 +24,11 @@ public class RuleSet {
     }
 
     public Decision decide(Packet packet) {
-        return rules.stream()
+        Optional<Rule> firstMatch = rules.stream()
                 .filter(rule -> rule.matches(packet))
-                .findFirst()
+                .findFirst();
+
+        return firstMatch
                 .map(rule -> new Decision(rule.id(), rule.action()))
                 .orElseGet(() -> new Decision(null, defaultAction));
     }

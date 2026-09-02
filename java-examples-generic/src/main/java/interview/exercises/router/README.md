@@ -8,6 +8,7 @@ An OO design exercise in four phases. Phases 1–3 are code driven by tests; Pha
 router/
   README.md               this page — run it from here
   INTERVIEWER-GUIDE.md    grading, answers, deliberate gaps, calibration
+  CANDIDATE-GUIDE.md      send to the candidate before the session
   handouts/               give these to the candidate, one at a time
       phase1.md  phase2.md  phase3.md  phase4.md
   phase1/  phase2/  phase3/    reference solutions, one per phase
@@ -36,6 +37,7 @@ Tests: `src/test/java/interview/exercises/router/phase{1,2,3}/`
 
 ## How to run it
 
+0. Send `CANDIDATE-GUIDE.md` ahead of the session. It covers setup, ground rules and what we grade, and gives away no part of the problem.
 1. Give them `handouts/phase1.md` and `FirewallPhase1Test`. **Nothing else.**
 2. When a phase works, hand out the next one. Never earlier — the change has to be unforeseen for the exercise to measure anything.
 3. Ask that phase's questions from the interviewer guide before moving on. The conversation is worth more than the code.

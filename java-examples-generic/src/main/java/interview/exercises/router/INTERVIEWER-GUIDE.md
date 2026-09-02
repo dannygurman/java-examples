@@ -1,7 +1,7 @@
 # Router Rule Matcher — Interviewer Guide
 
 > **Interviewer only. Do not share with candidates.**
-> Candidate-facing text lives in `handouts/phase1.md` … `phase4.md`.
+> Candidate-facing text lives in `CANDIDATE-GUIDE.md` and `handouts/phase1.md` … `phase4.md`.
 
 ## What this exercise measures
 
