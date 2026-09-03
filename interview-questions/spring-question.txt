@@ -1,0 +1,2526 @@
+================================================================================
+SPRING / SPRING BOOT + TESTING INTERVIEW QUESTIONS
+JUNIOR / MID JAVA DEVELOPER
+
+  PART 1  SPRING / SPRING BOOT   sections  1 - 23   (basic -> advanced)
+  PART 2  TESTING                sections 24 - 28   (basic -> advanced)
+
+Core Java questions live in java-basics-questions.txt; a reference written
+"#J6" points to a section number in that file.
+Cross-references inside this file are written "#n".
+================================================================================
+
+
+================================================================================
+PART 1 - SPRING / SPRING BOOT
+Ordered basic -> advanced
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. SPRING FRAMEWORK vs SPRING BOOT vs STARTERS
+--------------------------------------------------------------------------------
+
+Q: What is the difference between Spring, Spring MVC, Spring Boot and a
+   "starter"?
+
+ANSWER
+  Spring Framework
+    The core product: the IoC container, dependency injection, AOP, the
+    transaction abstraction, resource handling. Everything else is built on
+    it. On its own it ships no server and no defaults - you configure
+    everything yourself (XML in the old days, @Configuration today).
+
+  Spring MVC
+    NOT a competitor to the Framework - it is one MODULE of it, the servlet
+    web layer: DispatcherServlet, @Controller, HandlerMapping, message
+    converters. Its siblings are spring-jdbc, spring-orm, spring-tx.
+    Its reactive alternative is Spring WebFlux (Netty, non-blocking).
+
+  Spring Boot
+    Not a framework and not a replacement - an OPINIONATED LAYER on top of
+    Spring that bootstraps it:
+      - auto-configuration (configure beans based on what is on the classpath)
+      - starter dependencies
+      - an EMBEDDED server, so you ship a runnable jar instead of a WAR
+      - externalized configuration (application.yml, env vars, profiles)
+      - production extras: Actuator, health checks, metrics, graceful shutdown
+    The one-liner: you can do everything Boot does with plain Spring - Boot
+    just writes the boilerplate for you.
+
+  Starter
+    A dependency bundle. A starter is JUST A POM WITH NO CODE. Its only job
+    is to pull a consistent, version-aligned set of jars so you write one
+    dependency instead of hand-picking six with matching versions. The
+    versions come from the spring-boot-dependencies BOM - which is why you
+    write starters with no <version> tag.
+
+      spring-boot-starter            core container + logging + config
+                                     (every other starter includes it)
+      spring-boot-starter-web        Spring MVC + embedded Tomcat + Jackson
+                                     + Validation
+      spring-boot-starter-webflux    WebFlux + Netty (reactive)
+      spring-boot-starter-data-jpa   Spring Data JPA + Hibernate + HikariCP
+      spring-boot-starter-jdbc       spring-jdbc + HikariCP
+      spring-boot-starter-security   Spring Security auto-config
+      spring-boot-starter-validation Hibernate Validator (JSR-380)
+      spring-boot-starter-actuator   health / metrics / info endpoints
+      spring-boot-starter-aop        Spring AOP + AspectJ
+      spring-boot-starter-cache      caching abstraction
+      spring-boot-starter-test       JUnit 5, Mockito, AssertJ, Hamcrest,
+                                     JSONassert, spring-test
+      spring-boot-starter-amqp       RabbitMQ
+      -mail, -quartz, -thymeleaf, -batch, -data-redis ...
+      (Kafka is the odd one out: the artifact is "spring-kafka", there is no
+       spring-boot-starter-kafka.)
+
+  IS SPRING MVC INCLUDED IN SPRING BOOT?
+    No - it arrives with a starter. Plain spring-boot-starter has no web
+    layer at all, which is a perfectly valid Boot app (a CLI job, a batch, a
+    Kafka consumer). spring-boot-starter-web is what puts spring-webmvc on
+    the classpath; Boot then DETECTS it
+    (@ConditionalOnClass(DispatcherServlet.class) in WebMvcAutoConfiguration)
+    and auto-configures the DispatcherServlet, converters, error handling and
+    static resources.
+      - If both -web and -webflux are present, MVC WINS. Override with
+        spring.main.web-application-type=reactive.
+      - Adding your own @EnableWebMvc DISABLES WebMvcAutoConfiguration - the
+        classic self-inflicted wound where JSON, static resources and error
+        pages suddenly stop working. Customize with a WebMvcConfigurer
+        instead.
+
+  Further out
+    Spring Data, Spring Security, Spring Batch, Spring Integration are
+    separate projects on the Framework.
+    Spring Cloud is built on Boot: config server, service discovery, gateway,
+    resilience, distributed tracing.
+
+  @SpringBootApplication  =  @Configuration
+                          +  @EnableAutoConfiguration
+                          +  @ComponentScan (of its own package downwards)
+
+FOLLOW-UPS
+  - Swap Tomcat for Jetty: exclude spring-boot-starter-tomcat from
+    starter-web and add spring-boot-starter-jetty.
+  - How would you write your own starter?  (Artifact named
+    "xxx-spring-boot-starter", an auto-configuration class listed in
+    META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration
+    .imports - spring.factories before Boot 2.7.)
+  - How do you debug what got auto-configured?  (--debug prints the
+    CONDITIONS EVALUATION REPORT; /actuator/conditions at runtime.)
+  - Why does a starter have no <version>?
+
+RED FLAGS
+  - "Spring Boot replaced Spring" / "Boot is a new framework".
+  - Thinking a starter contains code.
+  - Adding @EnableWebMvc to a Boot app.
+
+
+--------------------------------------------------------------------------------
+2. IoC AND DEPENDENCY INJECTION
+--------------------------------------------------------------------------------
+
+Q: What is Inversion of Control? What problem does dependency injection
+   actually solve?
+
+ANSWER
+  Inversion of Control
+    Normally your code creates and controls its collaborators. With IoC you
+    hand that control to the container: it creates the objects, wires them
+    together, and hands them to you. "Don't call us, we'll call you."
+
+  Dependency Injection
+    The concrete technique: a class DECLARES what it needs and receives it
+    from outside instead of constructing it itself.
+
+      // without DI - the class is welded to the implementation
+      class OrderService {
+          private final PaymentClient client = new StripeClient();  // ouch
+      }
+
+      // with DI
+      class OrderService {
+          private final PaymentClient client;
+          OrderService(PaymentClient client) { this.client = client; }
+      }
+
+  What it buys you
+    - Testability. You pass a mock/stub in the test - no container, no
+      framework, just "new OrderService(mockClient)".
+    - Loose coupling: depend on the interface, swap the implementation
+      (Stripe -> PayPal, real -> in-memory) without touching the class.
+    - One place that owns object graph construction and lifecycle.
+    - Cross-cutting concerns become possible: because the container hands you
+      a bean, it can hand you a PROXY instead - which is how @Transactional,
+      @Async and @Cacheable work at all (see #20).
+
+  The container
+    ApplicationContext = the IoC container. It reads configuration (component
+    scanning, @Bean methods, auto-configuration), builds a BeanDefinition for
+    each bean, resolves the dependency graph, and instantiates in the right
+    order.
+
+  Bean
+    Simply an object whose lifecycle is managed by the Spring container.
+    Nothing more mystical than that.
+
+FOLLOW-UPS
+  - Is DI the same as IoC?  (DI is one form of IoC. Template method and
+    callbacks are others.)
+  - How does Spring know what to inject?  (By TYPE first, then by name to
+    break ties - see #7.)
+  - Why is "new" inside a service a design smell?
+
+RED FLAGS
+  - "IoC means Spring creates objects" with no idea why that helps.
+  - Cannot explain how DI makes a class unit-testable.
+
+
+--------------------------------------------------------------------------------
+3. STEREOTYPES: @Component @Service @Repository @Controller @RestController
+--------------------------------------------------------------------------------
+
+Q: What is the difference between these annotations?
+
+ANSWER
+  Functionally, for the container, @Component / @Service / @Controller are
+  the SAME: "component-scan finds this class and registers one bean".
+  @Service and @Controller are meta-annotated with @Component. The difference
+  is INTENT plus, in two cases, real extra behaviour.
+
+  @Component
+    The generic stereotype. Use when nothing more specific fits (a mapper, a
+    strategy, a client wrapper, a validator).
+
+  @Service
+    Business logic / the service layer. Purely semantic - zero extra
+    behaviour. It exists so a reader (and AOP pointcuts, and architecture
+    tests like ArchUnit) can identify the layer.
+
+  @Repository
+    Persistence layer, AND it does something real: exception translation.
+    A PersistenceExceptionTranslationPostProcessor wraps the bean and
+    converts vendor exceptions (Hibernate's, JDBC's SQLException) into
+    Spring's DataAccessException hierarchy - which is unchecked and
+    vendor-neutral. So you can swap JPA for JDBC without changing catch
+    blocks.
+
+  @Controller
+    Web layer. Real behaviour: the DispatcherServlet only treats a bean as a
+    handler if it is annotated @Controller (or @RequestMapping). Return
+    values are treated as VIEW NAMES to be resolved by a ViewResolver
+    (Thymeleaf, JSP).
+
+  @RestController
+    = @Controller + @ResponseBody on every method.
+    Return values are SERIALIZED INTO THE RESPONSE BODY (JSON via Jackson's
+    HttpMessageConverter) instead of resolved as a view name. This is what
+    you use for a REST API.
+
+      @Controller      String home() { return "index"; }   -> renders index.html
+      @RestController  String home() { return "index"; }   -> body is "index"
+
+  Why bother if three of them are identical?
+    Readability, layering, and targeting: an @Aspect pointcut
+    "within(@org.springframework.stereotype.Service *)" or a
+    @ComponentScan filter can select by stereotype.
+
+FOLLOW-UPS
+  - Which of these change behaviour and which are documentation?
+    (@Repository: exception translation. @Controller/@RestController: MVC
+     handler detection + response handling. The rest: documentation.)
+  - What if you forget the annotation entirely?  (No bean -> "No qualifying
+    bean of type ..." at startup, or a silent NPE if you created it by hand.)
+  - Does component scanning find a class outside the main package?
+    (No - @SpringBootApplication scans its own package downwards. Use
+     scanBasePackages or move the class.)
+  - @RestController on a method returning void with @ResponseStatus?
+
+RED FLAGS
+  - "@Service makes it transactional" or "@Service makes it a singleton" -
+    it does neither. (Singleton is the default scope for every bean.)
+  - Using @RestController and wondering why the view isn't rendering.
+
+
+--------------------------------------------------------------------------------
+4. @Bean vs @Component - WHEN TO USE WHICH
+--------------------------------------------------------------------------------
+
+Q: What is the difference between @Bean and @Component? Give use cases for each.
+
+ANSWER
+  Both end up as a bean in the container. The difference is WHO WRITES THE
+  CLASS and WHO CALLS THE CONSTRUCTOR.
+
+  @Component  (class-level, found by component scanning)
+    - You put it ON the class.
+    - Spring discovers the class by scanning and instantiates it itself.
+    - Requires that you OWN the source code.
+    - One bean per class.
+
+        @Service
+        class OrderService { OrderService(PaymentClient c) {...} }
+
+  @Bean  (method-level, inside a @Configuration class)
+    - You write a FACTORY METHOD; you call the constructor yourself and
+      return the object. Spring registers the return value.
+    - Works for classes you do NOT own.
+    - Bean name = the method name (override with @Bean("x")).
+
+        @Configuration
+        class AppConfig {
+            @Bean ObjectMapper objectMapper() {
+                ObjectMapper m = new ObjectMapper();
+                m.registerModule(new JavaTimeModule());
+                m.disable(WRITE_DATES_AS_TIMESTAMPS);
+                return m;
+            }
+        }
+
+  USE @Component WHEN
+    - It is YOUR class, in your codebase: services, repositories,
+      controllers, mappers, validators, listeners.
+    - No construction logic beyond injecting collaborators.
+    - This is the default; prefer it - it is less code and the wiring is
+      visible on the class itself.
+
+  USE @Bean WHEN
+    1. THIRD-PARTY CLASS you cannot annotate - ObjectMapper, RestTemplate /
+       WebClient, DataSource, a Redis client, an AWS SDK client, a Kafka
+       producer.
+    2. CONSTRUCTION LOGIC is needed - builders, setters, conditionals,
+       reading config before constructing:
+           @Bean WebClient webClient(WebClient.Builder b,
+                                     @Value("${api.url}") String url) {
+               return b.baseUrl(url).build();
+           }
+    3. MULTIPLE BEANS OF THE SAME TYPE from one class:
+           @Bean @Primary DataSource primaryDs() {...}
+           @Bean DataSource reportingDs() {...}
+       Impossible with @Component - one class, one bean.
+    4. CONDITIONAL registration - @ConditionalOnProperty,
+       @ConditionalOnMissingBean, @Profile on the method. This is exactly how
+       Boot's auto-configuration is written.
+    5. An INTERFACE / LAMBDA implementation that has no class of its own:
+           @Bean Filter corsFilter() { return (req,res,ch) -> {...}; }
+
+  Practical rule
+    Your code -> @Component. Somebody else's code, or anything needing
+    assembly logic -> @Bean in a @Configuration.
+
+FOLLOW-UPS
+  - Can you put @Bean on a method in a @Component class?  (Yes, but it is
+    "lite mode" - no proxying, so calling another @Bean method creates a NEW
+    object every time. See #5.)
+  - Two @Bean methods returning the same type - what happens on injection?
+    (NoUniqueBeanDefinitionException unless @Primary or @Qualifier.)
+  - How do you inject a dependency into a @Bean method?  (Declare it as a
+    method PARAMETER - Spring resolves it.)
+  - Which one lets you register a bean conditionally?
+
+RED FLAGS
+  - Wrapping own classes in @Bean methods for no reason (verbose, and the
+    dependency graph disappears from the class).
+  - Annotating a third-party class... which you cannot do.
+  - Calling "new" on a @Component and expecting injection to work.
+
+
+--------------------------------------------------------------------------------
+5. @Configuration - AND FULL vs LITE MODE
+--------------------------------------------------------------------------------
+
+Q: What does @Configuration do, and what is proxyBeanMethods?
+
+ANSWER
+  What
+    Marks a class as a source of bean definitions - a Java replacement for
+    the old XML file. It is itself meta-annotated with @Component, so it is
+    also picked up by component scanning and can have dependencies injected.
+
+  FULL MODE - the important part
+    A @Configuration class is CGLIB-PROXIED. Spring subclasses it and
+    intercepts every @Bean method so that calling one returns the EXISTING
+    singleton instead of running the method again.
+
+        @Configuration
+        class C {
+            @Bean A a() { return new A(); }
+            @Bean B b() { return new B(a()); }   // a() returns THE singleton
+        }
+
+    Without that proxy, b() would get a brand-new, unmanaged A - a second
+    instance that never gets @PostConstruct, proxies, or any container
+    services. This "inter-bean reference" behaviour is the entire reason
+    @Configuration exists as a distinct annotation.
+
+  LITE MODE
+    @Bean methods declared in a plain @Component (or with
+    @Configuration(proxyBeanMethods = false)) are NOT proxied. Each direct
+    call runs the method again and returns a new object.
+      - Faster startup, no CGLIB subclass (matters for native images / GraalVM
+        and is why Boot's own auto-configurations set proxyBeanMethods=false).
+      - Safe ONLY if your @Bean methods never call each other. If they need a
+        collaborator, take it as a METHOD PARAMETER instead - that always
+        resolves through the container:
+            @Bean B b(A a) { return new B(a); }
+        This is the recommended style either way.
+
+  Constraints of full mode
+    The class and its @Bean methods cannot be final or private (CGLIB has to
+    subclass and override them).
+
+  Related
+    @Import           pull another config class in explicitly
+    @ComponentScan    where to scan
+    @PropertySource   load an extra .properties file (not needed in Boot)
+    @EnableXxx        (@EnableScheduling, @EnableAsync, @EnableCaching) -
+                      each is just @Import of an internal configuration
+
+FOLLOW-UPS
+  - Why is a @Configuration class proxied but a @Service is not?
+  - What breaks if you set proxyBeanMethods=false and your @Bean methods call
+    each other?  (Duplicate, unmanaged instances - a nasty silent bug.)
+  - Can @Configuration be final?  (Not in full mode.)
+  - How does @EnableScheduling actually work?  (@Import of a configuration
+    that registers a post-processor.)
+
+RED FLAGS
+  - Not knowing @Configuration classes are proxied.
+  - Calling another @Bean method from a lite-mode class.
+
+
+--------------------------------------------------------------------------------
+6. CONFIGURATION PROPERTIES: Environment, @Value, @ConfigurationProperties
+--------------------------------------------------------------------------------
+
+Q: How do you read configuration? How do you bind a whole group of properties
+   by prefix?
+
+ANSWER
+  Three ways, worst to best for grouped config.
+
+  1. Environment (the low-level API)
+       @Autowired Environment env;
+       String url = env.getProperty("app.api.url");
+       int n = env.getProperty("app.retries", Integer.class, 3);
+       env.getRequiredProperty("app.key");     // throws if missing
+       boolean prod = env.acceptsProfiles(Profiles.of("prod"));
+     Environment is the container's abstraction over ALL property sources
+     plus the active profiles. Use it when the key is dynamic or you need it
+     very early (e.g. in an EnvironmentPostProcessor). Otherwise it is
+     imperative and untestable-ish - prefer the two below.
+
+  2. @Value - single values
+       @Value("${app.api.url}") String url;                  // fails if absent
+       @Value("${app.retries:3}") int retries;               // default after :
+       @Value("${app.hosts}") List<String> hosts;            // comma-separated
+       @Value("#{systemProperties['user.home']}") String h;  // SpEL
+     Good for one or two scalars. Bad for a group: no type safety beyond the
+     conversion, no validation, no IDE completion, and the keys are scattered
+     across the codebase as strings.
+
+  3. @ConfigurationProperties(prefix = "...")  - THE ANSWER for a group
+     Binds a whole property TREE onto a typed object.
+
+       # application.yml
+       app:
+         mail:
+           from-address: no-reply@acme.io
+           timeout: 5s
+           max-size: 10MB
+           retries: 3
+           smtp:
+             host: smtp.acme.io
+             port: 587
+           recipients: [ops@acme.io, dev@acme.io]
+
+       @ConfigurationProperties(prefix = "app.mail")
+       @Validated
+       public record MailProps(
+           @Email String fromAddress,          // relaxed binding
+           Duration timeout,                   // "5s"  -> Duration
+           DataSize maxSize,                   // "10MB"-> DataSize
+           @Min(1) @Max(10) int retries,
+           Smtp smtp,                          // nested object
+           List<String> recipients             // list / Map<String,X> too
+       ) {
+           record Smtp(String host, int port) {}
+       }
+
+     REGISTERING IT - pick one:
+       @EnableConfigurationProperties(MailProps.class) on a @Configuration
+       @ConfigurationPropertiesScan on the main class (Boot 2.2+)
+       @Component on the properties class itself (works, less clean)
+
+     BINDING STYLE
+       Constructor binding (record or a class with one constructor) ->
+         IMMUTABLE, final fields, no setters. Preferred.
+       Setter binding (plain class with getters/setters) -> mutable, needed
+         for @RefreshScope / rebinding.
+
+     RELAXED BINDING - all of these hit fromAddress:
+       app.mail.from-address   (kebab - canonical, use this in yml)
+       app.mail.fromAddress    (camel)
+       app.mail.from_address   (underscore)
+       APP_MAIL_FROMADDRESS    (env var - the only form env vars can take)
+
+     VALIDATION
+       @Validated + JSR-380 annotations means BAD CONFIG FAILS AT STARTUP
+       with a readable report, instead of a NullPointerException at 3am.
+
+     Keyed config binds to a Map:
+       app.clients.stripe.url / app.clients.paypal.url
+         -> Map<String, ClientConfig> clients
+
+  @Value vs @ConfigurationProperties
+       @Value              @ConfigurationProperties
+       one key             a whole prefix / tree
+       SpEL supported      no SpEL
+       no validation       @Validated, fails fast
+       no relaxed binding  relaxed binding
+       no metadata         IDE completion via the metadata json
+       hard to unit test   just a POJO - "new MailProps(...)" in a test
+
+  PROPERTY PRECEDENCE (highest wins - know the top of this list)
+    1. command-line args (--server.port=8081)
+    2. SPRING_APPLICATION_JSON
+    3. OS environment variables
+    4. Java system properties (-D)
+    5. application-{profile}.yml   (outside the jar, then inside)
+    6. application.yml             (outside the jar, then inside)
+    7. @PropertySource
+    8. defaults (SpringApplication.setDefaultProperties)
+  So a container env var always beats what is baked into the jar - which is
+  exactly how you configure the same image per environment.
+
+FOLLOW-UPS
+  - Why does @ConfigurationProperties beat @Value for a group of settings?
+  - How do you make invalid configuration fail at startup?
+  - How does an env var map to app.mail.from-address?
+  - Where do you put secrets?  (Not in application.yml in git - env vars,
+    Vault, a cloud secret manager.)
+  - What is @RefreshScope?  (Spring Cloud - rebind properties without a
+    restart; needs setter binding.)
+
+RED FLAGS
+  - Twenty @Value fields in one class.
+  - Committing passwords to application.yml.
+  - Thinking application.yml overrides an environment variable.
+
+
+--------------------------------------------------------------------------------
+7. @Autowired - CONSTRUCTOR vs FIELD vs SETTER INJECTION
+--------------------------------------------------------------------------------
+
+Q: What are the ways to inject a dependency, and which should you use?
+
+ANSWER
+  How Spring resolves an injection point
+    1. Find all beans assignable to the required TYPE.
+    2. Exactly one  -> inject it.
+    3. None         -> NoSuchBeanDefinitionException at startup
+                       ("No qualifying bean of type ...") unless the
+                       dependency is optional.
+    4. More than one -> narrow by @Primary, then @Qualifier, then by
+                        MATCHING THE FIELD/PARAMETER NAME against the bean
+                        name. Still ambiguous ->
+                        NoUniqueBeanDefinitionException. (See #8.)
+
+  CONSTRUCTOR INJECTION - use this
+      @Service
+      class OrderService {
+          private final PaymentClient client;
+          private final OrderRepo repo;
+          OrderService(PaymentClient client, OrderRepo repo) { ... }
+      }
+    Since Spring 4.3 @Autowired is OPTIONAL when the class has exactly ONE
+    constructor - that is why modern code has no annotation at all.
+    Why it wins:
+      - fields can be FINAL -> immutable, thread-safe
+      - the object is never in a half-built state
+      - dependencies are EXPLICIT: the constructor signature is the honest
+        list of what this class needs
+      - unit testable with plain "new OrderService(mock, mock)" - no Spring
+      - circular dependencies FAIL AT STARTUP instead of hiding
+      - a 9-parameter constructor is ugly, and that ugliness is a useful
+        signal that the class does too much
+
+  FIELD INJECTION - avoid
+      @Autowired private PaymentClient client;
+    Shortest to type, and wrong for real code:
+      - cannot be final -> mutable
+      - hides dependencies; a class can grow to 12 of them unnoticed
+      - untestable without Spring or reflection (@InjectMocks / ReflectionTestUtils)
+      - allows circular dependencies to exist silently
+      - the class only works inside a container
+    IntelliJ literally warns "Field injection is not recommended".
+
+  SETTER INJECTION - rare
+      @Autowired void setCache(Cache c) { this.cache = c; }
+    Legitimate for genuinely OPTIONAL or RECONFIGURABLE dependencies.
+      @Autowired(required = false) - skip if no such bean exists
+    Modern alternatives: Optional<Foo>, or ObjectProvider<Foo>.
+
+  Related injection types Spring understands
+      Optional<Foo>          empty if absent
+      ObjectProvider<Foo>    lazy: getIfAvailable(), getIfUnique(), stream()
+      List<Foo> / Map<String,Foo>   ALL beans of that type (see #14)
+      @Lazy Foo              inject a proxy, resolve on first use
+
+FOLLOW-UPS
+  - Why can a constructor-injected field be final but a field-injected one
+    cannot?
+  - When is @Autowired on a constructor required?  (Only when there is more
+    than one constructor.)
+  - How do you inject an optional dependency?
+  - You have 8 constructor parameters - what is that telling you?
+
+RED FLAGS
+  - @Autowired on fields throughout a new codebase.
+  - Using @Autowired + a no-args constructor and then complaining tests need
+    a Spring context.
+  - Not knowing resolution is by type first.
+
+
+--------------------------------------------------------------------------------
+8. AMBIGUITY: @Qualifier AND @Primary
+--------------------------------------------------------------------------------
+
+Q: Two beans implement the same interface. How does Spring know which to
+   inject?
+
+ANSWER
+  The failure
+      NoUniqueBeanDefinitionException: expected single matching bean but
+      found 2: stripeClient, paypalClient
+
+  Fix 1 - @Primary : "the default when nobody says otherwise"
+      @Bean @Primary PaymentClient stripeClient() {...}
+      @Bean          PaymentClient paypalClient() {...}
+    Every injection point that does not ask for something specific gets the
+    primary one. Exactly ONE @Primary per type, otherwise you are back to
+    ambiguous. Best when there is a clear "normal" implementation and the
+    other is the exception.
+
+  Fix 2 - @Qualifier : "I want THIS one"
+      @Service
+      class Checkout {
+          Checkout(@Qualifier("paypalClient") PaymentClient client) {...}
+      }
+    The string is the BEAN NAME (the @Bean method name, or the decapitalized
+    class name for @Component). Note the argument sits on the CONSTRUCTOR
+    PARAMETER, not on the constructor.
+
+    You can also name the component itself:
+      @Component("paypalClient")  or  @Service @Qualifier("external")
+
+  Fix 3 - CUSTOM QUALIFIER ANNOTATION (type-safe, no magic strings)
+      @Qualifier @Retention(RUNTIME) public @interface Paypal {}
+
+      @Bean @Paypal PaymentClient paypalClient() {...}
+      Checkout(@Paypal PaymentClient client) {...}
+    Refactor-safe and discoverable - the nicest option when there are several.
+
+  Fix 4 - MATCH BY NAME (implicit, works but fragile)
+      Checkout(PaymentClient paypalClient) {...}
+    If the PARAMETER NAME equals a bean name, Spring uses it as a tie-break.
+    Silently depends on the parameter name surviving refactoring and on
+    -parameters being enabled at compile time. Do not rely on it.
+
+  PRECEDENCE
+      @Qualifier (explicit)  >  @Primary  >  name match  >  error
+
+  Fix 5 - inject them ALL and choose at runtime
+      Checkout(Map<String, PaymentClient> clients) {...}   // see #14
+    Often the right answer when "which one" is a runtime decision rather than
+    a wiring decision.
+
+  Boot's own use of it
+    @ConditionalOnMissingBean is the auto-configuration equivalent: "define
+    your own ObjectMapper and mine backs off". Different mechanism, same
+    goal - your bean wins.
+
+FOLLOW-UPS
+  - What is the default bean name for a @Component / for a @Bean method?
+    (Decapitalized simple class name / the method name.)
+  - Can you have two @Primary beans of the same type?  (No - ambiguous again.)
+  - @Qualifier vs @Resource(name=...)?  (@Resource is JSR-250 and matches by
+    NAME first, then type - the reverse of @Autowired.)
+  - How do you avoid string-based qualifiers?
+
+RED FLAGS
+  - Not knowing @Primary exists and qualifying every single injection point.
+  - Believing @Qualifier takes the class name rather than the bean name.
+
+
+--------------------------------------------------------------------------------
+9. BEAN SCOPES: SINGLETON vs PROTOTYPE
+--------------------------------------------------------------------------------
+
+Q: What is the default scope? What is the difference between singleton and
+   prototype, and what is the classic trap?
+
+ANSWER
+  singleton  (THE DEFAULT)
+    ONE instance per ApplicationContext, created EAGERLY at startup, cached,
+    and shared by every injection point. Destroyed with the context
+    (@PreDestroy runs).
+    Note: this is a Spring singleton (one per container), NOT the GoF
+    singleton pattern (one per JVM/classloader). Two contexts -> two beans.
+
+  prototype
+    A NEW instance every time the bean is requested - by getBean() or by
+    injection.
+    Critically: SPRING DOES NOT MANAGE ITS LIFECYCLE AFTER CREATION. It
+    instantiates, injects and calls @PostConstruct, then forgets the object.
+    @PreDestroy is NEVER called and the container holds no reference - the
+    caller owns cleanup. Also created LAZILY, on demand.
+
+  Web scopes (need a web context)
+    request      one per HTTP request
+    session      one per HTTP session
+    application  one per ServletContext
+    websocket    one per WebSocket session
+
+  THE CLASSIC TRAP - prototype injected into a singleton
+      @Service
+      class Report {                       // singleton
+          private final Task task;         // @Scope("prototype")
+          Report(Task task) { this.task = task; }
+      }
+    Injection happens ONCE, when the singleton is built. You get exactly ONE
+    Task forever - the prototype scope is silently defeated. Scope is decided
+    by the LOOKUP, and there is only ever one lookup.
+
+    Fixes:
+      1. ObjectProvider (or Provider<T>) - ask for a fresh one each time.
+             private final ObjectProvider<Task> tasks;
+             void run() { Task t = tasks.getObject(); }        // new each call
+      2. @Lookup - Spring overrides the method with a container lookup.
+             @Lookup protected abstract Task newTask();
+      3. Scoped proxy - every call goes through a proxy that resolves the
+         real bean per scope. This is also how a REQUEST-scoped bean gets
+         injected into a singleton:
+             @Bean @Scope(value = "request",
+                          proxyMode = ScopedProxyMode.TARGET_CLASS)
+      4. Just use "new" - if the object needs no container services, a
+         prototype bean is over-engineering.
+
+  When to use prototype at all
+    Rarely: stateful helpers, per-request builders. Most "I need a new one
+    each time" cases are better served by a plain object or a factory method.
+
+  Thread safety
+    Because singletons are SHARED, they must be STATELESS (or their state
+    must be immutable / properly synchronized). A mutable instance field on
+    a @Service is a data race across concurrent requests - one of the most
+    common real production bugs in Spring apps. Keep per-request data in
+    method parameters and local variables.
+
+FOLLOW-UPS
+  - Are Spring singletons thread-safe?  (The container guarantees ONE
+    instance, not thread safety. That is your job.)
+  - Why is @PreDestroy not called on a prototype?
+  - How do you get a NEW prototype instance from inside a singleton?
+  - What does @Lazy do on a singleton?  (Created on first use, not at
+    startup - and startup errors move to first use.)
+  - How does a request-scoped bean get into a singleton controller?
+
+RED FLAGS
+  - Mutable instance fields on a @Service.
+  - Expecting a prototype injected into a singleton to be fresh each call.
+  - "Singleton means one per JVM".
+
+
+--------------------------------------------------------------------------------
+10. BEAN LIFECYCLE - @PostConstruct AND @PreDestroy
+--------------------------------------------------------------------------------
+
+Q: Walk through the lifecycle of a bean. What are @PostConstruct and
+   @PreDestroy for?
+
+ANSWER
+  THE ORDER (know at least the bold steps)
+    1. Bean definitions are loaded (scanning, @Bean methods, auto-config)
+    2. BeanFactoryPostProcessor may MODIFY the definitions (see #13)
+    3. INSTANTIATE - the constructor runs (constructor injection happens here)
+    4. POPULATE - field/setter injection, @Value resolution
+    5. *Aware callbacks - BeanNameAware, ApplicationContextAware, ...
+    6. BeanPostProcessor.postProcessBeforeInitialization
+    7. @PostConstruct
+    8. InitializingBean.afterPropertiesSet()
+    9. @Bean(initMethod = "...")
+   10. BeanPostProcessor.postProcessAfterInitialization
+       <-- THIS is where AOP proxies are created and the raw bean is swapped
+           for a proxy (see #20)
+   11. ... bean is in use ...
+   12. Context shutdown: @PreDestroy
+   13. DisposableBean.destroy()
+   14. @Bean(destroyMethod = "...")
+
+  @PostConstruct
+    Runs ONCE after the bean is fully injected, before it is handed out.
+    Use for: validating configuration, warming a cache, computing derived
+    state, registering with something.
+
+        @PostConstruct
+        void init() {
+            if (props.retries() < 1) throw new IllegalStateException(...);
+            this.pattern = Pattern.compile(props.regex());
+        }
+
+    Why not just do it in the constructor?
+      With CONSTRUCTOR injection you often can, and should. @PostConstruct is
+      necessary when the work depends on field/setter-injected values (not
+      set yet during the constructor), or when you want the work to happen
+      after the whole object graph exists.
+    Rules:
+      - void, no arguments
+      - throwing from it FAILS STARTUP - which is usually what you want for
+        invalid config (fail fast, don't start broken)
+      - do NOT do long-running work here: the context is still starting, the
+        app is not serving traffic yet, and "this" is still the RAW bean -
+        self-calls are not proxied, so @Transactional/@Async DO NOT WORK
+        inside @PostConstruct (see #20 and #22)
+      - Jakarta EE annotation. Since Java 11 / Boot 3 you need
+        jakarta.annotation-api (Boot brings it in).
+
+  @PreDestroy
+    Runs on graceful context shutdown: close pools, flush buffers, deregister.
+    NOT called for prototype beans. NOT called on kill -9 / a JVM crash - it
+    is a shutdown hook, not a guarantee.
+
+  Alternatives and when they matter
+    InitializingBean / DisposableBean   the old interface style; couples your
+                                        class to Spring - prefer annotations
+    @Bean(initMethod, destroyMethod)    for THIRD-PARTY classes you cannot
+                                        annotate (Boot also auto-detects a
+                                        public close()/shutdown() method)
+    SmartLifecycle                      start()/stop() with a phase - the
+                                        right hook for background threads,
+                                        listeners and consumers you must
+                                        start AFTER the context is ready and
+                                        stop in a controlled order (see #22)
+
+FOLLOW-UPS
+  - Constructor vs @PostConstruct - what can you do in one but not the other?
+  - Why does @Transactional not work inside @PostConstruct?
+  - When is @PreDestroy not called?  (Prototype scope, SIGKILL, JVM crash.)
+  - What runs at step 10 and why does it matter?  (Proxy creation.)
+  - What is @Order / Ordered good for on BeanPostProcessors?
+
+RED FLAGS
+  - Heavy work or network calls in @PostConstruct.
+  - Relying on @PreDestroy for correctness (money, data integrity).
+  - Expecting @PostConstruct on a prototype-scoped bean to be balanced by
+    @PreDestroy.
+
+
+--------------------------------------------------------------------------------
+11. CIRCULAR DEPENDENCIES
+--------------------------------------------------------------------------------
+
+Q: A depends on B and B depends on A. What happens?
+
+ANSWER
+  With CONSTRUCTOR injection
+    Startup FAILS:
+      "The dependencies of some of the beans in the application context form
+       a cycle"
+    Neither object can be constructed - each needs the other to exist first.
+    This is a FEATURE: the cycle is a design problem and you are told about
+    it at startup, loudly, with the cycle printed.
+
+  With FIELD/SETTER injection
+    Historically Spring resolved it using a three-level cache of
+    "early references": create A, expose a raw half-built A, create B,
+    inject the half-built A, finish A. It worked, and it hid the smell.
+    SINCE BOOT 2.6 THIS IS DISABLED BY DEFAULT - a cycle fails at startup
+    regardless. You can re-enable it with
+        spring.main.allow-circular-references=true
+    but that is a migration crutch, not a solution.
+
+  THE REAL FIXES, best first
+    1. EXTRACT the shared logic into a third bean C that both A and B depend
+       on. A cycle almost always means one class is doing two jobs.
+    2. REDESIGN the direction - does A really need B, or does it need an
+       event? Publish an ApplicationEvent (see #21) and invert the coupling.
+    3. Introduce an interface + callback so the dependency points one way.
+    4. @Lazy on ONE side - injects a PROXY, resolves the real bean on first
+       method call, so nothing is needed at construction time. Works, but it
+       hides the cycle rather than removing it.
+    5. ObjectProvider<B> on one side - resolve on demand. Same caveat.
+    6. Setter injection on one side. Same caveat, plus a non-final field.
+
+  Self-reference
+    A bean injecting ITSELF is a special (legal) case - it is a common
+    workaround for the self-invocation proxy problem (see #20), and Spring
+    allows it even when general circular references are disabled.
+
+FOLLOW-UPS
+  - Why does constructor injection fail where field injection used to work?
+  - Is @Lazy a fix or a workaround?
+  - How would you break a cycle between OrderService and NotificationService
+    without either knowing about the other?  (Events.)
+  - What does spring.main.allow-circular-references=true do, and why is it
+    off by default?
+
+RED FLAGS
+  - Turning allow-circular-references back on as the first move.
+  - Reaching for @Lazy without asking why the cycle exists.
+
+
+--------------------------------------------------------------------------------
+12. PROFILES, @Conditional AND AUTO-CONFIGURATION
+--------------------------------------------------------------------------------
+
+Q: How do you make configuration environment-specific? How does Boot decide
+   which beans to create?
+
+ANSWER
+  Profiles - named sets of configuration
+      @Profile("dev")            bean exists only when dev is active
+      @Profile("!prod")          everything except prod
+      @Profile({"dev","test"})   either
+    Activate with:
+      spring.profiles.active=dev         (yml / env var / --arg)
+      SPRING_PROFILES_ACTIVE=prod        (env var - the container way)
+    Files: application.yml is always loaded, then application-dev.yml is
+    layered on top of it (it overrides, it does not replace).
+    In tests: @ActiveProfiles("test").
+
+  @Conditional - the general mechanism
+    Profiles are just one implementation. Boot ships a family:
+      @ConditionalOnProperty(name="feature.x.enabled", havingValue="true")
+      @ConditionalOnClass(DispatcherServlet.class)     is it on the classpath?
+      @ConditionalOnMissingClass
+      @ConditionalOnBean / @ConditionalOnMissingBean    <- the important one
+      @ConditionalOnWebApplication / @ConditionalOnNotWebApplication
+      @ConditionalOnExpression("${a} && ${b}")
+    Put them on a @Bean method or a whole @Configuration class.
+    Custom: implement Condition and use @Conditional(MyCondition.class).
+
+  HOW AUTO-CONFIGURATION WORKS - the whole trick in four lines
+    1. @EnableAutoConfiguration (inside @SpringBootApplication) reads every
+       META-INF/spring/org.springframework.boot.autoconfigure
+       .AutoConfiguration.imports on the classpath.
+       (Before Boot 2.7 this was spring.factories.)
+    2. Each listed class is a @Configuration full of @Bean methods guarded by
+       @Conditional annotations.
+    3. So "Tomcat is on the classpath" -> ServletWebServerFactory bean;
+       "a DataSource class is present and spring.datasource.url is set" ->
+       a HikariDataSource.
+    4. @ConditionalOnMissingBean means YOUR bean always wins: define your own
+       ObjectMapper and Jackson's auto-configuration backs off. Auto-config
+       is deliberately ordered to run AFTER user configuration.
+
+  Debugging it - a genuinely useful answer in an interview
+      java -jar app.jar --debug        prints the CONDITIONS EVALUATION REPORT
+                                       (Positive matches / Negative matches)
+      /actuator/conditions             the same at runtime
+      spring.autoconfigure.exclude=... or
+      @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+
+FOLLOW-UPS
+  - How do you override an auto-configured bean?  (Just define your own -
+    @ConditionalOnMissingBean does the rest.)
+  - Profile-specific yml vs @Profile on a bean - when each?
+  - Why is @Profile a poor fit for a feature flag?  (Profiles are baked into
+    startup; @ConditionalOnProperty or a real flag system is better, and a
+    runtime flag beats both.)
+  - What is the difference between @ConditionalOnBean and ordering problems?
+    (It depends on definition order - use it only in auto-configurations.)
+
+RED FLAGS
+  - Ten profiles with overlapping meanings.
+  - Not knowing you can simply define a bean to replace an auto-configured one.
+  - Putting secrets in application-prod.yml in git.
+
+
+--------------------------------------------------------------------------------
+13. BeanFactory vs ApplicationContext (AND FactoryBean, BPP vs BFPP)
+--------------------------------------------------------------------------------
+
+Q: What is a BeanFactory? How is it different from an ApplicationContext?
+
+ANSWER
+  BeanFactory
+    THE root interface of the container - the bare IoC engine. It knows how
+    to hold bean definitions and produce beans:
+        getBean(name) / getBean(Class) / containsBean / isSingleton /
+        getBeanNamesForType / getBeansOfType
+    It is LAZY: beans are created only when requested.
+
+  ApplicationContext  extends  BeanFactory
+    The one you actually use. A BeanFactory PLUS the enterprise features:
+      - EAGER instantiation of singletons at startup (so wiring errors and
+        bad config surface immediately, not on first request)
+      - automatic detection of BeanPostProcessors and
+        BeanFactoryPostProcessors (a raw BeanFactory needs them registered
+        by hand)
+      - EVENT publishing (ApplicationEventPublisher - see #21)
+      - internationalization (MessageSource)
+      - resource loading (classpath:, file:, http:)
+      - Environment / property source integration
+      - AOP integration
+    Implementations: AnnotationConfigApplicationContext,
+    AnnotationConfigServletWebServerApplicationContext (what Boot uses),
+    ClassPathXmlApplicationContext (legacy).
+
+    One-liner: BeanFactory is the engine; ApplicationContext is the car.
+    Use ApplicationContext unless you are writing a memory-constrained
+    embedded container - the "BeanFactory saves memory" argument is
+    essentially obsolete.
+
+  Getting beans programmatically
+      @Autowired ApplicationContext ctx;
+      MyBean b = ctx.getBean(MyBean.class);
+    Legitimate for dynamic lookup and for framework-ish code. But calling
+    getBean() in ordinary business code is the SERVICE LOCATOR anti-pattern -
+    it re-couples you to the container and destroys testability. Inject
+    instead; if you need lazy or optional, use ObjectProvider.
+    (ApplicationContextAware / BeanFactoryAware give you the same handle by
+    callback rather than injection.)
+
+  DON'T CONFUSE: FactoryBean<T>
+    Completely different thing despite the name. A BEAN THAT BUILDS ANOTHER
+    BEAN - a factory registered in the container, for objects whose
+    construction is too complex for a constructor.
+        class SslClientFactoryBean implements FactoryBean<HttpClient> {
+            public HttpClient getObject() { ...complex assembly... }
+            public Class<?> getObjectType() { return HttpClient.class; }
+        }
+    Injecting HttpClient gives you getObject()'s RESULT.
+    To get the factory itself, ask for "&sslClientFactoryBean" (the &
+    prefix). Widely used inside Spring (SqlSessionFactoryBean,
+    LocalContainerEntityManagerFactoryBean); in your own code a @Bean method
+    is usually simpler.
+      BeanFactory   = the container
+      FactoryBean   = a bean inside the container that produces a bean
+
+  DON'T CONFUSE: the two post-processors
+    BeanFactoryPostProcessor (BFPP)
+      Runs EARLY, on the bean DEFINITIONS, before any bean is instantiated.
+      It can change metadata: scope, property values, add/remove definitions.
+      Example: PropertySourcesPlaceholderConfigurer, which resolves ${...}.
+    BeanPostProcessor (BPP)
+      Runs on every bean INSTANCE, around initialization (steps 6 and 10 in
+      #10). This is the extension point that implements most of Spring:
+      @Autowired resolution (AutowiredAnnotationBeanPostProcessor),
+      @PostConstruct (CommonAnnotationBeanPostProcessor), and AOP proxy
+      creation (AnnotationAwareAspectJAutoProxyCreator) - the last one is
+      literally why @Transactional works.
+    Mnemonic: BFPP edits the BLUEPRINTS, BPP edits the OBJECTS.
+    Caveat: a bean that a BPP depends on is created very early and therefore
+    cannot itself be proxied/post-processed - hence "is not eligible for
+    getting processed by all BeanPostProcessors" warnings in the log.
+
+FOLLOW-UPS
+  - Why does an ApplicationContext create singletons eagerly?
+  - BeanFactory vs FactoryBean - explain in one sentence each.
+  - Which post-processor creates AOP proxies, and at which lifecycle step?
+  - What is wrong with sprinkling getBean() through a service?
+  - How would you register beans dynamically at startup?
+    (BeanDefinitionRegistryPostProcessor, or ImportBeanDefinitionRegistrar.)
+
+RED FLAGS
+  - Thinking FactoryBean and BeanFactory are the same.
+  - getBean() as the normal way to obtain collaborators.
+
+
+--------------------------------------------------------------------------------
+14. GENERICS + INJECTING ALL BEANS OF A TYPE (List / Map)
+--------------------------------------------------------------------------------
+
+Q: How do you get every bean that implements a given interface, as a List or
+   a Map? How do generics interact with injection?
+
+ANSWER
+  THE FEATURE
+    Declare a collection of the interface type and Spring injects ALL beans
+    that match. This is the idiomatic Spring way to implement the STRATEGY /
+    plugin pattern.
+
+      interface Validator { boolean supports(Order o); void validate(Order o); }
+
+      @Component class AmountValidator  implements Validator {...}
+      @Component class CountryValidator implements Validator {...}
+      @Component class FraudValidator   implements Validator {...}
+
+      @Service
+      class OrderService {
+          private final List<Validator> validators;      // ALL THREE
+          OrderService(List<Validator> validators) { this.validators = validators; }
+
+          void check(Order o) { validators.forEach(v -> v.validate(o)); }
+      }
+
+    Adding a fourth validator is now just adding a class. No switch, no
+    registry, no change to OrderService - open/closed in practice.
+
+  AS A MAP - keyed by BEAN NAME
+      private final Map<String, Validator> byName;
+      // { "amountValidator": ..., "countryValidator": ..., ... }
+    Only Map<String, T> is supported - the key is always the bean name.
+    Perfect for dispatching on a string from config or a request:
+        Validator v = byName.get(request.getType() + "Validator");
+
+    Want a different key? Build it yourself in the constructor:
+        Map<PaymentType, PaymentHandler> byType =
+            handlers.stream().collect(toMap(PaymentHandler::type, identity()));
+    That also fails fast on duplicate keys, which is a bonus.
+
+  ORDERING
+    List order is NOT guaranteed by declaration or by package. Make it
+    explicit when it matters:
+      @Order(1) / @Order(Ordered.HIGHEST_PRECEDENCE) on the class,
+      or implement Ordered,
+      or @Order on the @Bean method.
+    Spring sorts the injected List by it (AnnotationAwareOrderComparator).
+
+  Also available
+      Set<Validator>              deduplicated
+      ObjectProvider<Validator>   .stream() / .orderedStream(), lazy,
+                                  and does not blow up when there are none
+      Optional<List<Validator>>   optional
+
+  THE EMPTY GOTCHA
+    If NO bean of the type exists, injecting List<Validator> is a
+    NoSuchBeanDefinitionException at startup - an empty list is not
+    considered a match by default. Use ObjectProvider, or
+    @Autowired(required=false), or Optional<List<T>> if zero is legal.
+    Also: a List<T> injection point never picks up a bean that is itself of
+    type List<T> - it means "all beans of T", not "the List bean".
+
+  GENERICS-AWARE INJECTION - the advanced part
+    Spring resolves generic type parameters when matching beans (since 4.0).
+    Erasure does not stop it: the generic signature survives in the CLASS
+    METADATA, and Spring reads it with ResolvableType.
+
+      interface Handler<T extends Event> { void handle(T event); }
+
+      @Component class UserHandler  implements Handler<UserEvent>  {}
+      @Component class OrderHandler implements Handler<OrderEvent> {}
+
+      @Autowired Handler<UserEvent> h;          // gets UserHandler, unambiguous
+      @Autowired List<Handler<?>> all;          // gets both
+
+    Same for Repository<User> vs Repository<Order>, Converter<A,B>, and it is
+    exactly how ApplicationListener<MyEvent> is matched to its event type
+    (see #21).
+
+    Programmatic version:
+        ResolvableType t = ResolvableType.forClassWithGenerics(
+                               Handler.class, UserEvent.class);
+        String[] names = ctx.getBeanNamesForType(t);
+      or simply  ctx.getBeansOfType(Validator.class)  ->  Map<String, Validator>
+
+    Limit: this works for a generic type declared in the CLASS DECLARATION
+    (class X implements Handler<UserEvent>). A bean created from a raw or
+    dynamically parameterized source may not carry the information.
+
+  Why this beats a switch / if-else chain
+    - new implementation = new class, zero edits elsewhere
+    - each strategy is independently testable
+    - the container does the registration
+
+FOLLOW-UPS
+  - What is the Map key when you inject Map<String, T>?
+  - How do you control the order of the injected List?
+  - What happens if there are no implementations at all?
+  - How does Spring match Handler<UserEvent> despite type erasure?
+  - How would you key a map by an enum instead of the bean name?
+  - How do you pick ONE at runtime from the injected collection?
+    (supports()/canHandle() on the interface, or a keyed map.)
+
+RED FLAGS
+  - Writing a giant if/else over types when the container can inject them all.
+  - Assuming List order matches declaration order.
+  - "Generics are erased so Spring cannot possibly do that."
+
+
+--------------------------------------------------------------------------------
+15. SPRING MVC - THE REQUEST LIFECYCLE
+--------------------------------------------------------------------------------
+
+Q: What happens between an HTTP request arriving and a JSON response going
+   back?
+
+ANSWER
+  1. Tomcat (embedded) accepts the connection, hands the request to the
+     SERVLET FILTER CHAIN (Spring Security lives here - see #17).
+  2. DispatcherServlet - the FRONT CONTROLLER. Everything below is inside it.
+  3. HandlerMapping finds the handler method for the URL + HTTP method
+     (RequestMappingHandlerMapping reads @RequestMapping/@GetMapping).
+     No match -> 404.
+  4. HandlerInterceptor.preHandle() for each registered interceptor.
+  5. HandlerAdapter invokes the method. Before that, ARGUMENT RESOLVERS build
+     each parameter:
+        @PathVariable    from the URI template   /orders/{id}
+        @RequestParam    from the query string or form   ?page=2
+        @RequestBody     from the body, deserialized by an
+                         HttpMessageConverter (Jackson) - ONE per request
+        @RequestHeader, @CookieValue, Principal, HttpServletRequest,
+        Pageable, @ModelAttribute (binds form fields onto an object)
+     @Valid triggers validation here -> MethodArgumentNotValidException (#16).
+  6. Your controller method runs.
+  7. RETURN VALUE HANDLING
+        @RestController / @ResponseBody -> HttpMessageConverter serializes
+          the object to JSON and writes it to the body.
+        @Controller returning a String -> ViewResolver treats it as a VIEW
+          NAME and renders a template.
+        ResponseEntity -> lets you set status + headers + body explicitly.
+  8. Interceptor postHandle(), then afterCompletion().
+  9. Any exception -> HandlerExceptionResolver chain -> your
+     @ControllerAdvice (#16). Unhandled -> Boot's /error -> the default
+     white-label page or the default JSON error body.
+
+  Mapping annotations
+    @RequestMapping(value="/orders", method=POST, produces=APPLICATION_JSON)
+    shorthands: @GetMapping @PostMapping @PutMapping @PatchMapping
+                @DeleteMapping
+    Class-level @RequestMapping("/api/orders") prefixes every method.
+
+  @RequestParam vs @PathVariable vs @RequestBody
+    @PathVariable   part of the PATH, identifies a resource   /orders/42
+    @RequestParam   query string or form field; filters, paging, flags
+                    (required=true by default; give defaultValue or use
+                     Optional)
+    @RequestBody    the whole body, one per method, deserialized to an object
+    Rule of thumb: identity in the path, options in the query, payload in
+    the body.
+
+  Threading model
+    Classic MVC is ONE THREAD PER REQUEST, blocking, from the Tomcat pool
+    (default 200). Controllers are SINGLETONS shared by all those threads -
+    so they must be stateless (#9).
+    Return Callable / DeferredResult / CompletableFuture to free the servlet
+    thread for long operations; WebFlux does this by design.
+
+FOLLOW-UPS
+  - What is the DispatcherServlet and why is it called a front controller?
+  - How is your DTO turned into JSON, and how do you customize it?
+    (HttpMessageConverter + Jackson; a custom ObjectMapper @Bean.)
+  - How do you return 201 with a Location header?
+    (ResponseEntity.created(uri).body(dto))
+  - What does @ResponseStatus do?
+  - What breaks if you add @EnableWebMvc to a Boot app?  (See #1.)
+  - Where does Spring Security sit - before or inside the DispatcherServlet?
+    (Before: a servlet Filter. That is why @ControllerAdvice does not catch
+     authentication failures.)
+
+RED FLAGS
+  - Instance state on a controller.
+  - Returning entities straight from the DB (lazy-loading errors, leaking
+    internal fields, no API contract) instead of DTOs.
+  - Not knowing @RestController implies @ResponseBody.
+
+
+--------------------------------------------------------------------------------
+16. @ControllerAdvice AND @ExceptionHandler - EXCEPTIONS TO HTTP CODES
+--------------------------------------------------------------------------------
+
+Q: How do you turn application exceptions into proper HTTP status codes in
+   one place?
+
+ANSWER
+  @ControllerAdvice
+    A bean whose @ExceptionHandler, @InitBinder and @ModelAttribute methods
+    apply to ALL controllers. @RestControllerAdvice = @ControllerAdvice +
+    @ResponseBody (return values become the JSON body) - that is the one you
+    want for an API.
+
+      @RestControllerAdvice
+      class ApiExceptionHandler {
+
+        @ExceptionHandler(EntityNotFoundException.class)
+        ResponseEntity<ApiError> notFound(EntityNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND)
+                     .body(new ApiError("NOT_FOUND", e.getMessage()));
+        }
+
+        @ExceptionHandler(MethodArgumentNotValidException.class)   // @Valid
+        ResponseEntity<ApiError> invalid(MethodArgumentNotValidException e) {
+            var fields = e.getBindingResult().getFieldErrors().stream()
+                .collect(toMap(FieldError::getField,
+                               FieldError::getDefaultMessage, (a,b) -> a));
+            return ResponseEntity.badRequest()
+                     .body(new ApiError("VALIDATION_FAILED", fields));
+        }
+
+        @ExceptionHandler(Exception.class)                          // last resort
+        ResponseEntity<ApiError> unexpected(Exception e) {
+            log.error("Unhandled", e);                 // log the stack trace
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                     .body(new ApiError("INTERNAL", "Unexpected error"));
+                     //                              ^ never leak e.getMessage()
+        }
+      }
+
+  THE USUAL MAPPING
+    EntityNotFoundException / your NotFoundException      -> 404
+    IllegalArgumentException / validation                 -> 400
+    MethodArgumentNotValidException (@Valid on @RequestBody)  -> 400
+    ConstraintViolationException (@Validated on params)   -> 400
+    HttpMessageNotReadableException (malformed JSON)      -> 400
+    MethodArgumentTypeMismatchException                   -> 400
+    AuthenticationException                               -> 401
+    AccessDeniedException                                 -> 403
+    HttpRequestMethodNotSupportedException                -> 405
+    HttpMediaTypeNotSupportedException                    -> 415
+    OptimisticLockException / duplicate key / conflict    -> 409
+    everything else                                       -> 500
+
+  THREE WAYS TO SET THE STATUS - know when to use each
+    1. ResponseEntity.status(...)          full control of status + headers +
+                                           body; the flexible default
+    2. @ResponseStatus(HttpStatus.NOT_FOUND) on the HANDLER METHOD
+                                           terse when the body is fixed/absent
+    3. @ResponseStatus on the EXCEPTION CLASS itself
+           @ResponseStatus(NOT_FOUND)
+           class OrderNotFoundException extends RuntimeException {}
+                                           zero handler code, but it couples
+                                           a domain exception to HTTP - fine
+                                           for a small app, poor for a shared
+                                           domain module
+
+  ProblemDetail / RFC 7807 (Spring 6, Boot 3) - the modern answer
+      ProblemDetail pd = ProblemDetail.forStatusAndDetail(NOT_FOUND, "No such order");
+      pd.setType(URI.create("https://api.acme.io/errors/not-found"));
+      pd.setProperty("orderId", id);
+    A standardized error body (type/title/status/detail/instance). Extend
+    ResponseEntityExceptionHandler to get sensible defaults for all the
+    built-in Spring MVC exceptions and override only what you care about.
+    Enable Spring's own with spring.mvc.problemdetails.enabled=true.
+
+  RESOLUTION ORDER
+    - The MOST SPECIFIC exception type wins (a handler for IOException beats
+      one for Exception).
+    - A @ExceptionHandler inside the CONTROLLER ITSELF beats a global advice.
+    - Between several advices, @Order / Ordered decides. Put the catch-all
+      advice LAST.
+    - Handlers also match the CAUSE chain, so a wrapped exception can still
+      be matched.
+
+  SCOPING an advice
+    @RestControllerAdvice(basePackages = "com.acme.api")
+    @RestControllerAdvice(assignableTypes = {OrderController.class})
+    @RestControllerAdvice(annotations = PublicApi.class)
+
+  WHAT IT DOES NOT CATCH - the classic follow-up
+    @ControllerAdvice only sees exceptions thrown INSIDE the
+    DispatcherServlet. Anything thrown EARLIER in the servlet FILTER chain -
+    authentication and authorization failures from Spring Security, CORS
+    rejections, your own @WebFilter - never reaches it. Those need an
+    AuthenticationEntryPoint / AccessDeniedHandler, an error page, or
+    handling inside the filter (see #17).
+
+FOLLOW-UPS
+  - Two handlers could match - which one runs?
+  - Why does your advice not catch a 401 from Spring Security?
+  - Should the exception carry the HTTP status, or the advice?  (Coupling
+    trade-off - be able to argue both.)
+  - How do you return field-level validation errors in a consistent shape?
+  - Why must you log 5xx but usually not 4xx?
+  - How do you avoid leaking internals to the client?
+
+RED FLAGS
+  - Try/catch in every controller method.
+  - Returning e.getMessage() or a stack trace to the client on a 500.
+  - Returning 200 with an "error" field in the body.
+  - Swallowing the exception without logging it.
+
+
+--------------------------------------------------------------------------------
+17. FILTER (@WebFilter) vs INTERCEPTOR vs ASPECT
+--------------------------------------------------------------------------------
+
+Q: What is a servlet Filter? How does it differ from a HandlerInterceptor and
+   from an @Aspect?
+
+ANSWER
+  THREE LAYERS, OUTSIDE IN
+
+    HTTP request
+      |
+      +-- Servlet FILTER chain          <- Servlet API, knows nothing of Spring MVC
+      |     |
+      |     +-- DispatcherServlet
+      |           |
+      |           +-- HandlerInterceptor  <- Spring MVC, knows the handler method
+      |                 |
+      |                 +-- Controller
+      |                       |
+      |                       +-- @Aspect / AOP proxy  <- any Spring bean
+      |                             |
+      |                             +-- Service method
+
+  1. FILTER  (jakarta.servlet.Filter)
+     Sees the RAW ServletRequest/ServletResponse. Runs for EVERY request,
+     including static resources, /error, and requests that never reach a
+     controller. It can BLOCK a request outright (never call
+     chain.doFilter) and it can WRAP the request/response.
+     Use for: authentication/authorization (Spring Security is a filter
+     chain), CORS, request/correlation IDs into the MDC, GZIP, request
+     logging, caching the body so it can be read twice, rate limiting.
+
+     Registering one - two ways:
+       a) @Component on the Filter (Boot auto-registers any Filter bean)
+       b) a FilterRegistrationBean @Bean - lets you set URL patterns and
+          ORDER explicitly:
+              @Bean FilterRegistrationBean<MyFilter> f(MyFilter filter) {
+                  var r = new FilterRegistrationBean<>(filter);
+                  r.addUrlPatterns("/api/*");
+                  r.setOrder(1);
+                  return r;
+              }
+       c) @WebFilter(urlPatterns="/api/*") - the SERVLET-SPEC annotation.
+          It only works if you add @ServletComponentScan to the main class,
+          it is NOT a Spring bean by default (so no DI into it), and its
+          ordering is awkward. In a Boot app prefer (a) or (b);
+          OncePerRequestFilter is the base class you almost always want -
+          it guarantees the filter runs once per request even with forwards
+          and async dispatches.
+
+  2. HandlerInterceptor  (Spring MVC)
+     Runs inside the DispatcherServlet, so it KNOWS THE HANDLER - you get
+     the controller method as an Object/HandlerMethod and can read its
+     annotations. Three hooks:
+        preHandle    before the controller; return false to stop
+        postHandle   after the controller, before the view is rendered
+        afterCompletion  always, even on exception - good for timing/cleanup
+     Register with a WebMvcConfigurer:
+        registry.addInterceptor(new AuditInterceptor()).addPathPatterns("/api/**");
+     Use for: per-endpoint auth checks driven by a custom annotation,
+     metrics/timing, populating the model, locale/theme handling.
+
+  3. @Aspect  (Spring AOP - see #18)
+     Not web at all. Wraps a BEAN METHOD CALL anywhere in the app - service,
+     repository, whatever. Sees the actual method ARGUMENTS and RETURN VALUE
+     with real types, which neither of the others do.
+     Use for: transactions, retries, caching, audit logging with arguments,
+     @Async - anything cross-cutting at the method level.
+
+  CHOOSING
+    Need the raw HTTP request, or must run even when no controller matches,
+    or must reject before Spring Security decides?      -> FILTER
+    Need to know which controller method will handle it? -> INTERCEPTOR
+    Not about HTTP at all, need method args/return?      -> ASPECT
+
+  Ordering
+    Filters: @Order / FilterRegistrationBean.setOrder (lowest runs first).
+    Spring Security's chain is itself a filter registered at a fixed order -
+    put your auth-dependent filters after it.
+    Interceptors: registration order.
+    Aspects: @Order on the aspect class.
+
+  Gotcha worth mentioning
+    Exceptions thrown in a FILTER do not reach @ControllerAdvice (#16) - the
+    DispatcherServlet is further in. Handle them in the filter or via an
+    error page.
+    You also cannot read the request body twice unless you wrap it
+    (ContentCachingRequestWrapper).
+
+FOLLOW-UPS
+  - Why does Spring Security use filters rather than interceptors?
+  - What is OncePerRequestFilter for?
+  - preHandle vs postHandle vs afterCompletion - which runs on exception?
+  - How do you make a filter apply only to /api/**?
+  - Where would you put a correlation ID for logging, and why there?
+
+RED FLAGS
+  - Using a filter where an aspect is the natural fit (or vice versa).
+  - Forgetting chain.doFilter() - the request silently dies.
+  - Expecting @ControllerAdvice to catch a filter exception.
+
+
+--------------------------------------------------------------------------------
+18. AOP AND @Aspect
+--------------------------------------------------------------------------------
+
+Q: What is AOP? Write an aspect.
+
+ANSWER
+  The idea
+    CROSS-CUTTING CONCERNS - logging, metrics, security, retries,
+    transactions - are needed in many classes but belong to none of them.
+    AOP lets you write that code ONCE and declare WHERE it applies, instead
+    of copying it into every method.
+
+  Vocabulary (interviewers do ask for these)
+    Aspect       the module holding the cross-cutting code (@Aspect class)
+    Join point   a point where advice can apply - in Spring AOP, always a
+                 PUBLIC METHOD EXECUTION on a Spring bean
+    Pointcut     the expression selecting join points
+    Advice       the code to run (@Before, @After, @Around, ...)
+    Weaving      connecting them - Spring does it at RUNTIME with proxies
+    Target       the real object being wrapped
+
+  Example
+      @Aspect
+      @Component
+      public class TimingAspect {
+
+        @Around("@annotation(com.acme.Timed)")
+        public Object time(ProceedingJoinPoint pjp) throws Throwable {
+            long t0 = System.nanoTime();
+            try {
+                return pjp.proceed();              // MUST call proceed()
+            } finally {
+                log.info("{} took {} ms", pjp.getSignature(),
+                         (System.nanoTime() - t0) / 1_000_000);
+            }
+        }
+      }
+
+  Advice types
+    @Before                 runs first; cannot change the outcome
+    @AfterReturning         only on success; can read the returned value
+    @AfterThrowing          only on exception; can read it
+    @After                  finally - always
+    @Around                 the powerful one: wraps the call, can change
+                            arguments, skip proceed() entirely, swap the
+                            return value, catch and translate exceptions.
+                            Must return the value / rethrow.
+
+  Pointcut expressions
+    execution(* com.acme.service.*.*(..))        by package/class/method
+    within(com.acme.service..*)                  everything in a package tree
+    @annotation(com.acme.Timed)                  methods carrying an annotation
+    @within(org.springframework.stereotype.Service)   all methods of @Service beans
+    bean(*Service)                               by bean name
+    args(String, ..)                             by argument types
+    Combine with && || ! and name them:
+        @Pointcut("within(@org.springframework.stereotype.Service *)")
+        void services() {}
+        @Around("services() && @annotation(Timed)")
+
+  Spring AOP vs AspectJ
+    Spring AOP    runtime PROXIES; only public methods on Spring beans; only
+                  method-execution join points; no self-invocation (#20).
+                  Zero setup - covers 95% of needs.
+    AspectJ       real bytecode weaving (compile-time or load-time); works on
+                  private methods, constructors, field access, non-Spring
+                  objects. More powerful, more setup
+                  (@EnableLoadTimeWeaving / the AspectJ compiler).
+
+  Where you already use it without knowing
+    @Transactional, @Async, @Cacheable, @Retryable, @PreAuthorize, and
+    @Timed/metrics are ALL implemented as AOP.
+
+FOLLOW-UPS
+  - @Around vs @Before - when do you need @Around?
+  - What happens if you forget pjp.proceed()?  (The target never runs and
+    the method returns null - a great way to break production quietly.)
+  - Can an aspect advise a private method?  (Not with Spring AOP.)
+  - Can two aspects apply to the same method?  (Yes - order with @Order.)
+  - What is the performance cost?  (A proxy indirection - negligible; the
+    real cost is debuggability and surprise.)
+
+RED FLAGS
+  - Business logic in an aspect ("spooky action at a distance").
+  - Broad pointcuts like execution(* com..*(..)) that advise everything.
+  - Not knowing @Transactional is itself an aspect.
+
+
+--------------------------------------------------------------------------------
+19. @Transactional
+--------------------------------------------------------------------------------
+
+Q: What does @Transactional do? Explain propagation, isolation and rollback
+   rules.
+
+ANSWER
+  What it does
+    Wraps the method in a database transaction: begin before, COMMIT on
+    normal return, ROLLBACK on error, and the same Connection / EntityManager
+    is reused throughout (bound to the thread by TransactionSynchronization-
+    Manager). It is implemented as AOP (#18) - which explains every gotcha
+    below.
+
+  Where to put it
+    On the SERVICE layer - a transaction should span one business use case
+    (several repository calls that must succeed or fail together). Not on
+    repositories (Spring Data already wraps each call), not on controllers
+    (an HTTP concern, and it holds a connection during serialization).
+    Prefer it on the CLASS for the common case and override per method.
+    Put it on PUBLIC methods only - Spring AOP cannot proxy anything else.
+
+  ROLLBACK RULES - the number one trap
+    By DEFAULT Spring rolls back on RuntimeException and Error ONLY.
+    A CHECKED exception COMMITS the transaction.
+
+        @Transactional
+        void transfer() throws IOException {
+            debit();
+            throw new IOException();     // <- COMMITS. Money gone.
+        }
+
+    Fix: @Transactional(rollbackFor = Exception.class)
+    Also: noRollbackFor = SomeException.class for the reverse.
+    And: CATCHING an exception inside the method means no rollback at all -
+    the proxy never sees it. If you catch and want a rollback, rethrow or
+    call TransactionAspectSupport.currentTransactionStatus().setRollbackOnly().
+    Once a transaction is marked rollback-only, a later commit attempt throws
+    UnexpectedRollbackException - the classic "why did my commit fail" bug.
+
+  PROPAGATION - what happens if a transaction already exists
+    REQUIRED (default)  join the existing one, or start a new one.
+                        A rollback anywhere kills the WHOLE thing.
+    REQUIRES_NEW        SUSPEND the outer transaction, run in a genuinely
+                        separate one, resume. Independent commit/rollback.
+                        Use for audit logs / notifications that must survive
+                        a business rollback. Costs a SECOND CONNECTION -
+                        deadlock risk if the pool is small, and the inner
+                        transaction cannot see the outer's uncommitted rows.
+    NESTED              a JDBC SAVEPOINT inside the current transaction -
+                        partial rollback without killing the outer. JDBC
+                        only, not supported by JPA/Hibernate generally.
+    SUPPORTS            join if one exists, otherwise run non-transactionally
+    NOT_SUPPORTED       suspend any transaction and run without one
+    MANDATORY           must already be in one, else exception
+    NEVER               must NOT be in one, else exception
+
+  ISOLATION
+    READ_UNCOMMITTED  dirty reads possible
+    READ_COMMITTED    no dirty reads (PostgreSQL/Oracle default)
+    REPEATABLE_READ   same row reads the same twice (MySQL/InnoDB default)
+    SERIALIZABLE      full isolation, worst concurrency
+    DEFAULT           whatever the database says
+    The anomalies: dirty read -> non-repeatable read -> phantom read.
+
+  Other useful attributes
+    readOnly = true    a hint: Hibernate skips dirty checking and snapshots
+                       (real memory/CPU saving on big reads), and some
+                       drivers/replicas route it to a read replica. It does
+                       NOT make writes impossible in general.
+    timeout = 5        seconds before the transaction is rolled back
+    isolation, propagation, rollbackFor, noRollbackFor as above
+
+  Related traps
+    - Transaction scope = connection held. Never make an HTTP call inside a
+      transaction; you are holding a pooled connection across the network.
+    - LazyInitializationException: the transaction (and the persistence
+      context) ends when the service method returns, so touching a lazy
+      association in the controller or during JSON serialization fails.
+      Fix by fetching what you need (JOIN FETCH / entity graph) and mapping
+      to a DTO inside the transaction - not by open-session-in-view.
+    - Long transactions cause lock contention and pool exhaustion.
+
+FOLLOW-UPS
+  - You threw a checked exception - did it roll back?
+  - REQUIRED vs REQUIRES_NEW - give a case for each.
+  - Why can readOnly=true improve performance?
+  - What is UnexpectedRollbackException?
+  - Why should @Transactional not be on a controller?
+  - What is the persistence context and when does it close?
+
+RED FLAGS
+  - Not knowing checked exceptions do not roll back by default.
+  - Catching the exception inside the transactional method and expecting a
+    rollback.
+  - @Transactional on private methods (silently does nothing - see #20).
+  - REST/HTTP calls inside a transaction.
+
+
+--------------------------------------------------------------------------------
+20. PROXIES AND SELF-INVOCATION
+    "Why does calling a @Transactional method from the same class do nothing?"
+--------------------------------------------------------------------------------
+
+Q: This is the single most-asked Spring gotcha. Explain it.
+
+ANSWER
+  THE PROBLEM
+
+      @Service
+      public class OrderService {
+
+          public void process(List<Order> orders) {
+              orders.forEach(this::saveOne);      // <-- self-invocation
+          }
+
+          @Transactional
+          public void saveOne(Order o) { repo.save(o); }   // NO TRANSACTION
+      }
+
+    saveOne() runs with NO transaction at all. No error, no warning - it just
+    silently does not work. Same for @Async (runs synchronously),
+    @Cacheable (never caches), @Retryable (never retries), @PreAuthorize
+    (never checks).
+
+  WHY - the proxy
+    @Transactional is AOP, and Spring AOP works by PROXIES. The container
+    does not give other beans your object; it gives them a WRAPPER around it:
+
+        caller ---> [ PROXY ] ---> [ real OrderService ]
+                    begin tx
+                    invoke
+                    commit / rollback
+
+    The proxy can only intercept calls that GO THROUGH IT - i.e. calls from
+    OUTSIDE the object. Inside process(), "this" is the RAW target object,
+    not the proxy. this.saveOne() is a plain Java virtual method call on the
+    heap object; the proxy is never involved, so no advice runs.
+
+    Same reason:
+      - PRIVATE, STATIC and FINAL methods are never advised
+      - a FINAL CLASS cannot be proxied by CGLIB at all
+      - @Transactional inside @PostConstruct does nothing (#10): the proxy
+        does not exist yet at that point
+
+  Two proxy mechanisms
+    JDK DYNAMIC PROXY  used when the bean implements an interface. The proxy
+                       implements the SAME INTERFACE. Consequence: you can
+                       only inject it by the interface type - injecting the
+                       concrete class fails with a ClassCastException-ish
+                       "not of the expected type" error.
+    CGLIB              used otherwise: generates a SUBCLASS at runtime and
+                       overrides the methods. Needs a non-final class and a
+                       non-private constructor; final methods are silently
+                       not advised.
+    Boot forces CGLIB by default (spring.aop.proxy-target-class=true) so that
+    both work; plain Spring picks JDK when an interface exists.
+
+  THE FIXES, best first
+    1. MOVE THE METHOD TO ANOTHER BEAN. The call then crosses a bean
+       boundary and goes through the proxy. This is almost always the right
+       answer, and usually reveals a genuine responsibility split:
+           process() -> orderSaver.saveOne(o)     // different bean
+    2. SELF-INJECTION - inject the proxy of yourself:
+           @Autowired @Lazy private OrderService self;
+           ...
+           orders.forEach(self::saveOne);         // through the proxy
+       Works, allowed even with circular references disabled (#11), but ugly.
+    3. AopContext.currentProxy() - requires
+       @EnableAspectJAutoProxy(exposeProxy = true):
+           ((OrderService) AopContext.currentProxy()).saveOne(o);
+       Works, very ugly, couples the class to Spring AOP.
+    4. Use the programmatic API where a declarative transaction does not fit:
+           transactionTemplate.execute(status -> { ... });
+       Honest and explicit; good for fine-grained control inside a loop.
+    5. Full AspectJ load-time weaving - weaves the advice into the BYTECODE,
+       so even self-calls and private methods are advised. Heavy setup;
+       reserved for cases the proxy model genuinely cannot cover.
+
+  How to notice it in the wild
+    - Log org.springframework.transaction at DEBUG and look for
+      "Creating new transaction" that never appears.
+    - Debug and inspect the injected object: the class name contains
+      "$$EnhancerBySpringCGLIB" or "$Proxy" when it is proxied.
+
+FOLLOW-UPS
+  - Why does making the method private not just work?
+  - What is the difference between JDK dynamic proxies and CGLIB, and when
+    does Spring pick each?
+  - Which other annotations suffer from exactly this?  (@Async, @Cacheable,
+    @Retryable, @PreAuthorize, @Validated.)
+  - Why is "extract to another bean" better than self-injection?
+  - Why does @Transactional not work in @PostConstruct?
+
+RED FLAGS
+  - Never having hit this - it is the most common Spring bug there is.
+  - "Add @Transactional to the outer method too" without understanding that
+    it changes the transaction BOUNDARY (one big transaction instead of one
+    per item), which may or may not be what you want.
+  - Believing final/private methods are advised.
+
+
+--------------------------------------------------------------------------------
+21. APPLICATION EVENTS AND LISTENERS
+--------------------------------------------------------------------------------
+
+Q: How do beans communicate without depending on each other? What events does
+   Spring publish?
+
+ANSWER
+  The mechanism - the observer pattern, built into the container.
+
+  PUBLISH
+      @Service
+      class OrderService {
+          private final ApplicationEventPublisher publisher;   // inject it
+          OrderService(ApplicationEventPublisher publisher) {...}
+
+          void place(Order o) {
+              repo.save(o);
+              publisher.publishEvent(new OrderPlacedEvent(o.getId()));
+          }
+      }
+    Since Spring 4.2 the event can be ANY OBJECT - no need to extend
+    ApplicationEvent. A record is ideal:
+      public record OrderPlacedEvent(Long orderId, Instant at) {}
+
+  LISTEN
+      @Component
+      class EmailNotifier {
+          @EventListener
+          void on(OrderPlacedEvent e) { mail.send(e.orderId()); }
+      }
+    The parameter type IS the subscription - Spring matches listeners by the
+    event type, generics included (that is #14's generic resolution at work:
+    an ApplicationListener<OrderPlacedEvent> is matched by its type argument
+    despite erasure).
+
+    Options:
+      @EventListener(condition = "#e.amount > 1000")     SpEL filter
+      @EventListener({A.class, B.class})                 several types
+      @Order(1)                                          listener ordering
+      returning a value from a listener PUBLISHES it as a new event
+      (chaining - clever, and easy to abuse)
+
+  SYNCHRONOUS BY DEFAULT - the key fact
+    publishEvent() BLOCKS: listeners run on the CALLER'S THREAD, inside the
+    caller's transaction. A slow listener slows the publisher; a listener
+    that throws PROPAGATES the exception to the publisher and can roll the
+    transaction back.
+    To decouple: @Async on the listener (+ @EnableAsync). Then it runs on a
+    task executor - but you lose the caller's transaction and its
+    exceptions are no longer the publisher's problem (handle them yourself).
+
+  @TransactionalEventListener - the one to know
+      @TransactionalEventListener(phase = AFTER_COMMIT)
+      void on(OrderPlacedEvent e) { mail.send(...); }
+    Defers the listener until the publishing transaction actually COMMITS -
+    so you never email a customer about an order that then rolled back.
+    Phases: BEFORE_COMMIT, AFTER_COMMIT (default), AFTER_ROLLBACK,
+    AFTER_COMPLETION.
+    Trap: after commit there is no active transaction, so a listener that
+    writes to the DB needs REQUIRES_NEW (#19).
+
+  BUILT-IN EVENTS - lifecycle, in order
+    ApplicationStartingEvent          before anything (needs a listener
+                                      registered in spring.factories)
+    ApplicationEnvironmentPreparedEvent   Environment ready, no context yet
+    ApplicationContextInitializedEvent
+    ApplicationPreparedEvent          bean definitions loaded, not created
+    ContextRefreshedEvent             ALL singletons created and ready.
+                                      Fires again on a context refresh, and
+                                      TWICE if you have a parent/child
+                                      context - guard against re-entry.
+    ServletWebServerInitializedEvent  the port is known (useful for random
+                                      ports in tests)
+    ApplicationStartedEvent           context refreshed, runners NOT yet run
+    ApplicationReadyEvent             EVERYTHING is up and serving traffic.
+                                      This is the one you want for startup
+                                      work (see #22).
+    ApplicationFailedEvent            startup blew up
+    ContextClosedEvent                shutting down
+    Also: Spring Security publishes AuthenticationSuccessEvent /
+    AbstractAuthenticationFailureEvent - handy for audit logging.
+
+  WHY USE EVENTS
+    - Decoupling: OrderService does not know EmailNotifier, MetricsRecorder
+      or SearchIndexer exist. Adding a fifth listener changes nothing.
+    - Breaks CIRCULAR DEPENDENCIES (#11) by inverting the direction.
+    - A natural seam that later becomes a real message queue.
+
+  WHEN NOT TO
+    - Control flow becomes invisible: "who handles this?" needs a search of
+      the whole codebase. Do not use events for the main happy path.
+    - It is IN-PROCESS and IN-MEMORY. Not durable, not distributed, lost on
+      crash. If it must not be lost, use Kafka/Rabbit/an outbox table.
+    - No ordering guarantee unless you add @Order.
+
+FOLLOW-UPS
+  - Are listeners synchronous or asynchronous?
+  - You email on OrderPlaced and the transaction rolls back - what did you do
+    wrong, and what is the fix?
+  - ContextRefreshedEvent vs ApplicationReadyEvent?
+  - How do you make a listener async, and what do you give up?
+  - How does Spring match a listener to an event type given type erasure?
+  - When would you replace an application event with a message broker?
+
+RED FLAGS
+  - Assuming events are async.
+  - Business-critical work in a fire-and-forget in-memory listener.
+  - Doing post-commit work in a plain @EventListener.
+
+
+--------------------------------------------------------------------------------
+22. STARTUP TASKS - RUN SOMETHING WHEN THE APP BOOTS
+--------------------------------------------------------------------------------
+
+Q: You need to run code once at startup - warm a cache, seed data, register
+   with a discovery service, start a consumer. What are the options and which
+   do you pick?
+
+ANSWER
+  THE OPTIONS, EARLIEST TO LATEST
+
+  1. @PostConstruct  (per bean, during context startup - #10)
+       Runs when THAT bean is ready; other beans may not exist yet and the
+       web server is NOT listening.
+       Good for: validating config, precompiling a regex, cheap local setup.
+       Bad for: anything slow, anything needing the whole app, anything
+       transactional or async (the proxy is not in place yet - #20).
+
+  2. InitializingBean.afterPropertiesSet()
+       Same timing, interface-based, couples you to Spring. Prefer (1).
+
+  3. ContextRefreshedEvent listener
+       All singletons exist. But it can fire more than once (context refresh,
+       parent/child contexts), so guard with an AtomicBoolean if that matters.
+
+  4. CommandLineRunner / ApplicationRunner  <- the standard Boot answer
+       Run AFTER the context is fully built, right before
+       ApplicationReadyEvent.
+           @Component
+           class SeedData implements ApplicationRunner {
+               public void run(ApplicationArguments args) { ... }
+           }
+       CommandLineRunner gives you the raw String[] args;
+       ApplicationRunner gives the PARSED ApplicationArguments
+       (getOptionValues("name"), getNonOptionArgs()) - prefer it.
+       Order several with @Order.
+       IMPORTANT: throwing from a runner FAILS STARTUP and the application
+       exits - which is a feature for "this must be true or do not start",
+       and a hazard for optional warm-up work.
+       Note the web server is already accepting connections at this point in
+       recent Boot versions, so slow work here delays readiness without
+       delaying the port opening.
+
+  5. ApplicationReadyEvent listener   <- best for "the app is live" work
+           @EventListener(ApplicationReadyEvent.class)
+           void warmUp() { ... }
+       Fires once, after runners, when the app is genuinely serving.
+       Best for: cache warm-up, registering with service discovery, kicking
+       off background polling, a "started" log/metric. Combine with @Async
+       if it is slow and nothing depends on it finishing.
+
+  6. SmartLifecycle   <- for things that must START and STOP
+           class Consumer implements SmartLifecycle {
+               public void start() {...}   public void stop() {...}
+               public boolean isRunning() {...}
+               public int getPhase() { return 100; }   // ordering
+           }
+       The proper hook for long-lived resources: Kafka consumers, schedulers,
+       socket listeners, background threads. Gives you ORDERED startup and,
+       crucially, ORDERED GRACEFUL SHUTDOWN (stop in reverse phase order) -
+       which @PostConstruct/@PreDestroy do not.
+
+  CHOOSING - the short version
+    cheap per-bean init / fail-fast on bad config   -> @PostConstruct
+    seed data, one-off job, CLI-style work          -> ApplicationRunner
+    warm-up / announce / anything needing a live app-> ApplicationReadyEvent
+    start & stop a background component             -> SmartLifecycle
+
+  PRACTICAL WARNINGS
+    - Startup work delays READINESS. In Kubernetes, do heavy warm-up before
+      the readiness probe passes, not after - or you take traffic you cannot
+      serve. Actuator's /actuator/health/readiness plus
+      AvailabilityChangeEvent is the clean way.
+    - MULTIPLE INSTANCES: every replica runs the startup task. Seeding data
+      or sending a notification from three pods is a bug. Make it idempotent,
+      or elect a leader, or use a lock (ShedLock), or move it to a migration
+      tool (Flyway/Liquibase) - schema and reference data belong there, not
+      in a runner.
+    - Do not swallow exceptions in warm-up code and then serve a broken app.
+    - Keep it out of @PostConstruct if it touches the network.
+
+FOLLOW-UPS
+  - @PostConstruct vs CommandLineRunner - what is available in one and not
+    the other?
+  - CommandLineRunner vs ApplicationRunner?
+  - What happens if a runner throws?
+  - Why is SmartLifecycle better for a Kafka consumer than @PostConstruct?
+  - Three replicas all seed the database - how do you fix it?
+  - Where does data seeding really belong?  (Flyway/Liquibase.)
+
+RED FLAGS
+  - Network calls or 30-second warm-ups in @PostConstruct.
+  - Seeding production data from a runner with no idempotency.
+  - Starting a thread in @PostConstruct with nothing to stop it.
+
+
+--------------------------------------------------------------------------------
+23. SCHEDULERS - @Scheduled
+--------------------------------------------------------------------------------
+
+Q: How do you run a periodic job? What are the traps?
+
+ANSWER
+  Setup
+      @EnableScheduling            on a @Configuration / the main class
+      @Scheduled                   on a method of a Spring bean
+    The method must be void and take NO ARGUMENTS.
+
+  The three timings - know the difference
+      @Scheduled(fixedRate = 5000)
+          start a run every 5s, MEASURED FROM THE START of the previous run.
+          If a run takes longer than the period, runs queue up (they do not
+          overlap on the default single thread - they pile up behind it).
+      @Scheduled(fixedDelay = 5000)
+          wait 5s AFTER THE PREVIOUS RUN FINISHES. Self-throttling; this is
+          the safe default for jobs of variable duration.
+      @Scheduled(cron = "0 0 3 * * *")
+          calendar-based. SIX fields in Spring:
+            second minute hour day-of-month month day-of-week
+          (Unix cron has five - forgetting the seconds field is the classic
+           mistake.) Add zone = "Europe/Berlin"; otherwise the JVM default
+          applies - and DST will bite you.
+      initialDelay = 10000        delay before the first run
+      fixedRateString = "${app.poll.ms}"    read the value from config
+
+  TRAP 1 - ONE THREAD FOR EVERYTHING
+    By default Spring uses a SINGLE-THREADED scheduler. Every @Scheduled
+    method in the whole app shares it, so one slow or hung job blocks all the
+    others, silently and forever.
+    Fix:
+        spring.task.scheduling.pool.size=5
+      or define your own:
+        @Bean ThreadPoolTaskScheduler taskScheduler() {...}
+      or implement SchedulingConfigurer for full control.
+    Note a single job never overlaps itself on the default scheduler; if you
+    WANT concurrent runs, add @Async (and then you must handle overlap
+    yourself).
+
+  TRAP 2 - MULTIPLE INSTANCES  (the big one)
+    Three replicas of your service = the job runs THREE TIMES. For "send the
+    daily invoice email" that is a customer-visible incident.
+    Fixes:
+      - ShedLock (net.javacrumbs) - a distributed lock in your existing DB;
+        the lightest solution and the usual answer:
+            @Scheduled(cron="...")
+            @SchedulerLock(name="dailyInvoices", lockAtMostFor="10m")
+      - Quartz in clustered mode - heavier, but persistent jobs, misfire
+        handling and a real job store
+      - leader election (Spring Integration / Kubernetes lease)
+      - an external trigger (a Kubernetes CronJob, or a scheduler service
+        calling an endpoint) - the cleanest separation
+      - a dedicated profile/replica that runs the jobs
+
+  TRAP 3 - EXCEPTIONS
+    An uncaught exception from a @Scheduled method is logged, and for
+    fixedRate/fixedDelay THE JOB KEEPS ITS SCHEDULE - but with a plain
+    ScheduledExecutorService a thrown exception cancels future runs, so never
+    rely on the details. Always wrap the body in try/catch, log, and emit a
+    metric. A job that silently stopped running three weeks ago is a real
+    outage pattern.
+
+  Other points
+    - @Scheduled is proxied like everything else: no self-invocation, public
+      methods only (#20).
+    - Add a KILL SWITCH: @ConditionalOnProperty on the scheduler bean, so you
+      can disable a job in production without a deploy.
+    - Long jobs and graceful shutdown: set
+      spring.task.scheduling.shutdown.await-termination=true and a timeout,
+      or the pod dies mid-job.
+    - Make jobs IDEMPOTENT - they will be re-run.
+    - Instrument: last-success timestamp, duration, error count.
+    - Alternatives: Quartz (persistent, misfire policies, dynamic
+      scheduling), or a real queue for work that must not be lost.
+
+FOLLOW-UPS
+  - fixedRate vs fixedDelay - which for a job whose duration varies?
+  - How many fields does a Spring cron expression have?
+  - Two @Scheduled methods, one hangs - what happens to the other?
+  - You scale to 3 pods - what breaks and how do you fix it?
+  - How do you disable a job without redeploying?
+  - How do you schedule something dynamically at runtime?
+    (SchedulingConfigurer / TaskScheduler.schedule(...) with a Trigger.)
+
+RED FLAGS
+  - Not knowing the default pool is one thread.
+  - No thought about multiple instances.
+  - No try/catch, no metric, no alert on a job that silently dies.
+  - Cron with five fields.
+
+
+================================================================================
+PART 2 - TESTING
+Ordered basic -> advanced
+================================================================================
+
+
+--------------------------------------------------------------------------------
+24. TESTING CONCEPTS
+--------------------------------------------------------------------------------
+
+Q: What kinds of tests are there and what should you write most of?
+
+ANSWER
+  THE TEST PYRAMID
+      /\      few    E2E / UI        slow, brittle, whole system
+     /  \            INTEGRATION     a few real pieces together
+    /____\    many   UNIT            one class, no I/O, milliseconds
+    Many fast unit tests, fewer integration tests, very few end-to-end.
+    The inverted pyramid ("ice cream cone") is the common failure mode: a
+    huge slow suite nobody trusts and everyone reruns until it goes green.
+
+  UNIT test
+    ONE class in isolation. Collaborators are test doubles. No Spring
+    context, no database, no network. Runs in milliseconds.
+
+  INTEGRATION test
+    Several real components together: the Spring context, a real DB, the
+    web layer. Slower, but it is the only thing that proves the wiring,
+    the SQL and the JSON actually work.
+
+  E2E
+    The deployed system through its real interface. Few and precious.
+
+  STRUCTURE - AAA / given-when-then
+      // given (arrange)   set up data and stubs
+      // when  (act)       call the ONE method under test
+      // then  (assert)    verify the outcome
+    One logical assertion per test; the test name states the behaviour:
+      shouldRejectOrderWhenBalanceIsInsufficient()
+      or @DisplayName("rejects an order when the balance is insufficient")
+
+  TEST DOUBLES (Meszaros' vocabulary - asked surprisingly often)
+    Dummy   passed but never used, just to fill a parameter
+    Stub    returns canned answers  ("when asked, say 42")
+    Mock    a stub that also RECORDS calls so you can VERIFY them
+    Spy     wraps a REAL object; real behaviour unless you stub a method
+    Fake    a real working implementation, simplified - an in-memory
+            repository, H2 instead of Postgres
+    Mockito's mock() covers stub+mock; spy() is the spy.
+
+  WHAT MAKES A GOOD TEST
+    - Deterministic: no clock, no random, no network, no ordering
+      dependency, no shared mutable state between tests
+    - Fast, so people actually run it
+    - Tests BEHAVIOUR, not implementation - if a refactor that changes no
+      behaviour breaks 40 tests, the tests were coupled to the internals
+    - Fails with a message that tells you what is wrong
+    - Independent: each test sets up its own data
+
+  WHAT NOT TO TEST
+    Getters/setters, the framework itself, generated code. Coverage is a
+    smoke detector, not a goal - 100% coverage with no assertions is
+    perfectly achievable and worthless.
+
+  Design connection
+    Constructor injection (#7) makes a class trivially unit-testable:
+    "new OrderService(mockRepo, mockClient)" - no container, no reflection.
+    If a class is hard to test, that is a DESIGN signal: too many
+    dependencies, static calls, "new" in the middle of business logic, or
+    hidden state.
+
+FOLLOW-UPS
+  - Unit vs integration - where is the line for you?
+  - Mock vs stub vs fake?
+  - Is 100% coverage a good target?
+  - Your test needs Thread.sleep() - what is wrong?
+    (Test async properly: Awaitility, a latch, or an injectable executor.)
+  - How do you test code that uses the current time?
+    (Inject a java.time.Clock; Clock.fixed(...) in the test.)
+  - What is TDD, and have you used it?
+
+RED FLAGS
+  - Only manual testing / "QA does that".
+  - Tests that assert nothing, or assert on mock internals only.
+  - Random failures accepted as normal ("just rerun it").
+
+
+--------------------------------------------------------------------------------
+25. JUnit 5
+--------------------------------------------------------------------------------
+
+Q: The basics of JUnit 5, and what changed from JUnit 4.
+
+ANSWER
+  Anatomy
+      class OrderServiceTest {
+          @BeforeAll  static void once() {}       // static, runs once
+          @BeforeEach void setUp() {}             // before EVERY test
+          @Test       void placesOrder() {}
+          @AfterEach  void tearDown() {}
+          @AfterAll   static void done() {}
+      }
+    LIFECYCLE: a NEW INSTANCE of the test class per test method - that is
+    why @BeforeAll must be static, and why instance fields are safely
+    reinitialized. Change with
+    @TestInstance(Lifecycle.PER_CLASS) (then @BeforeAll need not be static).
+
+  Assertions (org.junit.jupiter.api.Assertions)
+      assertEquals(expected, actual)      // EXPECTED FIRST - the message
+                                          // reads backwards otherwise
+      assertTrue / assertNull / assertSame / assertArrayEquals
+      assertThrows(IllegalArgumentException.class, () -> svc.place(null))
+        -> returns the exception, so you can assert on its message
+      assertAll("order", () -> ..., () -> ...)   // report ALL failures, not
+                                                 // just the first
+      assertTimeout, fail()
+    Every assertion takes an optional last message/Supplier<String>.
+
+  Parameterized tests - kills copy-pasted test methods
+      @ParameterizedTest
+      @ValueSource(strings = {"", " ", "\t"})
+      void rejectsBlank(String s) { ... }
+
+      @ParameterizedTest
+      @CsvSource({ "1,1,2", "2,3,5", "-1,1,0" })
+      void adds(int a, int b, int expected) { ... }
+
+      @ParameterizedTest
+      @MethodSource("orders")            // static Stream<Arguments> orders()
+      void handles(Order o, boolean expected) { ... }
+
+      also @EnumSource, @NullSource, @EmptySource, @NullAndEmptySource,
+      @CsvFileSource
+
+  Organizing
+      @DisplayName("rejects blank names")     readable report names
+      @Nested class WhenBalanceIsZero {...}   group related cases, shares
+                                              the outer @BeforeEach
+      @Tag("slow")                            filter what CI runs
+      @Disabled("flaky - see JIRA-123")       always give a reason
+      @RepeatedTest(10), @Timeout(5)
+      @TempDir Path dir                       auto-cleaned temp directory
+
+  JUNIT 4 -> 5 - the mapping
+      @Before          -> @BeforeEach
+      @After           -> @AfterEach
+      @BeforeClass     -> @BeforeAll
+      @AfterClass      -> @AfterAll
+      @Ignore          -> @Disabled
+      @RunWith(X)      -> @ExtendWith(X)      (multiple allowed - JUnit 4
+                                               permitted only ONE runner,
+                                               which is why @Rule existed)
+      @Rule / @ClassRule -> extensions
+      expected= / @Rule ExpectedException -> assertThrows
+      org.junit.Test   -> org.junit.jupiter.api.Test   (a very common
+                                                        wrong-import bug:
+                                                        the test silently
+                                                        does not run)
+    Architecture: Platform (runs tests) + Jupiter (the new API) +
+    Vintage (runs old JUnit 4 tests).
+
+FOLLOW-UPS
+  - Why must @BeforeAll be static?
+  - How many instances of the test class are created for 5 tests?
+  - How do you assert that a method throws, and check the message?
+  - @ParameterizedTest vs a loop inside one test?  (Separate reporting,
+    the suite does not stop at the first failure.)
+  - Your test passes alone and fails in the suite - what do you suspect?
+    (Shared static state, DB left dirty, order dependence.)
+
+RED FLAGS
+  - assertEquals(actual, expected) - arguments the wrong way round.
+  - Importing org.junit.Test in a JUnit 5 project.
+  - @Disabled with no explanation.
+
+
+--------------------------------------------------------------------------------
+26. ASSERTIONS AND MATCHERS - AssertJ / Hamcrest
+--------------------------------------------------------------------------------
+
+Q: What do you use to assert, and why not plain assertEquals?
+
+ANSWER
+  Three styles you will meet
+    JUnit      assertEquals(3, list.size())
+    Hamcrest   assertThat(list, hasSize(3))
+    AssertJ    assertThat(list).hasSize(3)          <- the modern default
+
+  AssertJ - fluent, discoverable, great failure messages
+      assertThat(order.getStatus()).isEqualTo(PLACED);
+      assertThat(orders)
+          .hasSize(3)
+          .extracting(Order::getCustomer)         // map then assert
+          .containsExactly("ann", "bob", "cid");  // order matters
+      assertThat(orders).containsExactlyInAnyOrder(...);
+      assertThat(name).isNotBlank().startsWith("A").hasSize(5);
+      assertThat(map).containsEntry("k", "v").doesNotContainKey("x");
+      assertThat(optional).isPresent().hasValue(order);
+      assertThat(actual).usingRecursiveComparison()      // field-by-field,
+             .ignoringFields("id", "createdAt")          // no equals() needed
+             .isEqualTo(expected);
+      assertThatThrownBy(() -> svc.place(null))
+             .isInstanceOf(IllegalArgumentException.class)
+             .hasMessageContaining("customer");
+      assertThat(bigDecimal).isEqualByComparingTo("2.00");   // scale-safe (#J10)
+
+    Why it beats assertEquals:
+      - CHAINING: several assertions on one subject, one statement
+      - the failure message says WHAT differed, not just
+        "expected true but was false" (assertTrue(list.contains(x)) is the
+        classic useless failure)
+      - IDE autocomplete after "assertThat(x)." tells you what you can assert
+      - type-safe: assertThat(aString).isEqualTo(anInt) will not compile,
+        while assertEquals(Object,Object) happily compares nonsense
+      - usingRecursiveComparison lets you compare DTOs that have no equals()
+
+  Hamcrest - matcher objects, "assertThat(actual, matcher)"
+      assertThat(list, hasItems("a", "b"));
+      assertThat(name, is(not(nullValue())));
+      assertThat(order, hasProperty("status", equalTo(PLACED)));
+    Still worth knowing because SPRING'S MockMvc USES IT:
+      .andExpect(jsonPath("$.items", hasSize(3)))
+    Matchers compose (allOf, anyOf, not) and you can write your own by
+    extending TypeSafeMatcher.
+
+  Careful: THREE assertThat imports
+      org.assertj.core.api.Assertions.assertThat      (fluent, one arg)
+      org.hamcrest.MatcherAssert.assertThat           (two args)
+      org.junit.jupiter.api.Assertions.assertThat     - does not exist;
+                                                        JUnit 5 has no
+                                                        assertThat at all
+    Static-import ONE of them per project and stay consistent.
+    spring-boot-starter-test ships both AssertJ and Hamcrest.
+
+  Soft assertions - report all failures, not just the first
+      SoftAssertions.assertSoftly(softly -> {
+          softly.assertThat(o.getId()).isEqualTo(1);
+          softly.assertThat(o.getStatus()).isEqualTo(PLACED);
+      });
+    (JUnit's assertAll does the same job.)
+
+FOLLOW-UPS
+  - Why is assertTrue(list.contains(x)) a bad assertion?
+  - How do you compare two objects that do not implement equals()?
+  - How do you assert on an exception with AssertJ?
+  - What is the difference between containsExactly and containsExactlyInAnyOrder?
+  - Where does Hamcrest still show up in a Spring project?
+
+RED FLAGS
+  - assertTrue for everything.
+  - Mixing all three assertion styles in one codebase.
+  - Asserting on toString() output.
+
+
+--------------------------------------------------------------------------------
+27. MOCKITO
+--------------------------------------------------------------------------------
+
+Q: How do you isolate the class under test? Explain stubbing, verification and
+   argument matchers.
+
+ANSWER
+  Setup
+      @ExtendWith(MockitoExtension.class)          // JUnit 5
+      class OrderServiceTest {
+          @Mock  PaymentClient client;             // a mock
+          @Mock  OrderRepo repo;
+          @InjectMocks OrderService service;       // mocks injected into it
+
+          // or, better and framework-free:
+          // OrderService service = new OrderService(client, repo);
+      }
+    @InjectMocks tries constructor, then setter, then field injection - and
+    fails SILENTLY (leaves a null) if it cannot match. With constructor
+    injection, plain "new" is clearer and safer.
+
+  STUBBING - "when asked, answer this"
+      when(repo.findById(1L)).thenReturn(Optional.of(order));
+      when(client.charge(any())).thenThrow(new PaymentException());
+      when(repo.save(any())).thenAnswer(i -> i.getArgument(0));  // echo back
+      when(clock.instant()).thenReturn(FIXED);
+      // consecutive calls:
+      when(it.next()).thenReturn("a", "b").thenThrow(new NoSuchElementException());
+
+      // void methods and SPIES need the do* form:
+      doNothing().when(mailer).send(any());
+      doThrow(new IOException()).when(mailer).send(any());
+      doReturn(x).when(spy).method();      // does NOT call the real method
+    Unstubbed methods return a DEFAULT: null for objects, 0 for numbers,
+    false for booleans, an EMPTY collection - never an error. That is why a
+    forgotten stub shows up as a mysterious NullPointerException.
+
+  VERIFICATION - "was it called?"
+      verify(repo).save(order);                    // exactly once (default)
+      verify(client, times(2)).charge(any());
+      verify(client, never()).refund(any());
+      verify(repo, atLeastOnce()).findById(1L);
+      verifyNoInteractions(mailer);
+      verifyNoMoreInteractions(repo);              // use sparingly - brittle
+      InOrder o = inOrder(repo, client);
+      o.verify(repo).save(any()); o.verify(client).charge(any());
+    Verify BEHAVIOUR THAT MATTERS (an email was sent, money was charged).
+    Verifying every call couples the test to the implementation.
+
+  ARGUMENT MATCHERS - and THE RULE
+      any(), any(Order.class), anyString(), anyLong(), anyList()
+      eq(42), isNull(), argThat(o -> o.getTotal() > 100)
+    THE RULE: if you use a matcher for ONE argument you must use matchers for
+    EVERY argument of that call. Mixing raw values and matchers throws
+    InvalidUseOfMatchersException:
+        when(svc.find("abc", any()))        // WRONG
+        when(svc.find(eq("abc"), any()))    // RIGHT
+    Reason: matchers are not values - they push onto a stack that Mockito
+    pops when the method is invoked, so a raw value leaves the stack
+    unbalanced. Note any() also matches NULL; use isNotNull() if that matters.
+
+  ArgumentCaptor - assert on what was actually passed
+      ArgumentCaptor<Order> cap = ArgumentCaptor.forClass(Order.class);
+      verify(repo).save(cap.capture());
+      assertThat(cap.getValue().getStatus()).isEqualTo(PLACED);
+    Better than argThat when you want a real assertion message.
+    (@Captor is the annotation form.)
+
+  mock vs spy vs real
+      mock(Foo.class)   nothing real; every method stubbed/defaulted
+      spy(realFoo)      REAL behaviour except what you stub. Useful for
+                        legacy code; a smell in new code. Remember the
+                        doReturn().when(spy) form - when(spy.x()) actually
+                        CALLS x().
+      the real object   best when it is cheap and has no I/O - do not mock a
+                        value object, a DTO or a list
+
+  WHAT MOCKITO CANNOT MOCK (plain)
+      static methods, final classes/methods, constructors, private methods,
+      equals/hashCode
+    mockito-inline (or mockito-core 5+, which is inline by default) adds
+    mockStatic / mockConstruction:
+        try (var m = mockStatic(Instant.class)) {
+            m.when(Instant::now).thenReturn(FIXED);
+        }
+    But needing to mock static usually means the design should have injected
+    a Clock / a collaborator instead.
+
+  Strictness
+    MockitoExtension is STRICT_STUBS by default: an unused stub fails the
+    test with UnnecessaryStubbingException, and a stub argument that never
+    matches is reported (PotentialStubbingProblem). It catches real bugs -
+    keep it on. Loosen per test with
+    @MockitoSettings(strictness = Strictness.LENIENT) or lenient().when(...).
+
+  DON'T OVER-MOCK
+    A test that is 20 lines of stubbing and one assertion tests the mock
+    setup, not the code. Mock at ARCHITECTURAL BOUNDARIES - the DB, HTTP
+    clients, the message broker, the clock. Use real objects inside your own
+    domain.
+
+FOLLOW-UPS
+  - What does an unstubbed mock method return?
+  - Why does "when(svc.find("a", any()))" blow up?
+  - When must you use doReturn().when() instead of when().thenReturn()?
+  - What is UnnecessaryStubbingException telling you?
+  - How do you assert on an argument passed to a mock?
+  - Should you mock a value object / a DTO?  (No.)
+  - How do you test code calling Instant.now()?  (Inject a Clock.)
+
+RED FLAGS
+  - Mocking the class under test.
+  - Mocking everything, including your own domain objects.
+  - Verifying every single interaction.
+  - Reaching for mockStatic instead of fixing the design.
+
+
+--------------------------------------------------------------------------------
+28. SPRING TESTING - SLICES, @MockBean AND MockMvc
+--------------------------------------------------------------------------------
+
+Q: How do you test a Spring application at each level?
+
+ANSWER
+  LEVEL 0 - NO SPRING AT ALL
+      new OrderService(mockRepo, mockClient)
+    Most of your tests should look like this. Fast, no context, no magic.
+    Constructor injection is what makes it possible (#7).
+
+  @SpringBootTest - the FULL context
+      @SpringBootTest
+      class ApplicationTests { @Test void contextLoads() {} }
+    Starts everything. Use for genuine end-to-end wiring tests, not as the
+    default. Options:
+      webEnvironment = MOCK (default, no real server)
+                     | RANDOM_PORT | DEFINED_PORT   (+ inject TestRestTemplate
+                                                     or WebTestClient)
+      properties = {"app.retries=1"}
+      @ActiveProfiles("test")
+
+  SLICE TESTS - load only the layer you are testing
+      @WebMvcTest(OrderController.class)
+          controllers, @ControllerAdvice, converters, filters, MockMvc.
+          NO services, NO repositories - you @MockBean what the controller
+          needs. Fast.
+      @DataJpaTest
+          entities, repositories, an embedded DB, and each test is
+          @Transactional AND ROLLED BACK afterwards. No services, no web.
+      @JsonTest         serialization only (JacksonTester)
+      @RestClientTest   your RestTemplate/WebClient client + MockRestServiceServer
+      @DataRedisTest, @JdbcTest, @WebFluxTest ...
+
+  MockMvc - test the web layer WITHOUT a server
+      @WebMvcTest(OrderController.class)
+      class OrderControllerTest {
+        @Autowired MockMvc mvc;
+        @MockBean OrderService service;              // the collaborator
+
+        @Test void returnsOrder() throws Exception {
+          when(service.find(1L)).thenReturn(new Order(1L, "ann"));
+
+          mvc.perform(get("/api/orders/1").accept(APPLICATION_JSON))
+             .andExpect(status().isOk())
+             .andExpect(jsonPath("$.id").value(1))
+             .andExpect(jsonPath("$.customer").value("ann"))
+             .andExpect(jsonPath("$.items", hasSize(2)));   // Hamcrest (#26)
+        }
+
+        @Test void returns404() throws Exception {
+          when(service.find(9L)).thenThrow(new OrderNotFoundException());
+          mvc.perform(get("/api/orders/9"))
+             .andExpect(status().isNotFound());             // tests #16!
+        }
+      }
+    Also: post(...).contentType(APPLICATION_JSON).content(json),
+    .andDo(print()) to dump the request/response when debugging,
+    header(...), with(csrf()) / @WithMockUser for Spring Security.
+    It exercises the REAL DispatcherServlet, mappings, converters and
+    exception handling - just without a socket.
+
+  @MockBean vs @Mock  - a favourite question
+      @Mock       a plain Mockito mock. No Spring involved.
+      @MockBean   creates a mock AND REPLACES that bean in the Spring
+                  CONTEXT (adding it if absent). Everything injected with
+                  that type gets the mock.
+    Use @MockBean only in a Spring test, and only for a bean you must
+    replace - each distinct combination of @MockBean CREATES A NEW CONTEXT,
+    which kills the context cache (below).
+    @SpyBean is the spy equivalent.
+    (Boot 3.4 renames these to @MockitoBean / @MockitoSpyBean.)
+
+  CONTEXT CACHING - why the suite is slow or fast
+    Spring CACHES the ApplicationContext and reuses it across test classes
+    with the SAME configuration. Anything that changes the configuration -
+    a different @MockBean set, different properties, a different
+    @ActiveProfiles - creates ANOTHER context. Dozens of contexts is the
+    usual reason a test suite takes 12 minutes.
+      - Keep test configuration uniform.
+      - @DirtiesContext evicts the cache: correct when a test corrupts
+        shared state, expensive - use it as a last resort.
+
+  Transactions in tests
+    @Transactional on a test method ROLLS BACK afterwards, so tests do not
+    pollute the DB. Two caveats: it can hide missing-transaction bugs in
+    production code, and it does not apply when the code under test runs on
+    another thread or through a real HTTP call (RANDOM_PORT).
+
+  DATABASE: H2 vs Testcontainers
+    H2 / embedded    fast, zero setup, but a DIFFERENT DATABASE - dialect
+                     quirks, missing functions, different locking. Green
+                     tests, broken production.
+    Testcontainers   a real Postgres/MySQL/Kafka in Docker, per suite:
+                       @Testcontainers
+                       @Container static PostgreSQLContainer<?> db = ...;
+                       @DynamicPropertySource static void props(...) {...}
+                     Slower to start, but it tests what you actually deploy.
+                     Boot 3.1+ has @ServiceConnection to wire it up.
+    Prefer Testcontainers for anything with real SQL.
+
+  spring-boot-starter-test gives you
+    JUnit 5, Mockito, AssertJ, Hamcrest, JSONassert, JsonPath, spring-test.
+
+FOLLOW-UPS
+  - Why is @SpringBootTest a poor default for every test?
+  - @Mock vs @MockBean - when does each apply?
+  - Why did adding one @MockBean make the suite slower?
+  - What does @DataJpaTest do about the database, and about transactions?
+  - How do you test that a bad request returns 400 with the right body?
+  - H2 vs Testcontainers - argue both sides.
+  - How do you test a @Scheduled method?  (Extract the body into a normal
+    method and unit-test that - do not wait for the scheduler.)
+
+RED FLAGS
+  - @SpringBootTest on every test class.
+  - Tests that depend on each other or on leftover database rows.
+  - Only integration tests, no unit tests.
+  - Never having heard of context caching while complaining the suite is slow.
+
+
+================================================================================
+END
+================================================================================
