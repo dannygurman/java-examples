@@ -1,0 +1,192 @@
+================================================================================
+OBJECT-ORIENTED / DESIGN QUESTIONS - JUNIOR JAVA DEVELOPER
+Ordered by importance (most important first)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. ABSTRACT CLASS vs INTERFACE
+--------------------------------------------------------------------------------
+
+Q: What is the difference between an abstract class and an interface? When would
+   you use each?
+
+ANSWER
+  Abstract class
+    - Partial implementation. Can hold instance state (fields) and constructors.
+    - Any access modifier on members.
+    - Single inheritance only - a class extends exactly one.
+
+  Interface
+    - A contract. No instance state, no constructors.
+    - Members are implicitly public.
+    - Multiple inheritance - a class can implement many.
+
+  Rule of thumb
+    - Abstract class for an "is-a" relationship with shared state or shared code.
+    - Interface for a capability / role ("can be compared", "can be closed").
+
+  Since Java 8 interfaces can have default and static methods, so the gap
+  narrowed - but state and constructors remain the real difference.
+
+FOLLOW-UPS
+  - Can an interface have private methods?  (Yes, private methods since Java 9,
+    used to share code between default methods.)
+  - Why does Java allow multiple interfaces but not multiple class inheritance?
+    (Diamond problem with state - see Java doc, default methods question.)
+
+RED FLAGS
+  - "Interfaces can't have implementations" (outdated since Java 8).
+  - Cannot give a concrete example from their own code.
+
+
+--------------------------------------------------------------------------------
+2. THE MEANING OF "static"
+--------------------------------------------------------------------------------
+
+Q: What does the keyword "static" mean on a field, a method, a nested class, and
+   inside an interface?
+
+ANSWER
+  Field
+    - One copy per class, not per instance. Shared by all instances.
+    - Shared mutable static state is a common source of concurrency bugs.
+
+  Method
+    - Belongs to the class, no "this", cannot access instance members.
+    - Resolved at compile time -> NOT polymorphic. Redeclaring a static method
+      in a subclass is method *hiding*, not overriding.
+
+  Nested class
+    - "static class Inner" has no implicit reference to the outer instance.
+    - A non-static inner class holds a hidden reference to the outer object,
+      which is a classic memory-leak source.
+
+  Interface (Java 8+)
+    - Static utility methods living on the interface, e.g. Comparator.comparing.
+    - NOT inherited by implementing classes; call them on the interface itself.
+
+  Note: a top-level class can never be declared static.
+
+FOLLOW-UPS
+  - When does a static initializer block run?  (Once, on class initialization.)
+  - Why can a static method not be overridden?
+
+RED FLAGS
+  - Saying static methods are overridden (they are hidden).
+  - Not knowing static fields are shared across all instances.
+
+
+--------------------------------------------------------------------------------
+3. THE MOST COMMON DESIGN PATTERNS
+--------------------------------------------------------------------------------
+
+Q: Name a few design patterns you have used and where they appear in the JDK.
+
+ANSWER
+  A good junior answer covers 5-6 of these with a real example, not a textbook
+  definition. The JDK examples are the tell that they actually understand them.
+
+  Singleton
+    Exactly one instance, one shared access point.
+    JDK: Runtime.getRuntime(); Spring beans (default scope).
+
+  Factory Method
+    Create objects without hardcoding the concrete class.
+    JDK: List.of(), Calendar.getInstance(), Integer.valueOf().
+
+  Builder
+    Construct objects with many optional fields, immutably.
+    JDK: StringBuilder, Stream.Builder, HttpRequest.newBuilder().
+
+  Strategy
+    Swap an algorithm at runtime.
+    JDK: Comparator passed to sort(), ThreadFactory.
+
+  Observer
+    Notify many listeners when state changes.
+    JDK / frameworks: Swing listeners, Spring ApplicationEvent,
+    reactive Subscriber.
+
+  Decorator
+    Add behavior by wrapping rather than subclassing.
+    JDK: new BufferedReader(new FileReader(...)),
+         Collections.unmodifiableList().
+
+  Adapter (bonus)
+    Make an incompatible interface usable.
+    JDK: Arrays.asList(), InputStreamReader (bytes -> chars).
+
+FOLLOW-UPS
+  - Builder vs constructor: when do you reach for a builder?
+    (Many params, several optional, want immutability; avoids the telescoping-
+    constructor mess.)
+  - Strategy vs inheritance: why pass a Comparator instead of subclassing per
+    sort order?  (Composition over inheritance; behavior chosen at runtime.)
+  - Decorator vs subclassing: why does BufferedReader wrap instead of extend?
+    (Combinable at runtime; subclassing would need a class per combination.)
+  - Singleton downsides: hidden global state, hard to test, DI is usually the
+    better answer.
+
+RED FLAGS
+  - Reciting definitions with no example.
+  - Naming patterns as goals in themselves ("I used a factory because patterns
+    are good practice").
+  - Not recognizing that lambdas have largely replaced Strategy / Command
+    boilerplate in modern Java.
+
+
+--------------------------------------------------------------------------------
+4. IMPLEMENT A SIMPLE SINGLETON
+--------------------------------------------------------------------------------
+
+Q: Write a singleton class.
+
+ANSWER
+  The two best answers in Java:
+
+    // 1. Enum - simplest, serialization- and reflection-safe
+    public enum Config {
+        INSTANCE;
+    }
+
+    // 2. Static holder idiom - lazy AND thread-safe via class initialization
+    public final class Config {
+        private Config() {}
+        private static class Holder {
+            static final Config I = new Config();
+        }
+        public static Config get() {
+            return Holder.I;
+        }
+    }
+
+  Why the holder works: the JVM guarantees a class is initialized once, and
+  Holder is only initialized on first call to get(). No locking needed.
+
+  Double-checked locking also works, but ONLY if the field is volatile:
+
+    private static volatile Config instance;
+    public static Config get() {
+        if (instance == null) {
+            synchronized (Config.class) {
+                if (instance == null) instance = new Config();
+            }
+        }
+        return instance;
+    }
+
+  Bonus: mention that singletons hurt testability and that dependency injection
+  is usually preferred in real applications.
+
+FOLLOW-UPS
+  - Why must the constructor be private?
+  - Why is volatile required in double-checked locking?  (Without it another
+    thread can see a non-null but partially constructed object.)
+  - How would you make it thread-safe the naive way, and what does that cost?
+    (synchronized getter - lock on every read.)
+
+RED FLAGS
+  - Non-synchronized lazy initialization presented as thread-safe.
+  - Double-checked locking without volatile.
+  - Public constructor left in place.

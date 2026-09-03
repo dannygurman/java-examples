@@ -1,0 +1,340 @@
+================================================================================
+JAVA-SPECIFIC QUESTIONS - JUNIOR JAVA DEVELOPER
+Ordered by importance (most important first)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. COLLECTIONS: List / ArrayList / Map / HashMap / HashSet
+--------------------------------------------------------------------------------
+
+Q: What is the difference between List, ArrayList, Map, HashSet and HashMap?
+
+ANSWER
+  List        Interface. Ordered, duplicates allowed, access by index.
+  ArrayList   List implementation backed by an array.
+              get O(1), add amortized O(1), insert/remove in the middle O(n).
+              Not thread-safe.
+  Map         Interface. Key -> value, unique keys. NOTE: Map is NOT a
+              Collection - it sits outside the Collection hierarchy.
+  HashMap     Map implementation using hash buckets.
+              Average O(1) get/put, no ordering guarantee, allows one null key
+              and many null values. Not thread-safe.
+  HashSet     Set implementation backed internally by a HashMap.
+              Unique elements, no ordering, O(1) contains.
+
+  Also worth knowing: LinkedList (O(1) insert at ends, O(n) index access),
+  LinkedHashMap (insertion order), TreeMap (sorted, O(log n)),
+  ConcurrentHashMap (thread-safe).
+
+FOLLOW-UPS
+  - What contract must a key satisfy to work in a HashMap or HashSet?
+    (Consistent equals/hashCode; equal objects must have equal hash codes.)
+  - What happens if you mutate a key after putting it in a HashMap?
+    (You can no longer find it - it hashes to a different bucket.)
+  - ArrayList vs LinkedList - when would you choose each?
+  - How does HashMap handle collisions?  (Chaining; converts a long bucket
+    chain to a balanced tree since Java 8.)
+
+RED FLAGS
+  - Thinking Map extends Collection.
+  - Not knowing why equals/hashCode matter.
+  - Claiming HashSet preserves insertion order.
+
+
+--------------------------------------------------------------------------------
+2. ERROR vs EXCEPTION - CHECKED vs UNCHECKED
+--------------------------------------------------------------------------------
+
+Q: What is the difference between an Error and an Exception? What are checked
+   and unchecked exceptions?
+
+ANSWER
+  Both Error and Exception extend Throwable.
+
+  Error
+    JVM or environment failure that you should not try to catch.
+    Examples: OutOfMemoryError, StackOverflowError, NoClassDefFoundError.
+
+  Exception
+    Application-level problem.
+
+    Checked   - everything under Exception except RuntimeException.
+                The compiler forces catch-or-declare.
+                Examples: IOException, SQLException, InterruptedException.
+
+    Unchecked - RuntimeException and its subclasses.
+                Usually programming bugs. No declaration required.
+
+  SUB-QUESTION: Are there exceptions that are unchecked?
+    Yes - RuntimeException and all its subclasses, plus everything under Error.
+    Examples: NullPointerException, IllegalArgumentException,
+    IllegalStateException, ArrayIndexOutOfBoundsException, ClassCastException,
+    NumberFormatException, ArithmeticException,
+    UnsupportedOperationException, ConcurrentModificationException.
+
+FOLLOW-UPS
+  - What is wrong with "catch (Exception e) {}"?
+  - What does finally guarantee, and when does it not run?  (System.exit, JVM
+    crash; also a return in finally swallows the exception.)
+  - What is try-with-resources and what problem does it solve?
+  - Checked vs unchecked in API design - which would you throw and why?
+
+RED FLAGS
+  - Catching and swallowing exceptions silently.
+  - Catching Throwable or Error.
+  - Not knowing that RuntimeException is unchecked.
+
+
+--------------------------------------------------------------------------------
+3. THREADS - BASICS
+--------------------------------------------------------------------------------
+
+Q: How do you create and start a thread? What is the difference between start()
+   and run()? What does synchronized do?
+
+ANSWER
+  Creating
+    - Implement Runnable and pass it to a Thread (preferred - composition,
+      not inheritance), or subclass Thread.
+    - In real code you rarely do either: use an ExecutorService from Executors
+      so threads are pooled and reused. (Java 21+: virtual threads.)
+
+  start() vs run()   - the classic trap
+    - start() asks the JVM for a NEW OS thread and calls run() on it.
+    - Calling run() directly just executes the method on the current thread -
+      no concurrency at all.
+    - Calling start() twice throws IllegalThreadStateException.
+
+  Thread states
+    NEW -> RUNNABLE -> (BLOCKED / WAITING / TIMED_WAITING) -> TERMINATED
+    BLOCKED = waiting for a monitor lock.
+    WAITING = wait() / join() with no timeout.
+
+  synchronized
+    - Mutual exclusion: one thread at a time per monitor object.
+    - Visibility: everything written before releasing the monitor is visible to
+      the next thread that acquires it.
+    - On an instance method the monitor is "this"; on a static method it is the
+      Class object.
+
+FOLLOW-UPS
+  - What is a race condition? Give an example.
+  - What is a deadlock and how do you avoid it?  (Consistent lock ordering,
+    timeouts, fewer locks.)
+  - Why is Thread.stop() deprecated?  (Leaves objects in an inconsistent state;
+    use an interrupt flag instead.)
+  - wait() vs sleep()?  (wait() releases the lock, sleep() does not.
+    wait() must be called while holding the monitor.)
+
+RED FLAGS
+  - Calling run() instead of start().
+  - Believing synchronized on two different objects provides mutual exclusion.
+  - Never having heard of a thread pool.
+
+
+--------------------------------------------------------------------------------
+4. THE "volatile" KEYWORD
+--------------------------------------------------------------------------------
+
+Q: Explain volatile. When would you use it?
+
+ANSWER
+  Guarantees
+    - Visibility: writes go to main memory, reads are never taken from a
+      CPU-local cache. Other threads always see the latest value.
+    - Ordering: forbids reordering of instructions around the access.
+
+  Does NOT guarantee
+    - Atomicity. "count++" is a read-modify-write and is still broken with
+      volatile.
+
+  When to use it
+    - A stop / state flag written by one thread and read by others.
+    - The field in a double-checked-locking singleton.
+
+  When NOT to use it
+    - Counters -> use AtomicInteger.
+    - Compound state that must change together -> use a lock.
+
+FOLLOW-UPS
+  - Why is "volatile boolean running" a valid stop flag but "volatile int
+    counter" a broken counter?
+  - What is the difference between volatile and synchronized?  (volatile gives
+    visibility only; synchronized gives visibility AND mutual exclusion.)
+
+RED FLAGS
+  - "volatile makes operations atomic" or "volatile is a lightweight lock".
+
+
+--------------------------------------------------------------------------------
+5. JVM MEMORY: HEAP vs NON-HEAP
+--------------------------------------------------------------------------------
+
+Q: What lives in the heap versus outside it, and which OutOfMemoryError comes
+   from where?
+
+ANSWER
+  One OS process, one virtual address space:
+
+    JVM process (what the OS sees as RSS)
+     |- Java heap                  <- bounded by -Xmx, GC-managed
+     |- non-heap
+         |- Metaspace
+         |- thread stacks
+         |- code cache
+         |- GC's own structures
+         |- direct / native memory <- malloc'd, not GC-managed
+
+  HEAP
+    All objects and arrays. Managed by the garbage collector.
+    Split into Young (Eden + 2 Survivor spaces) and Old / Tenured. Most objects
+    die young; survivors are promoted. Sized with -Xms / -Xmx.
+    Exhaustion -> OutOfMemoryError: Java heap space
+
+  NON-HEAP  (not counted in -Xmx)
+    Metaspace       Class metadata. Replaced PermGen in Java 8.
+                    -> OutOfMemoryError: Metaspace
+    Thread stacks   One per thread: frames, local variables, primitives, and
+                    object *references*.
+                    -> StackOverflowError; "unable to create new native thread"
+    Code cache      JIT-compiled native code.
+                    -> "CodeCache is full"
+    Direct/native   ByteBuffer.allocateDirect, NIO, Netty, JNI libraries,
+                    memory-mapped files.
+                    -> OutOfMemoryError: Direct buffer memory
+
+  Key points to listen for
+    - A primitive declared as a local variable lives on the stack, but a
+      primitive *field* lives inside its object on the heap.
+    - -Xmx is not the container memory limit. Total RSS = heap + metaspace +
+      stacks + code cache + direct buffers. A container whose limit equals -Xmx
+      will get OOM-killed.
+    - "Native memory" is still RAM, allocated by malloc rather than by the JVM
+      heap allocator. It is part of the JVM *process*, not the JVM *heap*.
+      The GC cannot see it; it is freed by a Cleaner, close(), or native code.
+      This is why a native leak is invisible in a heap dump - use
+      -XX:NativeMemoryTracking=summary and "jcmd VM.native_memory".
+
+  Bonus: escape analysis / scalar replacement can keep short-lived objects off
+  the heap entirely.
+
+FOLLOW-UPS
+  - What causes a StackOverflowError?  (Deep or infinite recursion.)
+  - What is the difference between the stack and the heap for a local variable
+    holding an object?  (Reference on the stack, object on the heap.)
+  - Roughly how does a generational GC work?
+
+RED FLAGS
+  - Believing -Xmx caps total JVM memory.
+  - "Objects can be on the stack" with no mention of escape analysis.
+
+
+--------------------------------------------------------------------------------
+6. DEFAULT METHODS IN INTERFACES (and the diamond problem)
+--------------------------------------------------------------------------------
+
+Q: What is a default method? What is it good for, and what is its main problem?
+
+ANSWER
+  What
+    An interface method with a body, added in Java 8.
+
+  Why
+    Lets you evolve an interface without breaking every existing implementor.
+    That is how Collection.stream() and Iterable.forEach() were added to the
+    JDK without breaking the world.
+
+  The problem - the diamond
+    If a class implements two interfaces that both declare the same default
+    method, it is a COMPILE ERROR. The class must override the method and
+    resolve it explicitly:
+
+        class C implements A, B {
+            public void m() {
+                A.super.m();   // pick one explicitly
+            }
+        }
+
+  Resolution rules
+    1. A class implementation always wins over an interface default.
+    2. A more specific interface (a sub-interface) wins over a less specific one.
+    3. Otherwise -> compile error, you must override.
+
+FOLLOW-UPS
+  - Can a default method be final or synchronized?  (No.)
+  - Can an interface provide a default implementation of equals/hashCode/
+    toString?  (No - Object methods cannot be defaulted.)
+  - Does a default method break a functional interface?  (No - only abstract
+    methods count toward the single-abstract-method rule.)
+
+RED FLAGS
+  - "Java now has multiple inheritance" with no mention of state.
+
+
+--------------------------------------------------------------------------------
+7. TYPE ERASURE
+--------------------------------------------------------------------------------
+
+Q: What is type erasure?
+
+ANSWER
+  Generics exist only at compile time. The compiler checks types, then erases
+  them to Object (or to the declared bound) and inserts the necessary casts.
+  It exists for backward compatibility with pre-Java-5 code.
+
+  Consequences
+    - List<String> and List<Integer> are the same class at runtime.
+    - You cannot write "new T[]".
+    - You cannot write "x instanceof List<String>".
+    - You cannot overload two methods that differ only by type parameter -
+      their erased signatures collide.
+    - There is no T.class; you must pass a Class<T> if you need the type.
+
+FOLLOW-UPS
+  - What are the wildcards "? extends T" and "? super T" for?
+    (PECS - Producer Extends, Consumer Super.)
+  - What is a raw type and why is using one dangerous?
+  - How do frameworks like Jackson recover generic type information?
+    (Class metadata retains generic signatures - TypeReference / super type
+    tokens.)
+
+RED FLAGS
+  - Believing generic type information is available at runtime.
+
+
+--------------------------------------------------------------------------------
+8. MANY READERS, FEW WRITERS - READ/WRITE LOCK
+--------------------------------------------------------------------------------
+
+Q: How would you protect a data structure that is read by many threads and
+   written by few?
+
+ANSWER
+  ReentrantReadWriteLock
+    - Many readers may hold the read lock concurrently.
+    - A writer holds the write lock exclusively - it blocks all readers.
+
+  Things to watch for
+    - Always release in a finally block.
+    - Writer starvation with the default non-fair policy; "new
+      ReentrantReadWriteLock(true)" is fair but slower.
+    - You can DOWNGRADE write -> read (acquire read while holding write, then
+      release write). You cannot UPGRADE read -> write - it deadlocks.
+    - Read/write locks only pay off when reads are frequent and hold the lock
+      long enough to matter; otherwise plain synchronized is faster.
+
+  Modern alternatives
+    - ConcurrentHashMap - lock-free reads, no explicit locking needed.
+    - Immutable snapshots / CopyOnWriteArrayList for read-mostly data.
+    - StampedLock with optimistic reads for very short read sections.
+
+FOLLOW-UPS
+  - Why can you not upgrade a read lock to a write lock?
+  - What is reentrancy and why does it matter?
+  - When would ConcurrentHashMap be the better answer than any lock?
+
+RED FLAGS
+  - Reaching for a read/write lock where ConcurrentHashMap or an immutable
+    object would remove the problem entirely.
+  - Not releasing the lock in finally.
